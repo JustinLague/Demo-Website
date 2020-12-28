@@ -1,0 +1,19 @@
+.title {
+    font-weight: 400;
+}
+
+.art-description {
+    font-size: 1.15em;  
+    font-weight: 300;
+    color: #808080;
+}
+
+.description {
+    font-weight: 200;
+}
+
+
+.content {
+    padding-top: 110px;
+    padding-bottom: 20px;
+}

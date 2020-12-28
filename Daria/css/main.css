@@ -20,10 +20,10 @@ body {
 
 .name {
     font-size: 27px;
-    font-weight: 700;
+    font-weight: 500;
     font-style: normal;
     line-height: 1.2em;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Quicksand', sans-serif;
 }
 
 .name p small {
@@ -31,19 +31,19 @@ body {
 }
 
 .links {
-    font-weight: 500;
+    font-weight: 400;
     line-height: 2em;
     font-size: 18px;
 }
 
 .follow {
-    font-weight: 500;
+    font-weight: 400;
     padding-top: 30px;
 }
 
 .footer {
     color: #808080;
-    font-weight: 500;
+    font-weight: 400;
     padding-top: 30px;
     font-size: 0.8em;
 }
@@ -63,9 +63,12 @@ img {
     width: 100%;
 }
 
-.first {
+.content {
     padding-top: 110px;
     padding-bottom: 20px;
+}
+
+.first {
     font-weight: 300;
     font-family: 'Montserrat', sans-serif;
 }

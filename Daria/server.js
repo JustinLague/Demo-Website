@@ -5,21 +5,20 @@ app.use(express.static('./'));
 
 app.engine('html', require('ejs').renderFile);
 app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs'); 
 
 app.get('/', function(req, res) {
-    res.render('index.html');
+    res.render('index');
 });
 
 app.get('/review', function(req, res) {
-    res.render('review.html');
+    res.render('review');
 });
 
-app.get('/projet1', function(req, res) {
-    res.render('projet1.html');
-});
-
-app.get('/projet2', function(req, res) {
-    res.render('projet2.html');
+app.get('/projet/:id', function(req, res) {
+    let projectId = req.params.id;
+    console.log(projectId)
+    res.render('projet', {projectId: projectId});
 });
 
 const server = app.listen(8080, () => {
