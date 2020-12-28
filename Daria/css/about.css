@@ -1,0 +1,13 @@
+#profil {
+    width: 100%;
+}
+
+.biographie {
+    font-size: 1.1em;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.sous-titre {
+    font-weight:  500;
+    font-family: 'Montserrat', sans-serif;
+}

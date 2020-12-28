@@ -1,0 +1,21 @@
+1. reformatage du code :
+
+    css faire un main css et un css pour porfolio
+
+
+
+2. Gallery:
+
+    Tout les photos de tout les projets en ordre de date ????????? ou random number
+
+    lorsqu'on click sur la photo, redirection vers la page du projet.
+
+3. Projet:
+
+    Ajout de la base de donner
+    faire le back end pour creer des projets / creates les objects. 
+
+4. About:
+
+    Texte avec la demarche artistique et une photo de la Queen
+

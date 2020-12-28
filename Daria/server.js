@@ -11,13 +11,12 @@ app.get('/', function(req, res) {
     res.render('index');
 });
 
-app.get('/review', function(req, res) {
-    res.render('review');
+app.get('/about', function(req, res) {
+    res.render('about');
 });
 
 app.get('/projet/:id', function(req, res) {
     let projectId = req.params.id;
-    console.log(projectId)
     res.render('projet', {projectId: projectId});
 });
 
