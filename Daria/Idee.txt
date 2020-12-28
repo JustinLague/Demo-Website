@@ -1,21 +1,20 @@
-1. reformatage du code :
+1. reformatage du code : DO THIS FIRST
 
     css faire un main css et un css pour porfolio
 
 
 
-2. Gallery:
+2. Gallery: DO THIS SECOND
 
     Tout les photos de tout les projets en ordre de date ????????? ou random number
 
     lorsqu'on click sur la photo, redirection vers la page du projet.
 
-3. Projet:
+3. Projet: DO THIS THIRD
 
     Ajout de la base de donner
     faire le back end pour creer des projets / creates les objects. 
 
-4. About:
+4. Footer: 
 
-    Texte avec la demarche artistique et une photo de la Queen
-
+    "you're amazing <3" "you're doing great sweetie"
