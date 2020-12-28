@@ -28,23 +28,27 @@
 
         <div class="follow">
             <div class="row">
-            <span>
-                <a href="https://www.instagram.com/daria.elas/" id="instagram">
-                    <font-awesome-icon icon="spinner" />
-                </a>
-                <a href="mailto:dariaalexandrae@gmail.com">
-                    <font-awesome-icon icon="spinner" />
-                </a>
-            </span>  
+                <span>
+                    <a href="https://www.instagram.com/daria.elas/" id="instagram">
+                        <b-icon class="icon" icon="instagram"></b-icon>
+                    </a>
+                    <a href="mailto:dariaalexandrae@gmail.com">
+                        <b-icon id="icon-env" icon="envelope"></b-icon>
+                    </a>
+                </span>  
             </div>
         </div> 
         
         <div class="footer">
             <p>
-                I don't like sauces, 
+                I don't like mail, 
             <br>
                 but i can't escape them. 
             </p>
+        </div>
+
+        <div id="gif">
+            <img src="../assets/img/dariaHappyGif.gif" alt="">
         </div>
     </div>
 </template>
@@ -100,7 +104,16 @@ export default {
 }
 
 #instagram {
-    padding-right: 15px;
+    padding-left: 15px;
+    padding-right: 25px;
+}
+
+.icon {
+    font-size: 1.5em;
+}
+
+#icon-env {
+    font-size: 1.7em;
 }
 
 .footer {
@@ -117,5 +130,11 @@ a {
 
 a:hover {
     color: #808080;
+    text-decoration: none;
+}
+
+#gif {
+    display:block;
+    width: 100px;
 }
 </style>

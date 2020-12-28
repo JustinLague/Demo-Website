@@ -13,13 +13,14 @@
         <div class="row">
             <div class="col-lg-6">
                 <div>
-                    <img src="../assets/img/enfantQuarantaine.jpg" alt="">
+                    <img src="../assets/img/LinesInTheSkies.jpg" alt="">
+                    
                 </div>
             </div>
             
             <div class="col-lg-6">
                 <div>
-                    <img src="../assets/img/LinesInTheSkies.jpg" alt="">
+                    <img src="../assets/img/DariaShapeThingThatSheLikes.png" alt="">
                 </div>
             </div>
         </div>
@@ -63,5 +64,15 @@ export default {
     font-size: 1.25em;
     font-weight: 200;
     padding-bottom: 20px;
+}
+
+a {
+    color: black; 
+    text-decoration: none;
+}
+
+a:hover {
+    color: #808080;
+    text-decoration: none;
 }
 </style>
