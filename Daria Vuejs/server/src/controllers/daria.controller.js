@@ -1,6 +1,6 @@
 const Image = require('../models/image');
 const Project = require("../models/project");
-const upload = require("../middleware/upload");
+const fs = require('fs');
 
 class DariaController {
     
@@ -19,37 +19,50 @@ class DariaController {
     }
   }
 
- async uploadFile(req, res) {
+  async uploadImage(req, res) {
     try {
-      await upload(req, res);
-  
-      console.log(req.file);
-      if (req.file == undefined) {
-        return res.send(`You must select a file.`);
-      }
-  
-      return res.send(`File has been uploaded.`);
-    } catch (error) {
-      console.log(error);
-      return res.send(`Error when trying upload image: ${error}`);
-    }
-  };
+      var img = fs.readFileSync(req.file.path);
+      var encode_image = img.toString('base64');
+      // Define a JSONobject for the image attributes for saving to database
+    
+      var image = new Image.Image({
+          name: req.body.name,
+          description: req.body.description,
+          contentType: req.file.mimetype,
+          data: new Buffer.from(encode_image, 'base64') 
+        });
 
-  async addImage(req, res) {
-    try {
-
-      console.log(req.file);
-
-      var image = new Image();
-      image.data = fs.readFileSync(req.files.userPhoto.path)
-      image.contentType = 'image/png';
-      image.name = req.body.name;
-      image.description = req.body.description;
       image.save();
+
+      res.send("It has been saved");
     } catch (err) {
       res.status(400).send({ error: err.message });
     }
-  }
+  };
+
+  async uploadImages(req, res) {
+    try {
+      req.files.forEach((file, index) => {
+        var img = fs.readFileSync(file.path);
+        var encode_image = img.toString('base64');
+        // Define a JSONobject for the image attributes for saving to database
+      
+        var image = new Image.Image({
+            id: index,
+            name: req.body.name + index,
+            description: req.body.description,
+            contentType: file.mimetype,
+            data: new Buffer.from(encode_image, 'base64') 
+          });
+  
+        image.save();
+      })
+
+      res.send("It has been saved");
+    } catch (err) {
+      res.status(400).send({ error: err.message });
+    }
+  };
 }
 
 module.exports = new DariaController();
