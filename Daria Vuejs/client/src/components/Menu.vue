@@ -41,14 +41,14 @@
         
         <div class="footer">
             <p>
-                I don't like mail, 
+                I don't like men, 
             <br>
                 but i can't escape them. 
             </p>
         </div>
 
         <div id="gif">
-            <img src="../assets/img/dariaHappyGif.gif" alt="">
+            <img src="../assets/img/HappyGif.gif" alt="">
         </div>
     </div>
 </template>
@@ -134,7 +134,8 @@ a:hover {
 }
 
 #gif {
+    margin-left: -25px;
     display:block;
-    width: 100px;
+    width: 200px;
 }
 </style>

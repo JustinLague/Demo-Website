@@ -1,9 +1,3 @@
-1. reformatage du code : DO THIS FIRST
-
-    css faire un main css et un css pour porfolio
-
-
-
 2. Gallery: DO THIS SECOND
 
     Tout les photos de tout les projets en ordre de date ????????? ou random number
@@ -12,7 +6,7 @@
 
 3. Projet: DO THIS THIRD
 
-    Ajout de la base de donner
+    Ajout de la base de donner - Done
     faire le back end pour creer des projets / creates les objects. 
 
 4. Footer: 
