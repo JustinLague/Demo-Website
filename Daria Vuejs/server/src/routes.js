@@ -1,14 +1,17 @@
 // Import Controllers
-const AuthController = require("./controllers/auth.controller");
-
-//Import Policies
-const AuthPolicies = require("./policies/auth");
+const DariaController = require("./controllers/daria.controller");
 
 module.exports = (app) => {
-  // Auth
-  app.post("/api/register", AuthController.register);
-  app.post("/api/login", AuthController.login);
+  //Portfolio
+  app.get("/api/porfolio", DariaController.project);
 
-  //Test
-  //app.get("api/helloWorld", AuthPolicies.verifyToken, HelloWorld.helloWorld);
+  app.post('/api/uploadFile', DariaController.uploadFile);
+
+  app.post("/api/addImage", DariaController.addImage);
+
+  //Gallery
+  //app.get("/api/gallery", DariaController.gallery);
+  
+  // Project
+  //app.get("/api/project/:id", DariaController.portfolio);
 };
