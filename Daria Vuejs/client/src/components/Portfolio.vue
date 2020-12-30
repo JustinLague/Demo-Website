@@ -4,7 +4,7 @@
 
     <div class="row">
         <div class="col-6">
-            <router-link :to="{ name: 'Project', params: { projectId: 1 }}">
+            <router-link :to="{name: 'Project', params: { projectId: '5febd2bde66d533cf08c0b21' }}">
                 <div class="image">
                     <img src="../assets/img/enfantQuarantaine.jpg" alt="">
                     <p class="description">
@@ -38,8 +38,6 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200,300,400,500,600,700,800&display=swap');
-
 .first {
     font-weight: 300;
     font-family: 'Montserrat', sans-serif;

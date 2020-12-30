@@ -1,6 +1,6 @@
 <template>
   <div>
-      Gallery
+      <img :src="`data:image/png;base64,${img.encodedImage}`" />
   </div>
 </template>
 

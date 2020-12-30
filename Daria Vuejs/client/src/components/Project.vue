@@ -1,20 +1,18 @@
 <template>
     <div class="content">
-        <h1 class="title">Enfant de la quarantaine</h1>
-        <h4 class="art-description">acrylique et gesso sur toile, 64 po. x 52 po., 2020</h4>
+        <h1 class="title">{{ title }}</h1>
+        <h4 class="art-description">{{ artDescription }}</h4>
         
         <div class="row">
             <div class="col-lg-6">
-                <h4 class="description">Je transfère enfin cette toile sur ce compte qui a changé ma propre vision de la création. Peinture réalisée au début du confinement où je me suis donnée la permission de me laisser aller dans mon processus artistique, sans aucune attente face au résultat ou ma technique.
-                Une de mes toiles préférées à ce jour</h4>    
+                <h4 class="description">{{ description }}</h4>    
             </div>
         </div>
             
         <div class="row">
             <div class="col-lg-6">
                 <div>
-                    <img src="../assets/img/LinesInTheSkies.jpg" alt="">
-                    
+                    <Image-viewer :image=images[0] v-if="images[0]"></Image-viewer>
                 </div>
             </div>
             
@@ -42,12 +40,28 @@
 </template>
 
 <script>
+import ImageViewer from "./subComponents/ImageViewer";
+import { mapActions, mapState } from "vuex";
+
 export default {
+    components: {
+        ImageViewer
+    },
+    props: ["projectId"],
+    created() {
+        this.$nextTick(function () {
+            this.initProject(this.projectId);
+    })},
+    computed: {
+        ...mapState("project", ["title", "artDescription", "description", "images"]),
+    },
+    methods: {
+        ...mapActions("project", ["initProject"]),
+    }
 }
 </script>
 
 <style scoped>
-
 .title {
     font-weight: 400;
 }
