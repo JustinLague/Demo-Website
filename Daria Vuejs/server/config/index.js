@@ -5,4 +5,7 @@ module.exports = {
   db: {
     url: process.env.DB_URL
   },
+  auth: {
+    jwtSecret: process.env.JWT_SECRET || "S3creT"
+  }
 };
