@@ -9,11 +9,8 @@
             </div>
         </div>
             
-        <!-- <Image-viewer :image=images[0] v-if="images[0]"></Image-viewer> -->
-
-        <div v-for="image in images" :key="image">
-            <Image-viewer :image=image v-if="image"></Image-viewer>
-        </div>
+        <Image-viewer :images=images v-if="images"></Image-viewer>
+        
     </div>
 </template>
 
