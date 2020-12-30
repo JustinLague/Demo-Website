@@ -9,32 +9,10 @@
             </div>
         </div>
             
-        <div class="row">
-            <div class="col-lg-6">
-                <div>
-                    <Image-viewer :image=images[0] v-if="images[0]"></Image-viewer>
-                </div>
-            </div>
-            
-            <div class="col-lg-6">
-                <div>
-                    <img src="../assets/img/DariaShapeThingThatSheLikes.png" alt="">
-                </div>
-            </div>
-        </div>
+        <!-- <Image-viewer :image=images[0] v-if="images[0]"></Image-viewer> -->
 
-        <div class="row">
-            <div class="col-lg-6">
-                <div>
-                    <img src="../assets/img/LinesInTheSkies.jpg" alt="">
-                </div>
-            </div>
-
-            <div class="col-lg-6">
-                <div>
-                    <img src="../assets/img/enfantQuarantaine.jpg" alt="">
-                </div>
-            </div>
+        <div v-for="image in images" :key="image">
+            <Image-viewer :image=image v-if="image"></Image-viewer>
         </div>
     </div>
 </template>
