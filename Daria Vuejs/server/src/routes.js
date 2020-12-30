@@ -4,15 +4,18 @@ const upload = require("./middleware/upload")
 
 module.exports = (app) => {
   //Portfolio
-  app.get("/api/porfolio", DariaController.project);
+  app.get("/api/portfolio", DariaController.portfolio);
 
-  app.post('/api/uploadImage', upload.single('image'),  DariaController.uploadImage);
+  app.post('/api/createProject', upload.array('image', 12),  DariaController.createProject);
 
-  app.post('/api/uploadImages', upload.array('image', 12),  DariaController.uploadImages);
+  app.post('/api/createPortfolio', upload.single('image'),  DariaController.createPortfolio);
 
   //Gallery
   //app.get("/api/gallery", DariaController.gallery);
   
-  // Project
-  //app.get("/api/project/:id", DariaController.portfolio);
+  //Project
+  app.get("/api/project/:id", DariaController.project);
+  
+  app.get("/api/image/:id", DariaController.image);
+  
 };

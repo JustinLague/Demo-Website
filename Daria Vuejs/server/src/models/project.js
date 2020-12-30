@@ -1,13 +1,17 @@
 const mongoose = require("mongoose");
-const Image  = require("../models/image");
 const Schema = mongoose.Schema;
 
 const ProjectSchema = new Schema({
-    id: { type: Number },
-    name: { type: String, required: true, index: { unique: true } },
+    id: { type: mongoose.Schema.Types.ObjectId, index: { unique: true }},
+    title: { type: String, required: true},
     artDescription: { type: String },
     description: { type: String },
-    images: [Image.ImageSchema]
 });
 
-module.exports = mongoose.model("Project", ProjectSchema);
+
+const Project =  mongoose.model("Project", ProjectSchema)
+
+module.exports = {
+    Project,
+    ProjectSchema
+}
