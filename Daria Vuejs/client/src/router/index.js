@@ -5,7 +5,9 @@ import About from "../components/About"
 import Enquiries from "../components/Enquiries"
 import Gallery from "../components/Gallery"
 import Project from "../components/Project"
-
+import LoginRegister from "@/components/Login/LoginRegister";
+import Dashboard from "../components/Admin/Dashboard"
+import store from "../stores/store";
 
 Vue.use(Router);
 
@@ -36,7 +38,25 @@ const router = new Router({
       name: "Project",
       component: Project,
       props: true 
-    }
+    },
+    {
+      path: "/Login",
+      name: "Login",
+      component: LoginRegister,
+      beforeEnter: (to, from, next) => {
+         if (to.name === "Login" && store.state.user.userSignedIn) next({ name: "Dashboard" });
+         else next();
+      }
+    },
+    {
+      path: "/Dashboard/",
+      name: "Dashboard",
+      component: Dashboard,
+      beforeEnter: (to, from, next) => {
+         if (to.name === "Dashboard" && !store.state.user.userSignedIn) next({ name: "Login" });
+         else next();
+      }
+    },
   ]
 });
 
