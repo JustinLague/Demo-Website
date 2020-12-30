@@ -32,9 +32,10 @@ const router = new Router({
       component: Enquiries
     },
     {
-      path: "/Project/:id",
+      path: "/Project/:projectId",
       name: "Project",
       component: Project,
+      props: true 
     }
   ]
 });
