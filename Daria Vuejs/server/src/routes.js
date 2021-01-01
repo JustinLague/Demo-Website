@@ -1,6 +1,7 @@
 // Import Controllers
 const PortfolioController = require("./controllers/portfolio.controller");
 const DashboardController = require("./controllers/dashboard.controller");
+const GalleryController = require("./controllers/gallery.controller"); 
 const ProjectController = require("./controllers/project.controller");
 const ImageController = require("./controllers/image.controller");
 const AuthController = require("./controllers/auth.controller");
@@ -27,7 +28,7 @@ module.exports = (app) => {
   
 
   //Gallery
-  //app.get("/api/gallery", DariaController.gallery);
+  app.get("/api/gallery", GalleryController.gallery);
   
   
   //Image
