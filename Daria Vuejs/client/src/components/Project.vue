@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-        <h1 class="title">{{ title }}</h1>
+        <h1 class="main-title">{{ title }}</h1>
         <h4 class="art-description">{{ artDescription }}</h4>
         
         <div class="row">
@@ -37,10 +37,6 @@ export default {
 </script>
 
 <style scoped>
-.title {
-    font-weight: 400;
-}
-
 .art-description {
     font-size: 1.15em;  
     font-weight: 300;

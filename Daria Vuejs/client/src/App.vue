@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Menu from "./components/Menu";
+import Menu from "./components/Menu/Menu";
 
 export default {
   name: "app",
@@ -42,5 +42,10 @@ body {
 
 img {
     width: 100%;
+}
+
+.main-title {
+    font-weight: 300;
+    font-family: 'Montserrat', sans-serif;
 }
 </style>

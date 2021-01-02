@@ -1,16 +1,5 @@
 <template>
-    <div class="menu">
-        <div class="title">
-            <router-link to="/">
-                <h2 class="name">
-                    Daria Elas
-                    <p>
-                        <small class="text-muted">Artist</small>
-                    </p>
-                </h2>
-            </router-link>
-        </div>
-
+  <div class="row menu">
         <div class="links">
             <div>
                 <router-link to="/">Portfolio</router-link>
@@ -27,15 +16,13 @@
         </div>  
 
         <div class="follow">
-            <div class="row">
-                <span>
-                    <a href="https://www.instagram.com/daria.elas/" id="instagram">
-                        <b-icon class="icon" icon="instagram"></b-icon>
-                    </a>
-                    <a href="mailto:dariaalexandrae@gmail.com">
-                        <b-icon id="icon-env" icon="envelope"></b-icon>
-                    </a>
-                </span>  
+            <div>
+                <a href="https://www.instagram.com/daria.elas/" id="instagram">
+                    <b-icon class="icon" icon="instagram"></b-icon>
+                </a>
+                <a href="mailto:dariaalexandrae@gmail.com">
+                    <b-icon id="icon-env" icon="envelope"></b-icon>
+                </a>
             </div>
         </div> 
         
@@ -48,44 +35,25 @@
         </div>
 
         <div id="gif">
-            <img src="../assets/img/HappyGif.gif" alt="">
+            <img src="../../assets/img/HappyGif.gif" alt="">
         </div>
     </div>
 </template>
 
 <script>
 export default {
-
+    name: "MenuLink",
 }
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
-
 .menu {  
     padding: 0px;
-    margin-top: 40px;
     margin-left: 31px;
-
-    position: fixed;
-}
-
-@media (max-width: 1199.98px) { 
-    .menu {
-        position: inherit;  
-    }
 }
 
 .about {
     padding-top: 20px;
-}
-
-.name {
-    font-size: 27px;
-    font-weight: 500;
-    font-style: normal;
-    line-height: 1.2em;
-    font-family: 'Quicksand', sans-serif;
 }
 
 .name p small {
@@ -93,6 +61,7 @@ export default {
 }
 
 .links {
+    width: 100%;
     font-weight: 400;
     line-height: 2em;
     font-size: 18px;
@@ -104,7 +73,6 @@ export default {
 }
 
 #instagram {
-    padding-left: 15px;
     padding-right: 25px;
 }
 
@@ -124,7 +92,7 @@ export default {
 }
 
 a {
-    color: black; 
+    color: #707070; 
     text-decoration: none;
 }
 

@@ -5,6 +5,7 @@ import VuexPersist from "vuex-persist";
 import project from "./modules/project.store";
 import portfolio from "./modules/portfolio.store";
 import dashboard from "./modules/dashboard.store";
+import gallery from "./modules/gallery.store";
 
 Vue.use(Vuex);
 
@@ -28,7 +29,8 @@ export default new Vuex.Store({
     portfolio,
     project,
     user,
-    dashboard
+    dashboard,
+    gallery
   },
   plugins: [vueLocalStorage.plugin],
   strict: debug

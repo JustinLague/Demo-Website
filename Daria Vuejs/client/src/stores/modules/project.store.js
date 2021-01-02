@@ -29,8 +29,8 @@ const mutations = {
     state.description = data.project.description;
     state.images = data.images;
     
-    data.images.forEach((image, index) => {
-      state.images[index].url = process.env.VUE_APP_API_URL + "/image/" + image.id   
+    data.images.forEach((image) => {
+      image.url = process.env.VUE_APP_API_URL + "/image/" + image.id   
     })
   },
   EMPTY_PROJECT(state) {
