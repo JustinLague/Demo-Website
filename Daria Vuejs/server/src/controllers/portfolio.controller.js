@@ -24,22 +24,36 @@ class PortfolioController {
     
           var image = new Image({
             id : new mongoose.mongo.ObjectId(),
-            name: req.body.name,
-            description: req.body.description,
             contentType: req.file.mimetype,
             data: new Buffer.from(encode_image, 'base64'),
           });
-    
+
+          //there is a better way to do this i know.
+
+          image.name[0] = req.body.name;
+          image.name[1] = req.body.nameEN;
+
+          image.description[0] = req.body.description;
+          image.description[1] = req.body.descriptionEN;
+
+          image.artDescription[0] = req.body.artDescription;
+          image.artDescription[1] = req.body.artDescriptionEN;
+
           await image.save();
     
           image.projectId = req.body.projectId;
     
           var portfolio = new Portfolio({ 
             id : new mongoose.mongo.ObjectId(),
-            title: req.body.portfolioTitle,
             description: req.body.portfolioDescription,
             image: image
           })
+
+          portfolio.title[0] = req.body.portfolioTitle;
+          portfolio.title[1] = req.body.portfolioTitleEN;
+
+          portfolio.description[0] = req.body.description;
+          portfolio.description[1] = req.body.descriptionEN;
     
           await portfolio.save();
     

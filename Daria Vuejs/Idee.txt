@@ -47,12 +47,11 @@ Photos:
 
     mettre une modal lorsqu'on click dessus avec un carrousel.
 
-Translating
-
+Internationalisation -- Done
 
 
 ** Bug : 
 
-    About : mobile view looks bad
+    Gallery et portfolio on a pas le meme espace
 
 

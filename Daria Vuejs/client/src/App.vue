@@ -25,7 +25,7 @@ export default {
   computed: {
     show() {
       return !(this.$route.name === "Login" || 
-             this.$route.name === "Dashboard");
+               this.$route.name === "Dashboard");
     }
   }
 };
@@ -48,4 +48,5 @@ img {
     font-weight: 300;
     font-family: 'Montserrat', sans-serif;
 }
+
 </style>

@@ -1,36 +1,36 @@
 <template>
   <div class="row menu">
         <div class="links">
-            <div>
-                <router-link to="/">Portfolio</router-link>
+           <div>
+                <router-link to="/">{{ $t('portfolio.title') }}</router-link>
             </div>
             <div>
-                <router-link to="/Gallery">Gallery</router-link>
+                <router-link to="/Gallery">{{ $t('gallery.title') }}</router-link>
             </div>
             <div class="about">
-                <router-link to="/About">About</router-link>
+                <router-link to="/About">{{ $t('about.title') }}</router-link>
             </div>
             <div>
-                <router-link to="/Enquiries">Enquiries</router-link>
+                <router-link to="/Enquiries">{{ $t('enquiries.title') }}</router-link>
+            </div>
+            <div>
+                <router-link to="/resume">{{ $t('resume.title') }}</router-link>
             </div>
         </div>  
 
-        <div class="follow">
-            <div>
-                <a href="https://www.instagram.com/daria.elas/" id="instagram">
-                    <b-icon class="icon" icon="instagram"></b-icon>
-                </a>
-                <a href="mailto:dariaalexandrae@gmail.com">
-                    <b-icon id="icon-env" icon="envelope"></b-icon>
-                </a>
-            </div>
-        </div> 
+        <div class="lang">
+            <button v-on:click="changeLocal('fr')">FR</button>
+            <span>|</span>
+            <button  v-on:click="changeLocal('en')">EN</button>
+        </div>
         
         <div class="footer">
             <p>
-                I don't like men, 
+                "I don't like men, 
             <br>
-                but i can't escape them. 
+                but i can't escape them." 
+            <br>
+                - Liam Fraser 2020
             </p>
         </div>
 
@@ -42,7 +42,12 @@
 
 <script>
 export default {
-    name: "MenuLink",
+    name: "HamburgerMenu",
+    methods: {
+        changeLocal: function (lang) {
+            this.$i18n.locale = lang;
+        }
+    }
 }
 </script>
 
@@ -84,10 +89,31 @@ export default {
     font-size: 1.7em;
 }
 
+.lang {
+    width: 100%;
+}
+
+button {
+    margin-top: 20px;
+    background: #3F3F41;
+    color: #808080;
+    box-shadow: 0px 0px 0px transparent;
+    border: 0px solid transparent;
+    text-shadow: 0px 0px 0px transparent;
+}
+
+button:first-child {
+    padding-left: 0px;
+}
+
+button:focus {
+    outline: 0px auto -webkit-focus-ring-color;
+}
+
 .footer {
     color: #808080;
     font-weight: 400;
-    padding-top: 30px;
+    padding-top: 20px;
     font-size: 0.8em;
 }
 

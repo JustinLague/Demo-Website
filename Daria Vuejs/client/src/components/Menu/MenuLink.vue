@@ -5,39 +5,35 @@
                 <h2 class="name">
                     Daria Elas
                     <p>
-                        <small class="text-muted">Artist</small>
+                        <small class="text-muted">{{ $t('menu.artist') }}</small>
                     </p>
                 </h2>
             </router-link>
         </div>
 
         <div class="links">
-            <div>
-                <router-link to="/">Portfolio</router-link>
+           <div>
+                <router-link to="/">{{ $t('portfolio.title') }}</router-link>
             </div>
             <div>
-                <router-link to="/Gallery">Gallery</router-link>
+                <router-link to="/Gallery">{{ $t('gallery.title') }}</router-link>
             </div>
             <div class="about">
-                <router-link to="/About">About</router-link>
+                <router-link to="/About">{{ $t('about.title') }}</router-link>
             </div>
             <div>
-                <router-link to="/Enquiries">Enquiries</router-link>
+                <router-link to="/Enquiries">{{ $t('enquiries.title') }}</router-link>
+            </div>
+            <div>
+                <router-link to="/resume">{{ $t('resume.title') }}</router-link>
             </div>
         </div>  
 
-        <div class="follow">
-            <div class="row">
-                <span>
-                    <a href="https://www.instagram.com/daria.elas/" id="instagram">
-                        <b-icon class="icon" icon="instagram"></b-icon>
-                    </a>
-                    <a href="mailto:dariaalexandrae@gmail.com">
-                        <b-icon id="icon-env" icon="envelope"></b-icon>
-                    </a>
-                </span>  
-            </div>
-        </div> 
+        <div>
+            <button  v-on:click="changeLocal('fr')">FR</button>
+            <span>|</span>
+            <button  v-on:click="changeLocal('en')">EN</button>
+        </div>
         
         <div class="footer">
             <p>
@@ -56,6 +52,11 @@
 <script>
 export default {
     name: "MenuLink",
+     methods: {
+        changeLocal: function (lang) {
+            this.$root.$i18n.locale = lang;
+        }
+    }
 }
 </script>
 
@@ -99,7 +100,7 @@ export default {
 
 #instagram {
     padding-left: 15px;
-    padding-right: 25px;
+    padding-right: 20px;
 }
 
 .icon {
@@ -110,10 +111,26 @@ export default {
     font-size: 1.7em;
 }
 
+button {
+    margin-top: 20px;
+    background: white;
+    box-shadow: 0px 0px 0px transparent;
+    border: 0px solid transparent;
+    text-shadow: 0px 0px 0px transparent;
+}
+
+button:first-child {
+  padding-left: 0px;
+}
+
+button:focus {
+    outline: 0px auto -webkit-focus-ring-color;
+}
+
 .footer {
     color: #808080;
     font-weight: 400;
-    padding-top: 30px;
+    padding-top: 15px;
     font-size: 0.8em;
 }
 

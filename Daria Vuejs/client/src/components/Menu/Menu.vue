@@ -5,7 +5,7 @@
                 <h2 class="name">
                     Daria Elas
                     <p>
-                        <small class="text-muted">Artist</small>
+                        <small class="text-muted">{{ $t('menu.artist') }}</small>
                     </p>
                 </h2>
             </router-link>

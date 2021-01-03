@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 
 const PortfolioSchema = new Schema({
     id: { type: mongoose.Schema.Types.ObjectId, index: { unique: true }},
-    title: { type: String },
-    description: { type: String },
+    title: [String],
+    description: [String],
     image: ImageSchema 
 });
 

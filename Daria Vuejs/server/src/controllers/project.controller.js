@@ -28,11 +28,17 @@ class ProjectController {
         try {
           var project = new Project({ 
             id : new mongoose.mongo.ObjectId(),
-            title: req.body.projectTitle,
-            description: req.body.projectDescription,
-            artDescription: req.body.projectArtDescription
           })
     
+          project.title[0] = req.body.projectTitle;
+          project.title[1] = req.body.projectTitleEN;
+
+          project.description[0] = req.body.projectDescription;
+          project.description[1] = req.body.projectDescriptionEN;
+
+          project.artDescription[0] = req.body.projectArtDescription;
+          project.artDescription[1] = req.body.projectArtDescriptionEN;
+          
           await project.save();
     
           req.files.forEach((file) => {
@@ -40,12 +46,26 @@ class ProjectController {
           
             var image = new Image({
                 id : new mongoose.mongo.ObjectId(),
-                name: req.body.name,
-                description: req.body.description,
                 contentType: file.mimetype,
                 data: new Buffer.from(img, 'base64'),
                 projectId: project.id
-              });
+            });
+
+
+            image.name[0] = req.body.name;
+            image.name[1] = req.body.nameEN;
+
+            console.log("name")
+
+            image.description[0] = req.body.description;
+            image.description[1] = req.body.descriptionEN;
+
+            console.log("description")
+
+            image.artDescription[0] = req.body.artDescription;
+            image.artDescription[1] = req.body.artDescriptionEN;
+
+            console.log("artdescription")
       
             image.save();
           })

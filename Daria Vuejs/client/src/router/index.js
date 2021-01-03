@@ -3,6 +3,7 @@ import Router from "vue-router";
 import Portfolio from "../components/Portfolio"
 import About from "../components/About"
 import Enquiries from "../components/Enquiries"
+import Resume from "../components/Resume"
 import Gallery from "../components/Gallery"
 import Project from "../components/Project"
 import LoginRegister from "@/components/Login/LoginRegister";
@@ -34,6 +35,11 @@ const router = new Router({
       component: Enquiries
     },
     {
+      path: "/resume",
+      name: "resume",
+      component: Resume
+    },
+    {
       path: "/Project/:projectId",
       name: "Project",
       component: Project,
@@ -57,7 +63,10 @@ const router = new Router({
          else next();
       }
     },
-  ]
+  ],
+  scrollBehavior() {
+    window.scrollTo(0,0);
+  }
 });
 
 export default router;

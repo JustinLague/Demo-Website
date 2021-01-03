@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-        <h1 class="main-title">Portfolio</h1>
+        <h2 class="main-title">{{ $t('portfolio.title') }}</h2>
         <div v-if="portfolios">
             <div v-for="p in formatedArray" :key="p.length">
                 <div class="row">
@@ -10,7 +10,7 @@
                                 <img :src=portfolio.image.url>
                                 <p class="description">
                                     <strong>
-                                        {{ portfolio.description }}
+                                        {{ $t('portfolio.description', portfolio.description) }}
                                     </strong>
                                 </p>
                             </div>
