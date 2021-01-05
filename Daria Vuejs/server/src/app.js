@@ -23,6 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
+require("./middleware/passport");
 require("./routes")(app);
 
 app.listen(config.port);

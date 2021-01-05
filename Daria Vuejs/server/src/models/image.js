@@ -3,8 +3,9 @@ const Schema = mongoose.Schema;
 
 const ImageSchema = new Schema({
     id: { type: mongoose.Schema.Types.ObjectId, index: { unique: true }},
-    name: { type: String },
-    description: { type: String },
+    name: [String],
+    artDescription: [String],
+    description: [String],
     data: { type: Buffer },
     contentType: { type: String },
     projectId:  {

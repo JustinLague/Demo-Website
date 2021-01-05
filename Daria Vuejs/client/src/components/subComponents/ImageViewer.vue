@@ -1,9 +1,11 @@
 <template>
 <div>
-    <div v-for="a in formatedArray" :key="a.lenght">
+    <div v-for="a in formatedArray" :key="a.length">
         <div class="row">
             <div class="col-lg-6" v-for="image in a" :key="image.id">
                 <img :src=image.url>
+                {{ $t('image.name', image.name) }}
+                {{ $t('image.description', image.description) }}
             </div>
         </div>
     </div>
@@ -12,6 +14,7 @@
 
 <script>
 export default {
+    name: "ImageViewer",
     props: ['images'],
     computed: {
         formatedArray() {

@@ -1,16 +1,14 @@
 <template>
-    <div class="content">
-        <h1 class="title">{{ title }}</h1>
-        <h4 class="art-description">{{ artDescription }}</h4>
+    <div class="content" v-if="project">
+        <h2 class="main-title">{{ $t('project.title', project.title) }}</h2>
+        <h4 class="art-description">{{ $t('project.artDescription', project.artDescription) }}</h4>
         
         <div class="row">
             <div class="col-lg-6">
-                <h4 class="description">{{ description }}</h4>    
+                <h4 class="description">{{ $t('project.description', project.description) }}</h4>    
             </div>
         </div>
-            
         <Image-viewer :images=images v-if="images"></Image-viewer>
-        
     </div>
 </template>
 
@@ -28,7 +26,7 @@ export default {
             this.initProject(this.projectId);
     })},
     computed: {
-        ...mapState("project", ["title", "artDescription", "description", "images"]),
+        ...mapState("project", ["project", "images"]),
     },
     methods: {
         ...mapActions("project", ["initProject"]),
@@ -37,10 +35,6 @@ export default {
 </script>
 
 <style scoped>
-.title {
-    font-weight: 400;
-}
-
 .art-description {
     font-size: 1.15em;  
     font-weight: 300;
