@@ -1,34 +1,35 @@
 <template>
-  <div class="content">
-    <h2 class="main-title">{{ $t('gallery.title') }}</h2>
+    <div class="content">
+        <h2 class="main-title">{{ $t('gallery.title') }}</h2>
 
-    <div v-if="galleryImages">
-        <div v-for="galleryImage in formatedArray" :key="galleryImage.length">
-            <div class="row">
-                <div class="col-lg-6" v-for="image in galleryImage" :key="image.id">
-                    <router-link :to="{name: 'Project', params: { projectId: image.projectId }}">
+        <div v-if="galleryImages">
+            <div v-for="galleryImage in formatedArray" :key="galleryImage.length">
+                <div class="row">
+                    <div class="col-lg-4" v-for="image in galleryImage" :key="image.id">
                         <div class="image">
-                            <img :src=image.url>
+                            <enlargeable-image :src=image.thumnailUrl :src_large=image.detailedImageUrl />
                             <p class="name">
                                 <strong>
                                     {{ $t('gallery.imageName', image.name) }}
                                 </strong>
                             </p>
                         </div>
-                    </router-link>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    
-  </div>
 </template>
 
 <script>
+import EnlargeableImage from "@diracleo/vue-enlargeable-image";
 import { mapActions, mapState } from "vuex";
 
 export default {
-  created() {
+    components: {
+        EnlargeableImage
+    },
+    created() {
         this.$nextTick(function () {
           this.initGallery();
     })},
@@ -36,8 +37,8 @@ export default {
         ...mapState("gallery", ["galleryImages"]),
         formatedArray() {
             const result = []
-            for (let i = 0; i < this.galleryImages.length; i += 2)
-                result.push(this.galleryImages.slice(i, i + 2))
+            for (let i = 0; i < this.galleryImages.length; i += 3)
+                result.push(this.galleryImages.slice(i, i + 3))
             return result
         }
     },

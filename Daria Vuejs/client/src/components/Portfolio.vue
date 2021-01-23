@@ -7,7 +7,7 @@
                     <div class="col-lg-6" v-for="portfolio in p" :key="portfolio.id">
                         <router-link :to="{name: 'Project', params: { projectId: portfolio.image.projectId }}">
                             <div class="image">
-                                <img :src=portfolio.image.url>
+                                <img :src=portfolio.image.thumnailUrl>
                                 <p class="description">
                                     <strong>
                                         {{ $t('portfolio.description', portfolio.description) }}

@@ -2,40 +2,59 @@ import { dashboardService } from "../../services/dashboard.services";
 
 /* eslint-disable no-console */
 const state = {
-    nbImages: 0
+    projectTryingToUpload: false,
 };
 
 const getters = {
 };
 
 const actions = { 
-  async initDashboard({ commit, dispatch }) {
-    try {
-        const dashboard = await dashboardService.get();
-    
-        commit("INIT_DASHBOARD", dashboard.data);
-    }catch (err) {
-        if (err.response.status === 403) {
-            dispatch('user/logout', null, { root: true })
+    async addProject({ dispatch }, project) {
+        try {
+            var projectId = await dashboardService.addProject(project.project);
+            
+            dispatch('addImages', {images: project.images, projectId: projectId.data } );
+        } catch (err) {
+            if (err.response.status === 403) {
+                dispatch('user/logout', null, { root: true })
+            }
         }
-        commit("EMPTY_DASHBOARD");
+    },
+    async addImages({ dispatch }, imagePayload) {
+        try {
+            let formData = new FormData();
+            let images = imagePayload.images;
+
+            for(let i = 0; i < imagePayload.images.length; i++) {
+                formData.append('projectId', imagePayload.projectId)
+
+                formData.append('name', images[i].title[0]);
+                formData.append('nameEN', images[i].title[1]);
+                formData.append('description', images[i].description[0]);
+                formData.append('descriptionEN', images[i].description[1]);
+                formData.append('artDescription', images[i].artDescription[0]);
+                formData.append('artDescriptionEN', images[i].artDescription[1]);
+
+                formData.append('image', images[i].dataImage);
+                formData.append('image', images[i].dataThumbnail);
+
+                await dashboardService.addImage(formData);
+            }
+        } catch (err) {
+            if (err.response.status === 403) {
+                dispatch('user/logout', null, { root: true })
+            }
+        }
     }
-  },
 };
 
 const mutations = {
-    INIT_DASHBOARD(state, data) {
-    state.nbImages = data.nbImages;
-  },
-  EMPTY_DASHBOARD(state) {
-    state.nbImages = 0; 
-  }
 };
 
 export default {
-  namespaced: true,
-  getters,
-  state,
-  actions,
-  mutations
+    namespaced: true,
+    getters,
+    state,
+    actions,
+    mutations
 };

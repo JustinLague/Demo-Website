@@ -8,6 +8,8 @@ import Gallery from "../components/Gallery"
 import Project from "../components/Project"
 import LoginRegister from "@/components/Login/LoginRegister";
 import Dashboard from "../components/Admin/Dashboard"
+import AddProject from "../components/Admin/AddProject"
+import AddPortfolio from "../components/Admin/AddPortfolio"
 import store from "../stores/store";
 
 Vue.use(Router);
@@ -62,6 +64,16 @@ const router = new Router({
          if (to.name === "Dashboard" && !store.state.user.userSignedIn) next({ name: "Login" });
          else next();
       }
+    },
+    {
+      path: "/admin/project",
+      name: "addProject",
+      component: AddProject
+    },
+    {
+      path: "/admin/portfolio",
+      name: "addPortfolio",
+      component: AddPortfolio
     },
   ],
   scrollBehavior() {

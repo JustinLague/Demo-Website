@@ -3,7 +3,7 @@
     <div v-for="a in formatedArray" :key="a.length">
         <div class="row">
             <div class="col-lg-6" v-for="image in a" :key="image.id">
-                <img :src=image.url>
+                <enlargeable-image :src=image.thumnailUrl :src_large=image.detailedImageUrl />
                 {{ $t('image.name', image.name) }}
                 {{ $t('image.description', image.description) }}
             </div>
@@ -13,9 +13,14 @@
 </template>
 
 <script>
+import EnlargeableImage from "@diracleo/vue-enlargeable-image";
+
 export default {
     name: "ImageViewer",
     props: ['images'],
+    components: {
+        EnlargeableImage
+    },
     computed: {
         formatedArray() {
             const result = []

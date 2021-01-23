@@ -21,7 +21,8 @@ const mutations = {
     state.portfolios = data.portfolio;
     
     state.portfolios.forEach((portfolio) => {
-        portfolio.image.url = process.env.VUE_APP_API_URL + "/image/" + portfolio.image.id   
+      portfolio.image.thumnailUrl = process.env.VUE_APP_API_URL + "/image/" + portfolio.image.thumbnail;
+      portfolio.image.detailedImageUrl = process.env.VUE_APP_API_URL + "/image/" + portfolio.image.detailedImage;  
     })
   },
 };
