@@ -1,5 +1,5 @@
 const Portfolio = require("../models/portfolio").Portfolio;
-const Image = require('../models/image').Image;
+const ImageData = require('../models/imageData').ImageData;
 const mongoose = require('mongoose');
 const fs = require('fs');
 
@@ -18,42 +18,22 @@ class PortfolioController {
 
     async createPortfolio(req, res) {
         try {
-          var img = fs.readFileSync(req.file.path);
-          var encode_image = img.toString('base64');
-          // Define a JSONobject for the image attributes for saving to database
-    
-          var image = new Image({
+
+          var image = new ImageData({
             id : new mongoose.mongo.ObjectId(),
             contentType: req.file.mimetype,
-            data: new Buffer.from(encode_image, 'base64'),
+            data: new Buffer.from(fs.readFileSync(req.file.path), 'base64'),
           });
 
-          //there is a better way to do this i know.
-
-          image.name[0] = req.body.name;
-          image.name[1] = req.body.nameEN;
-
-          image.description[0] = req.body.description;
-          image.description[1] = req.body.descriptionEN;
-
-          image.artDescription[0] = req.body.artDescription;
-          image.artDescription[1] = req.body.artDescriptionEN;
-
           await image.save();
-    
-          image.projectId = req.body.projectId;
-    
+
           var portfolio = new Portfolio({ 
             id : new mongoose.mongo.ObjectId(),
-            description: req.body.portfolioDescription,
+            title: [req.body.title, req.body.titleEN],
+            description: [req.body.description, req.body.descriptionEN],
+            projectId: req.body.projectId,
             image: image
           })
-
-          portfolio.title[0] = req.body.portfolioTitle;
-          portfolio.title[1] = req.body.portfolioTitleEN;
-
-          portfolio.description[0] = req.body.description;
-          portfolio.description[1] = req.body.descriptionEN;
     
           await portfolio.save();
     

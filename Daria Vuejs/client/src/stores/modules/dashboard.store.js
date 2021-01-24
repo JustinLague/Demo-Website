@@ -1,26 +1,68 @@
 import { dashboardService } from "../../services/dashboard.services";
+import router from "../../router";
 
 /* eslint-disable no-console */
 const state = {
-    projectTryingToUpload: false,
+    projectTryingToAdd: false,
+    portfolioTryingToAdd: false,
+    projects: []
 };
 
 const getters = {
 };
 
 const actions = { 
-    async addProject({ dispatch }, project) {
+    async getProjects({ dispatch, commit }) {
         try {
-            var projectId = await dashboardService.addProject(project.project);
-            
-            dispatch('addImages', {images: project.images, projectId: projectId.data } );
+            var projects = await dashboardService.getProjects();
+
+            commit("INIT_PROJECTS", projects.data);
         } catch (err) {
             if (err.response.status === 403) {
                 dispatch('user/logout', null, { root: true })
             }
         }
     },
-    async addImages({ dispatch }, imagePayload) {
+    async addProject({ dispatch, commit }, project) {
+        commit("TRYING_ADD_PROJECT");
+        try {
+
+            var projectId = await dashboardService.addProject(project.project);
+            
+            dispatch('addImage', {images: project.images, projectId: projectId.data });
+
+            commit("ADDED_PROJECT");
+            router.push({ name: "Dashboard" });
+        } catch (err) {
+            if (err.response.status === 403) {
+                dispatch('user/logout', null, { root: true })
+            }
+        }
+    },
+    async addPortfolio({ dispatch, commit }, portfolio) {
+        commit("TRYING_ADD_PORTFOLIO");
+        try {
+            let formData = new FormData();
+            
+            formData.append('title', portfolio.portfolioTitle[0]);
+            formData.append('titleEN', portfolio.portfolioTitle[1]);
+            formData.append('description', portfolio.portfolioDescription[0]);
+            formData.append('descriptionEN', portfolio.portfolioDescription[1]);
+            formData.append('projectId', portfolio.projectId);
+            
+            formData.append('image', portfolio.image.dataImage);
+            
+            await dashboardService.addPortfolio(formData);
+            
+            commit("ADDED_PORTFOLIO");
+            router.push({ name: "Dashboard" });
+        } catch (err) {
+            if (err.response.status === 403) {
+                dispatch('user/logout', null, { root: true })
+            }
+        }
+    },
+    async addImage({ dispatch }, imagePayload) {
         try {
             let formData = new FormData();
             let images = imagePayload.images;
@@ -49,6 +91,21 @@ const actions = {
 };
 
 const mutations = {
+    TRYING_ADD_PROJECT(state) {
+        state.projectTryingToAdd = true;
+    },
+    ADDED_PROJECT(state) {
+        state.projectTryingToAdd = false;
+    },
+    TRYING_ADD_PORTFOLIO(state) {
+        state.portfolioTryingToAdd = true;
+    },
+    ADDED_PORTFOLIO(state) {
+        state.portfolioTryingToAdd = false;
+    },
+    INIT_PROJECTS(state, projects) {
+        state.projects = projects.project;
+    }
 };
 
 export default {

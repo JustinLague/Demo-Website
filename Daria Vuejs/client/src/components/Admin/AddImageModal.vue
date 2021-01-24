@@ -1,7 +1,7 @@
 <template>
     <modal name="modal-add-image" :adaptive="true" width="70%" height="auto" @before-open="clear()">
         <div class="modal-content">
-              <b-form-group>
+              <b-form-group v-if=isProject>
                 <div class="row">
                     <div class="input-group px-2 py-2 bg-white shadow-sm col-lg-6">
                         <input id="upload-thumbnail" type="file" ref="inputThumbnail" @change="onChangeThumbnail" class="form-control border-0">
@@ -41,7 +41,7 @@
                 </div>
             </b-form-group>
 
-            <b-form-group>
+            <b-form-group v-if=isProject>
                 <div class="row">
                     <div class="col-lg-6">
                         <h6 class="subTitle">Français</h6>
@@ -54,7 +54,7 @@
                 </div>
             </b-form-group>
 
-            <b-form-group>
+            <b-form-group v-if=isProject>
                 <div class="row">
                     <div class="col-lg-6">
                         <textarea placeholder="Description de l'art" class="form-control" v-model="image.artDescription[0]" rows="3"></textarea>
@@ -65,7 +65,7 @@
                 </div>
             </b-form-group>
 
-            <b-form-group>
+            <b-form-group v-if=isProject>
                 <div class="row">
                     <div class="col-lg-6">
                         <textarea placeholder="Description de l'image" class="form-control" v-model="image.description[0]" rows="3"></textarea>
@@ -77,7 +77,7 @@
             </b-form-group>
 
             <b-form-group>
-                    <b-button @click="addImage" variant="primary">Ajouter une photos</b-button>
+                    <b-button @click="addImage" variant="primary">Ajouter une photo</b-button>
                     <b-button class="float-right" @click="cancel" variant="danger">Cancel</b-button>
             </b-form-group>
         </div>
@@ -86,6 +86,9 @@
 
 <script>
 export default {
+    props: {
+        isProject: Boolean
+    },
     data() {
         return {
             image: {
@@ -137,7 +140,7 @@ export default {
             this.image.artDescription = [];
             this.image.description = [];
         },
-        clearRef(){
+        clearRef() {
             this.$refs.inputImage.value = null;
             this.$refs.inputThumbnail.value = null;
         },

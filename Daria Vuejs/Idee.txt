@@ -1,27 +1,8 @@
-4. Footer: 
+Admin :
 
-    "you're amazing <3" "you're doing great sweetie"
+    Add Portfolio :
 
-
-
-Add project dans la data base : 
-
-    one to many image a projet 
-
-    Porfolio : ajout d'un nouveau schema
-
-        one to one project :
-
-        +description
-        +photo
-
-    page pour ajouter un projet : 
-
-        +Name: 
-        +Art-description: 
-        +Description: 
-
-        +images files: (multiple)
+    Add Project :
     
     Modification du projet : 
         
@@ -35,19 +16,20 @@ Add project dans la data base :
 
             click sur plus pour ajouter des images.
 
-    Ajouter des images sans projet : 
 
-        file field 
-            name : 
-            description : 
-            
+Projets : 
 
+    Envoit une requetes pour creer le projet
+
+    Envoit une requete par photos avec leur infos
+
+    EZ PZ
 
 Photos: 
 
-    mettre une modal lorsqu'on click dessus avec un carrousel.
+    trois colones avec height de set, should look better, avec un ajout de spaces
 
-Internationalisation -- Done
+    mettre une modal lorsqu'on click dessus avec un carrousel.
 
 
 ** Bug : 

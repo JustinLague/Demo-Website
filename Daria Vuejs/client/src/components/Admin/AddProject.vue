@@ -38,7 +38,7 @@
             </b-form-group>
 
             <b-form-group>
-                <AddImageModal v-on:addImage="addImage"></AddImageModal>
+                <AddImageModal v-on:addImage="addImage" :isProject="true"></AddImageModal>
                 <b-button variant="primary" @click="$modal.show('modal-add-image')">Ajouter une image</b-button>
             </b-form-group>
 
@@ -49,7 +49,7 @@
             </b-form-group>
 
             <b-form-group>
-                <div v-if="!projectTryingToUpload">
+                <div v-if="!projectTryingToAdd">
                     <b-button type="submit" variant="primary">Ajouter un projet</b-button>
                 </div>
                 <div v-else>
@@ -87,7 +87,7 @@ export default {
         };
     },
     computed: {
-        ...mapState("dashboard", ["projectTryingToUpload", "serverError"]),
+        ...mapState("dashboard", ["projectTryingToAdd", "serverError"]),
         hasError() {
             return !this.serverError;
         },
@@ -97,9 +97,9 @@ export default {
     methods: {
         ...mapActions("dashboard", ["addProject"]),
         handleSubmit() {
-            const { projectTitle, projectArtDescription, projectDescription, images } = this;
+            const { project, images } = this;
 
-            this.addProject({ projectTitle, projectArtDescription, projectDescription, images });
+            this.addProject({ project, images });
         },
         addImage(image) {
             this.images.push({ ...image});

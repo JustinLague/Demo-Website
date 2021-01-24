@@ -6,12 +6,18 @@ const ImageSchema = new Schema({
     name: [String],
     artDescription: [String],
     description: [String],
-    data: { type: Buffer },
-    contentType: { type: String },
-    projectId:  {
+    projectId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Project"
-    }
+    },
+    thumbnail: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ImageData"
+    },
+    detailedImage: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ImageData"
+    },
 });
 
 const Image =  mongoose.model("Image", ImageSchema)

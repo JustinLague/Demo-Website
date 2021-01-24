@@ -27,35 +27,29 @@
             </b-form-group>
 
             <b-form-group>
-                <b-dropdown id="projectId" v-model="projectId" text="Select Item" variant="primary" class="m-md-2" v-on:change="changeItem">
-                    <b-dropdown-item v-for="project in projects" :key="project.id" :value="project.title[0]" @click="projectId = option.value"></b-dropdown-item>           
+                <b-dropdown v-model="portfolio.projectId" :text=getText() classplaceholder="Sélectionner une projet" variant="primary">
+                    <b-dropdown-item v-for="project in projects" :key="project.id" :value="project.id" @click="portfolio.projectId = project.id; selectedProjectTitle = project.title[0]">{{project.title[0]}}</b-dropdown-item>           
                 </b-dropdown> 
             </b-form-group>
 
             <b-form-group>
-                <AddImageModal v-on:addImage="addImage"></AddImageModal>
+                <AddImageModal v-on:addImage="addImage" :isProject="false"></AddImageModal>
                 <b-button variant="primary" @click="$modal.show('modal-add-image')">Ajouter une image</b-button>
             </b-form-group>
 
             <b-form-group>
                 <div>
-                    <img :src=image.urlImage>
+                    <img :src=portfolio.image.urlImage>
                 </div>
             </b-form-group>
 
             <b-form-group>
-                <div v-if="!portfolioTryingToUpload">
+                <div v-if="!portfolioTryingToAdd">
                     <b-button type="submit" variant="primary">Ajouter un portfolio</b-button>
                 </div>
                 <div v-else>
                     <b-spinner variant="primary" label="Spinning" class="spinner"></b-spinner>
                 </div>
-            </b-form-group>
-
-            <b-form-group>
-                <label class="error" :state="hasError">
-                    {{ serverError }}
-                </label>
             </b-form-group>
         </b-form>
     </b-container>
@@ -66,35 +60,43 @@ import { mapActions, mapState } from "vuex";
 import AddImageModal from "./AddImageModal";
 
 export default {
-  components: {
-    AddImageModal,
-  },
+    components: {
+        AddImageModal,
+    },
     data() {
         return {
-            projects: [],
             portfolio: {
                 portfolioTitle: [],
                 portfolioDescription: [],
-                projectId: Number
+                projectId: String,
+                image: {},
             },
-            image: {},
+            selectedProjectTitle: String,
         };
     },
+    created() {
+        this.$nextTick(function () {
+            this.getProjects();
+        })
+    },
     computed: {
-        ...mapState("dashboard"),
+        ...mapState("dashboard", ["projects", "portfolioTryingToAdd"]),
         console: () => console,
         window: () => window,
     },
     methods: {
-        ...mapActions("dashboard", ["addPortfolio"]),
+        ...mapActions("dashboard", ["addPortfolio", "getProjects"]),
         handleSubmit() {
-            const { portfolio, image } = this;
+            const { portfolio } = this;
 
-            this.addPortfolio({ portfolio, image });
+            this.addPortfolio( portfolio );
         },
         addImage(image) {
-            this.image = { ...image};
+            this.portfolio.image = { ...image};
         },
+        getText() {
+            return this.selectedProjectTitle.length != 1 ? this.selectedProjectTitle : "Sélectionner un projet";
+        }
     },
 }
 </script>
