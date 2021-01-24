@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import ImageViewer from "./subComponents/ImageViewer";
+import ImageViewer from "./SubComponents/ImageViewer";
 import { mapActions, mapState } from "vuex";
 
 export default {

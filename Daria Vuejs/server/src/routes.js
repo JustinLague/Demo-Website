@@ -18,11 +18,15 @@ module.exports = (app) => {
   //Portfolio
   app.get("/api/portfolio", PortfolioController.portfolio);
   
-  app.post('/api/createPortfolio', upload.single('image'),  PortfolioController.createPortfolio);
+  app.post('/api/dashboard/portfolio', AuthPolicies.verifyToken, upload.single('image'), PortfolioController.createPortfolio);
   
   
   //Project
-  app.post('/api/createProject', upload.array('image', 12),  ProjectController.createProject);
+  app.post('/api/dashboard/image', AuthPolicies.verifyToken, upload.array('image', 2),  ProjectController.addImage);
+
+  app.post('/api/dashboard/project', AuthPolicies.verifyToken, ProjectController.createProject);
+
+  app.get('/api/dashboard/project', ProjectController.getProject);
 
   app.get("/api/project/:id", ProjectController.project);
   
@@ -34,7 +38,6 @@ module.exports = (app) => {
   //Image
   app.get("/api/image/:id", ImageController.image);
 
+  
   //Dashboard
-
-  app.get("/api/dashboard", AuthPolicies.verifyToken, DashboardController.dashboard)
 };

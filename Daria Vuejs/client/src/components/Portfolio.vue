@@ -5,9 +5,9 @@
             <div v-for="p in formatedArray" :key="p.length">
                 <div class="row">
                     <div class="col-lg-6" v-for="portfolio in p" :key="portfolio.id">
-                        <router-link :to="{name: 'Project', params: { projectId: portfolio.image.projectId }}">
+                        <router-link :to="{name: 'Project', params: { projectId: portfolio.projectId }}">
                             <div class="image">
-                                <img :src=portfolio.image.url>
+                                <img :src=portfolio.imageUrl>
                                 <p class="description">
                                     <strong>
                                         {{ $t('portfolio.description', portfolio.description) }}

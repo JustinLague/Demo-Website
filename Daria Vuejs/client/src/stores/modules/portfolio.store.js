@@ -19,9 +19,10 @@ const actions = {
 const mutations = {
   INIT_PORTFOLIO(state, data) {
     state.portfolios = data.portfolio;
+
     
     state.portfolios.forEach((portfolio) => {
-        portfolio.image.url = process.env.VUE_APP_API_URL + "/image/" + portfolio.image.id   
+      portfolio.imageUrl = process.env.VUE_APP_API_URL + "/image/" + portfolio.image;
     })
   },
 };
