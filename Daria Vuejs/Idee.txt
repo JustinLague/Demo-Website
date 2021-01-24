@@ -1,39 +1,21 @@
 Admin :
 
-    Add Portfolio :
-
-    Add Project :
-    
-    Modification du projet : 
-        
-        drop down de tout les projets :
-
-            click dessus 
-
-            affiche name, art-description, description et tout les images
-
-            click sur X pour enlever une images
-
-            click sur plus pour ajouter des images.
-
-
-Projets : 
-
-    Envoit une requetes pour creer le projet
-
-    Envoit une requete par photos avec leur infos
-
-    EZ PZ
+    Ajouter des images juste dans la galerie.
 
 Photos: 
 
     trois colones avec height de set, should look better, avec un ajout de spaces
 
-    mettre une modal lorsqu'on click dessus avec un carrousel.
 
+Contact: 
+
+    Ajouter un form pour envoyer automatiquement un mail. 
 
 ** Bug : 
+    ne pas afficher les thumnail dans la galerie
 
-    Gallery et portfolio on a pas le meme espace
+    click sur X pour enlever une images
 
+    Verifier dockerfile
 
+    QUOTE YOU NEED A QUOTE

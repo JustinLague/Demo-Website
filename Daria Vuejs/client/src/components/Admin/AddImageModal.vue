@@ -118,13 +118,13 @@ export default {
             this.image.urlThumbnail = URL.createObjectURL(file);
         },
         onDeleteImage() {
-            this.cleanRef();
+            this.clearRef();
             this.image.imageName = "";
             this.image.dataImage = null;
             this.image.urlImage = "";
         },
         onDeleteThumbnail() {
-            this.cleanRef();
+            this.clearRef();
             this.image.dataThumbnail = null;
             this.image.thumbnailName = "";
             this.image.urlThumbnail = "";

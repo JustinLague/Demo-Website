@@ -67,21 +67,23 @@ const actions = {
             let formData = new FormData();
             let images = imagePayload.images;
 
-            for(let i = 0; i < imagePayload.images.length; i++) {
+            images.forEach(async image => {
+                formData = new FormData();
+
                 formData.append('projectId', imagePayload.projectId)
 
-                formData.append('name', images[i].title[0]);
-                formData.append('nameEN', images[i].title[1]);
-                formData.append('description', images[i].description[0]);
-                formData.append('descriptionEN', images[i].description[1]);
-                formData.append('artDescription', images[i].artDescription[0]);
-                formData.append('artDescriptionEN', images[i].artDescription[1]);
+                formData.append('name', image.title[0]);
+                formData.append('nameEN', image.title[1]);
+                formData.append('description', image.description[0]);
+                formData.append('descriptionEN', image.description[1]);
+                formData.append('artDescription', image.artDescription[0]);
+                formData.append('artDescriptionEN', image.artDescription[1]);
 
-                formData.append('image', images[i].dataImage);
-                formData.append('image', images[i].dataThumbnail);
+                formData.append('image', image.dataThumbnail);
+                formData.append('image', image.dataImage);
 
                 await dashboardService.addImage(formData);
-            }
+            })
         } catch (err) {
             if (err.response.status === 403) {
                 dispatch('user/logout', null, { root: true })

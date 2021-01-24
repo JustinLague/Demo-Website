@@ -44,7 +44,7 @@
 
             <b-form-group>
                 <div v-for="image in images" :key="image.name">
-                    <enlargeable-image :src=image.urlImage :src_large=image.urlThumbnail />
+                    <enlargeable-image :src=image.urlThumbnail :src_large=image.urlImage />
                 </div>
             </b-form-group>
 

@@ -8,11 +8,6 @@
                     <div class="col-lg-4" v-for="image in galleryImage" :key="image.id">
                         <div class="image">
                             <enlargeable-image :src=image.thumnailUrl :src_large=image.detailedImageUrl />
-                            <p class="name">
-                                <strong>
-                                    {{ $t('gallery.imageName', image.name) }}
-                                </strong>
-                            </p>
                         </div>
                     </div>
                 </div>
@@ -62,5 +57,9 @@ a {
 a:hover {
     color: #808080;
     text-decoration: none;
+}
+
+.image {
+    margin-bottom: 30px;
 }
 </style>
