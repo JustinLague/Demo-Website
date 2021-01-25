@@ -7,6 +7,7 @@ const messages = {
     fr: {
         portfolio: { 
             title: 'Portfolio',
+            painting: 'Peinture',
             description: (ctx) => `${ctx.list(0)}`,
         },
         about: { 
@@ -19,6 +20,7 @@ const messages = {
         },
         gallery: { 
             title: 'Galerie',
+            more: 'plus de détails',
             imageName: (ctx) => `${ctx.list(0)}`
         },
         resume: { 
@@ -49,6 +51,7 @@ const messages = {
     en: {
         portfolio: { 
             title: 'Portfolio',
+            painting: 'Painting',
             description: (ctx) => `${ctx.list(1)}`,
         },
         about: { 
@@ -61,6 +64,7 @@ const messages = {
         },
         gallery: { 
             title: 'Gallery',
+            more: 'more details',
             imageName: (ctx) => `${ctx.list(1)}`
         },
         resume: { 

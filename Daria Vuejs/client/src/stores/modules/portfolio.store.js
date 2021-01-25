@@ -2,7 +2,7 @@ import { portfolioService } from "../../services/portfolio.services";
 
 /* eslint-disable no-console */
 const state = {
-  portfolios: [],
+  projects: [],
   
 };
 
@@ -11,19 +11,14 @@ const getters = {
 
 const actions = { 
   async initPortfolio({ commit }) {
-    const portfolios = await portfolioService.get();
-    commit("INIT_PORTFOLIO", portfolios.data);
+    const projects = await portfolioService.get();
+    commit("INIT_PORTFOLIO", projects.data);
   },
 };
 
 const mutations = {
   INIT_PORTFOLIO(state, data) {
-    state.portfolios = data.portfolio;
-
-    
-    state.portfolios.forEach((portfolio) => {
-      portfolio.imageUrl = process.env.VUE_APP_API_URL + "/image/" + portfolio.image;
-    })
+    state.projects = data.projects;
   },
 };
 

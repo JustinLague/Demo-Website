@@ -1,21 +1,15 @@
 <template>
     <div class="content">
         <h2 class="main-title">{{ $t('portfolio.title') }}</h2>
-        <div v-if="portfolios">
-            <div v-for="p in formatedArray" :key="p.length">
-                <div class="row">
-                    <div class="col-lg-6" v-for="portfolio in p" :key="portfolio.id">
-                        <router-link :to="{name: 'Project', params: { projectId: portfolio.projectId }}">
-                            <div class="image">
-                                <img :src=portfolio.imageUrl>
-                                <p class="description">
-                                    <strong>
-                                        {{ $t('portfolio.description', portfolio.description) }}
-                                    </strong>
-                                </p>
-                            </div>
-                        </router-link>
-                    </div>
+        <h5 class="sub-section">{{ $t('portfolio.painting') }}</h5>
+        <div v-if="projects">
+            <div class="row">
+                <div class="col-lg-12 project" v-for="project in projects" :key="project.id">
+                    <router-link :to="{name: 'Project', params: { projectId: project.id }}">
+                        <p>
+                            {{ $t('project.title', project.title) }}
+                        </p>
+                    </router-link>
                 </div>
             </div>
         </div>
@@ -31,13 +25,7 @@ export default {
             this.initPortfolio();
     })},
     computed: {
-        ...mapState("portfolio", ["portfolios"]),
-        formatedArray() {
-            const result = []
-            for (let i = 0; i < this.portfolios.length; i += 2)
-                result.push(this.portfolios.slice(i, i + 2))
-            return result
-        }
+        ...mapState("portfolio", ["projects"]),
     },
     methods: {
         ...mapActions("portfolio", ["initPortfolio"]),
@@ -46,15 +34,6 @@ export default {
 </script>
 
 <style scoped>
-.first {
-    font-weight: 300;
-    font-family: 'Montserrat', sans-serif;
-}
-
-.description {
-    margin-top: 18px;
-}
-
 a {
     color: black; 
     text-decoration: none;
@@ -63,5 +42,14 @@ a {
 a:hover {
     color: #808080;
     text-decoration: none;
+}
+
+.project {
+    margin-bottom: -10px;
+}
+
+.sub-section {
+    padding-top: 30px;
+    padding-bottom: 10px;
 }
 </style>

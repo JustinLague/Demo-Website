@@ -3,9 +3,7 @@
     <div v-for="a in formatedArray" :key="a.length">
         <div class="row">
             <div class="col-lg-6" v-for="image in a" :key="image.id">
-                <enlargeable-image :src=image.thumnailUrl :src_large=image.detailedImageUrl />
-                {{ $t('image.name', image.name) }}
-                {{ $t('image.description', image.description) }}
+                <enlargeable-image class="image" :src=image.detailedImageUrl :src_large=image.detailedImageUrl />
             </div>
         </div>
     </div>
@@ -32,6 +30,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.image {
+    margin-bottom: 20px;
+}
 </style>

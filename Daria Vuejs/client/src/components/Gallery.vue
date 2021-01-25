@@ -3,11 +3,14 @@
         <h2 class="main-title">{{ $t('gallery.title') }}</h2>
 
         <div v-if="galleryImages">
-            <div v-for="galleryImage in formatedArray" :key="galleryImage.length">
+            <div v-for="(galleryImage, index) in formatedArray" :key="index">
                 <div class="row">
                     <div class="col-lg-4" v-for="image in galleryImage" :key="image.id">
                         <div class="image">
                             <enlargeable-image :src=image.thumnailUrl :src_large=image.detailedImageUrl />
+                            <router-link class="more" :to="{name: 'Project', params: { projectId: image.projectId }}">
+                                <p >{{ $t('gallery.more') }}</p>
+                            </router-link>
                         </div>
                     </div>
                 </div>
@@ -44,11 +47,7 @@ export default {
 }
 </script>
 
-<style scoped>
-.name {
-    margin-top: 18px;
-}
-
+<style>
 a {
     color: black; 
     text-decoration: none;
@@ -61,5 +60,19 @@ a:hover {
 
 .image {
     margin-bottom: 30px;
+}
+
+div.full.enlarged {
+    background-image: none !important;
+}
+
+.more {
+    color: black; 
+    text-decoration: none;
+}
+
+.more:hover {
+    color: #808080;
+    text-decoration: none;
 }
 </style>

@@ -2,9 +2,17 @@ Admin :
 
     Ajouter des images juste dans la galerie.
 
-Photos: 
+Project: 
 
-    trois colones avec height de set, should look better, avec un ajout de spaces
+    Une grosse photo de l'oeuvre, pas de texte en bas de l'image
+
+Portfolio :
+
+    Ajouter une section (sous titre) peinture.
+
+    Le titre du project qui est un lien vers la page du project.
+
+
 
 
 Contact: 
