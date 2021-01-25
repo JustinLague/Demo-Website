@@ -1,0 +1,63 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: bmg-nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - vuejs:/app
+    depends_on:
+      - "back-end"
+      - "front-end"
+    networks:
+      - bmg-network
+
+  front-end:
+    container_name: bmg-fe
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    volumes:
+      - vuejs:/app
+    networks:
+      - bmg-network
+
+  back-end:
+    container_name: bmg-be
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    env_file: ./server/config/.env
+    ports: ['3005:3005']
+    volumes:
+      - '/src/node_modules'
+    depends_on:
+      - "db"
+    networks:
+      - bmg-network
+
+  db:
+    container_name: bmg-db
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: sketcher
+      MONGO_INITDB_ROOT_PASSWORD: 9WuANDrLg25BJhPM
+      MONGO_INITDB_DATABASE: sketcher
+    ports: ["27017:27017"]
+    volumes:
+      - mongodb_data_container:/data/db
+    networks:
+      - bmg-network
+
+networks:
+  bmg-network:
+    driver: bridge
+
+volumes:
+  mongodb_data_container:
+  vuejs:

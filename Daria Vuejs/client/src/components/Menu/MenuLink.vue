@@ -13,10 +13,10 @@
 
         <div class="links">
            <div>
-                <router-link to="/">{{ $t('portfolio.title') }}</router-link>
+                <router-link to="/Portfolio">{{ $t('portfolio.title') }}</router-link>
             </div>
             <div>
-                <router-link to="/Gallery">{{ $t('gallery.title') }}</router-link>
+                <router-link to="/">{{ $t('gallery.title') }}</router-link>
             </div>
             <div class="about">
                 <router-link to="/About">{{ $t('about.title') }}</router-link>

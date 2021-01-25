@@ -4,6 +4,7 @@ import router from "./router";
 import VModal from 'vue-js-modal'
 import store from "./stores/store";
 import i18n from "./plugins/i18n.js"
+import VueLazyLoad from 'vue-lazyload'
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import EnlargeableImage from '@diracleo/vue-enlargeable-image';
@@ -15,6 +16,7 @@ Vue.use(BootstrapVueIcons);
 Vue.use(EnlargeableImage);
 Vue.use(DropdownPlugin)
 Vue.use(BootstrapVue);
+Vue.use(VueLazyLoad);
 Vue.use(VModal);
 Vue.config.productionTip = false;
 

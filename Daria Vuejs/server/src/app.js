@@ -10,9 +10,9 @@ const app = express();
 console.log(config.db.url);
 mongoose.connect(config.db.url, { useNewUrlParser: true, useUnifiedTopology: true });
 
-var db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error"));
-db.once("open", function () {
+const conn = mongoose.connection;
+conn.on("error", console.error.bind(console, "connection error"));
+conn.once("open", function () {
   console.log("connected to the db");
 });
 

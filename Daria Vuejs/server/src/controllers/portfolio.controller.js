@@ -1,3 +1,4 @@
+const Project = require("../models/project").Project;
 const Portfolio = require("../models/portfolio").Portfolio;
 const ImageData = require('../models/imageData').ImageData;
 const mongoose = require('mongoose');
@@ -7,9 +8,9 @@ class PortfolioController {
     
     async portfolio(req, res) {
       try {
-        var portfolio = await Portfolio.find().select("-_id -__v -image.data -image.__v -image._id").exec();
+        var projects = await Project.find().select("-_id -__v -description -artDescription").exec();
        
-        res.send({ portfolio });
+        res.send({ projects });
   
       } catch (err) {
         res.status(400).send({ error: err.message });
