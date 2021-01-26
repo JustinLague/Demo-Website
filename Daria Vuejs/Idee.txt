@@ -2,28 +2,30 @@ Admin :
 
     Ajouter des images juste dans la galerie.
 
-Project: 
-
-    Une grosse photo de l'oeuvre, pas de texte en bas de l'image
-
-Portfolio :
-
-    Ajouter une section (sous titre) peinture.
-
-    Le titre du project qui est un lien vers la page du project.
-
-
-
-
 Contact: 
 
     Ajouter un form pour envoyer automatiquement un mail. 
 
 ** Bug : 
-    ne pas afficher les thumnail dans la galerie
 
     click sur X pour enlever une images
 
-    Verifier dockerfile
-
     QUOTE YOU NEED A QUOTE
+
+    password du droplet digital ocean : nv*AX2eBMQWH@7Y
+
+    password of the database : 9WuANDrLg25BJhPM
+
+
+
+Bug docker :
+
+    files names qui etait capitalize : doit etre en minuscule.
+
+    mauvais configuration de nginx config : ca pointais sur bme-be au lieu de daria-be
+
+    wrong bd uri : il me manquait le @
+
+    changer le url api
+
+    code doesnt want to change. rebuilding the image doesnt work for some reason DELETE LES FCKING VOLUMES
