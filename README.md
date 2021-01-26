@@ -1,3 +1,3 @@
-# Web-Design
+# Daria Elas website.
 
-This is a repo to try some web design. Im sorry if your eyes are bleeding.
+This is the repo of the www.dariaelas.com webstie.
