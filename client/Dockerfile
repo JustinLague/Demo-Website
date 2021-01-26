@@ -6,8 +6,4 @@ RUN npm install
 COPY . .
 RUN npm run build
 EXPOSE 8080
-<<<<<<< HEAD:Daria Vuejs/client/Dockerfile
 CMD [ "http-server", "dist" ]
-=======
-CMD [ "http-server", "dist" ]
->>>>>>> master:client/Dockerfile
