@@ -5,6 +5,7 @@ image
 
 # local env files
 .env
+.env.production
 .env.local
 .env.*.local
 
