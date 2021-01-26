@@ -10,7 +10,7 @@ const upload = require("./middleware/upload")
 
 module.exports = (app) => {
   //Authorisation
-  app.post("/api/register", AuthController.register);
+  //app.post("/api/register", AuthController.register);
 
   app.post("/api/login", AuthController.login);
 
