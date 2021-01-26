@@ -3,7 +3,7 @@ version: '3'
 services:
   nginx:
     image: nginx:alpine
-    container_name: bmg-nginx
+    container_name: daria-nginx
     restart: unless-stopped
     tty: true
     ports:
@@ -15,20 +15,20 @@ services:
       - "back-end"
       - "front-end"
     networks:
-      - bmg-network
+      - daria-network
 
   front-end:
-    container_name: bmg-fe
+    container_name: daria-fe
     build:
       context: ./client
       dockerfile: Dockerfile
     volumes:
       - vuejs:/app
     networks:
-      - bmg-network
+      - daria-network
 
   back-end:
-    container_name: bmg-be
+    container_name: daria-be
     build:
       context: ./server
       dockerfile: Dockerfile
@@ -39,23 +39,23 @@ services:
     depends_on:
       - "db"
     networks:
-      - bmg-network
+      - daria-network
 
   db:
-    container_name: bmg-db
+    container_name: daria-db
     image: mongo:latest
     environment:
-      MONGO_INITDB_ROOT_USERNAME: sketcher
+      MONGO_INITDB_ROOT_USERNAME: daria
       MONGO_INITDB_ROOT_PASSWORD: 9WuANDrLg25BJhPM
-      MONGO_INITDB_DATABASE: sketcher
+      MONGO_INITDB_DATABASE: daria
     ports: ["27017:27017"]
     volumes:
       - mongodb_data_container:/data/db
     networks:
-      - bmg-network
+      - daria-network
 
 networks:
-  bmg-network:
+  daria-network:
     driver: bridge
 
 volumes:
