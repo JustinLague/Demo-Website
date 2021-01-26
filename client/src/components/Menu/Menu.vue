@@ -29,7 +29,7 @@ export default {
             screenWidth: 0
         }
     },
-     components: {
+    components: {
         Slide,
         MenuLink,
         HamburgerMenu
@@ -37,7 +37,8 @@ export default {
     mounted() {
         window.addEventListener('resize', () => {
             this.screenWidth = window.innerWidth;
-        })
+        });
+        this.screenWidth = window.innerWidth;
     },
     computed: {
         showMobileMenu() {
