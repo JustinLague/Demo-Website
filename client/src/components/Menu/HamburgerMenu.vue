@@ -26,11 +26,9 @@
         
         <div class="footer">
             <p>
-                "I don't like men, 
+                You need a quote 
             <br>
-                but i can't escape them." 
-            <br>
-                - Liam Fraser 2020
+                Daria.
             </p>
         </div>
 
