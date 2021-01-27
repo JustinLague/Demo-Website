@@ -85,8 +85,8 @@ const messages = {
             artDescription: (ctx) => `${ctx.list(1)}`,
         },
         enquiries: {
-            title: 'Enquieries',
-            renseignement: 'For any inquiries, please fill out the form below:',
+            title: 'Enquiries',
+            renseignement: 'For any enquiries, please fill out the form below:',
         },
         menu: { 
             artist: 'Visual artist'
