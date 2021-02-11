@@ -35,13 +35,24 @@
             <button  v-on:click="changeLocal('en')">EN</button>
         </div>
         
-        <div class="footer">
+        <div class="links">
+            <span>
+                <a href="https://www.instagram.com/daria.elas/">
+                    <b-icon class="instagram" id="icon-env" scale="1.4" icon="instagram"></b-icon>
+                </a>
+                <a href="mailto:dariaalexandrae@gmail.com">
+                    <b-icon id="icon-env" scale="1.4" icon="envelope-open"></b-icon>
+                </a>
+            </span>
+        </div>
+        
+        <!-- <div class="footer">
             <p>
                 You need a quote 
             <br>
                 Daria.
             </p>
-        </div>
+        </div> -->
 
         <div id="gif">
             <img src="../../assets/img/HappyGif.gif" alt="">
@@ -87,32 +98,7 @@ export default {
     font-size: 0.7em;
 }
 
-.links {
-    font-weight: 400;
-    line-height: 2em;
-    font-size: 18px;
-}
-
-.follow {
-    font-weight: 400;
-    padding-top: 30px;
-}
-
-#instagram {
-    padding-left: 15px;
-    padding-right: 20px;
-}
-
-.icon {
-    font-size: 1.5em;
-}
-
-#icon-env {
-    font-size: 1.7em;
-}
-
 button {
-    margin-top: 20px;
     background: white;
     box-shadow: 0px 0px 0px transparent;
     border: 0px solid transparent;
@@ -125,6 +111,15 @@ button:first-child {
 
 button:focus {
     outline: 0px auto -webkit-focus-ring-color;
+}
+
+.links {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.instagram {
+    margin-right: 16px;
 }
 
 .footer {
