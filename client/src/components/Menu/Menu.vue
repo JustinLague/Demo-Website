@@ -10,7 +10,7 @@
                 </h2>
             </router-link>
         </div>
-        <slide v-if="showMobileMenu" right>
+        <slide v-if="showMobileMenu" right :closeOnNavigation="true">
             <hamburger-menu></hamburger-menu>
         </slide>
         <menu-link v-if="!showMobileMenu"></menu-link>

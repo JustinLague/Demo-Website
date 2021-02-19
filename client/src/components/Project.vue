@@ -4,7 +4,7 @@
         <h4 class="art-description">{{ $t('project.artDescription', project.artDescription) }}</h4>
         
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-11">
                 <h4 class="description">{{ $t('project.description', project.description) }}</h4>    
             </div>
         </div>

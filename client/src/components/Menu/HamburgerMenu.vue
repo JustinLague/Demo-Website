@@ -23,14 +23,25 @@
             <span>|</span>
             <button  v-on:click="changeLocal('en')">EN</button>
         </div>
+
+        <div class="links">
+            <span>
+                <a href="https://www.instagram.com/daria.elas/">
+                    <b-icon class="instagram" id="icon-env" scale="1.4" icon="instagram"></b-icon>
+                </a>
+                <a href="mailto:dariaalexandrae@gmail.com">
+                    <b-icon id="icon-env" scale="1.4" icon="envelope-open"></b-icon>
+                </a>
+            </span>
+        </div>
         
-        <div class="footer">
+        <!-- <div class="footer">
             <p>
                 You need a quote 
             <br>
                 Daria.
             </p>
-        </div>
+        </div> -->
 
         <div id="gif">
             <img src="../../assets/img/HappyGif.gif" alt="">
@@ -63,36 +74,24 @@ export default {
     font-size: 0.7em;
 }
 
+
 .links {
     width: 100%;
-    font-weight: 400;
-    line-height: 2em;
-    font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
-.follow {
-    font-weight: 400;
-    padding-top: 30px;
+.instagram {
+    margin-left: 5px;
+    margin-right: 17px;
 }
 
-#instagram {
-    padding-right: 25px;
-}
-
-.icon {
-    font-size: 1.5em;
-}
-
-#icon-env {
-    font-size: 1.7em;
-}
 
 .lang {
     width: 100%;
 }
 
 button {
-    margin-top: 20px;
     background: #3F3F41;
     color: #808080;
     box-shadow: 0px 0px 0px transparent;
