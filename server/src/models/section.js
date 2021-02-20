@@ -1,20 +1,18 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const PortfolioSchema = new Schema({
+const SectionSchema = new Schema({
     id: { type: mongoose.Schema.Types.ObjectId, index: { unique: true }},
     title: [String],
-    description: [String],
-    projectId: String,
-    image: {
+    projects: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "ImageData"
-    },
+        ref: "Project"
+    }]
 });
 
-const Portfolio =  mongoose.model("Portfolio", PortfolioSchema)
+const Section = mongoose.model("Section", SectionSchema)
 
 module.exports = {
-    Portfolio,
-    PortfolioSchema
+    Section,
+    SectionSchema
 }
