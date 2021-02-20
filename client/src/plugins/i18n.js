@@ -7,7 +7,7 @@ const messages = {
     fr: {
         portfolio: { 
             title: 'Portfolio',
-            painting: 'Peinture',
+            sectionTitle: (ctx) => `${ctx.list(0)}`,
             description: (ctx) => `${ctx.list(0)}`,
         },
         about: { 
@@ -51,7 +51,7 @@ const messages = {
     en: {
         portfolio: { 
             title: 'Portfolio',
-            painting: 'Painting',
+            sectionTitle: (ctx) => `${ctx.list(1)}`,
             description: (ctx) => `${ctx.list(1)}`,
         },
         about: { 

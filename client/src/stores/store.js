@@ -3,7 +3,7 @@ import Vuex from "vuex";
 import user from "./modules/user.store";
 import VuexPersist from "vuex-persist";
 import project from "./modules/project.store";
-import portfolio from "./modules/portfolio.store";
+import section from "./modules/section.store";
 import dashboard from "./modules/dashboard.store";
 import gallery from "./modules/gallery.store";
 
@@ -26,9 +26,9 @@ const vueLocalStorage = new VuexPersist({
 
 export default new Vuex.Store({
   modules: {
-    portfolio,
     project,
     user,
+    section,
     dashboard,
     gallery
   },
