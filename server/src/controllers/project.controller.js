@@ -1,12 +1,26 @@
 const Project = require("../models/project").Project;
 const Image = require('../models/image').Image;
 const ImageData = require('../models/imageData').ImageData;
+const Section = require('../models/section').Section;
 const mongoose = require('mongoose');
 const fs = require('fs');
 
 class ProjectController {
    
-    async project(req, res) {
+    async projects(req, res) {
+        try {
+            var projects = await Project.find().select("-_id -__v").exec();
+           
+            res.send({
+              projects
+            });
+      
+          } catch (err) {
+              err.status(400).send({ error: err.message });
+          }
+    }
+
+    async projectId(req, res) {
         try {
           var id = req.params.id;
     

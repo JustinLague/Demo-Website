@@ -1,11 +1,14 @@
 import { dashboardService } from "../../services/dashboard.services";
+import { sectionService } from "../../services/section.services";
 import router from "../../router";
+import _ from 'lodash'; 
 
 /* eslint-disable no-console */
 const state = {
     projectTryingToAdd: false,
-    portfolioTryingToAdd: false,
-    projects: []
+    sectionTryingToAdd: false,
+    projects: [],
+    sections: []
 };
 
 const getters = {
@@ -20,13 +23,15 @@ const actions = {
         } catch (err) {
             if (err.response.status === 403) {
                 dispatch('user/logout', null, { root: true })
+            } else {
+                const serverError = err.response.data.error;
+                commit("LOGIN_ERROR", serverError);
             }
         }
     },
     async addProject({ dispatch, commit }, project) {
         commit("TRYING_ADD_PROJECT");
         try {
-
             var projectId = await dashboardService.addProject(project.project);
             
             dispatch('addImage', {images: project.images, projectId: projectId.data });
@@ -36,33 +41,13 @@ const actions = {
         } catch (err) {
             if (err.response.status === 403) {
                 dispatch('user/logout', null, { root: true })
+            } else {
+                const serverError = err.response.data.error;
+                commit("LOGIN_ERROR", serverError);
             }
         }
     },
-    async addPortfolio({ dispatch, commit }, portfolio) {
-        commit("TRYING_ADD_PORTFOLIO");
-        try {
-            let formData = new FormData();
-            
-            formData.append('title', portfolio.portfolioTitle[0]);
-            formData.append('titleEN', portfolio.portfolioTitle[1]);
-            formData.append('description', portfolio.portfolioDescription[0]);
-            formData.append('descriptionEN', portfolio.portfolioDescription[1]);
-            formData.append('projectId', portfolio.projectId);
-            
-            formData.append('image', portfolio.image.dataImage);
-            
-            await dashboardService.addPortfolio(formData);
-            
-            commit("ADDED_PORTFOLIO");
-            router.push({ name: "Dashboard" });
-        } catch (err) {
-            if (err.response.status === 403) {
-                dispatch('user/logout', null, { root: true })
-            }
-        }
-    },
-    async addImage({ dispatch }, imagePayload) {
+    async addImage({ commit, dispatch }, imagePayload) {
         try {
             let formData = new FormData();
             let images = imagePayload.images;
@@ -87,8 +72,27 @@ const actions = {
         } catch (err) {
             if (err.response.status === 403) {
                 dispatch('user/logout', null, { root: true })
+            } else {
+                const serverError = err.response.data.error;
+                commit("LOGIN_ERROR", serverError);
             }
         }
+    },
+    async addSection({ commit }) {
+        commit("ADD_SECTION");
+    },
+    async initSection({ commit }) {
+        const sections = await sectionService.get();
+        commit("INIT_SECTION", sections.data);
+    },
+    async updateSection({ commit }, payload) {
+        commit("UPDATE_SECTION", payload);
+    },
+    async removeProject({ commit }, payload) {
+        commit("REMOVE_PROJECT", payload);
+    },
+    async removeSection({ commit }, section) {
+        commit("REMOVE_SECTION", section);
     }
 };
 
@@ -99,14 +103,43 @@ const mutations = {
     ADDED_PROJECT(state) {
         state.projectTryingToAdd = false;
     },
-    TRYING_ADD_PORTFOLIO(state) {
-        state.portfolioTryingToAdd = true;
-    },
-    ADDED_PORTFOLIO(state) {
-        state.portfolioTryingToAdd = false;
-    },
     INIT_PROJECTS(state, projects) {
         state.projects = projects.project;
+    },
+    INIT_SECTION(state, data) {
+        data.forEach(section => {
+          section.projects = _.sortBy(section.projects, ["index"]);
+        });
+    
+        state.sections = data;
+    },
+    ADD_SECTION(state) {
+        let randomId = "tempId" + Math.floor(Math.random() * 6000000); 
+        
+        //making sure its a unique ID
+        while (state.sections.find(section => section.id === randomId) != undefined) {
+            randomId = "tempId" + Math.floor(Math.random() * 6000000); 
+        }
+        
+        let newSection = { id: randomId, title: ["Sans titre", "Untitled"], projects: []};
+        state.sections.push(newSection);
+    },
+    REMOVE_PROJECT(state, payload) {
+        let prevSectionIndex = state.sections.findIndex(section => section.id === payload.section.id);
+
+       _.remove(state.sections[prevSectionIndex].projects, subSection => subSection.project.id === payload.project.id);
+    },
+    REMOVE_SECTION(state, section) {
+        _.remove(state.sections, s => s.id === section.id);
+    },
+    UPDATE_SECTION(state, payload) {
+        let prevSectionIndex = state.sections.findIndex(section => section.id === payload.prevSectionID);
+
+        let subSection = _.remove(state.sections[prevSectionIndex].projects, subSection => subSection.project.id === payload.projectID)[0];
+
+        let newSection = state.sections.find(section => section.id === payload.newSectionID);
+
+        newSection.projects.push(subSection);
     }
 };
 

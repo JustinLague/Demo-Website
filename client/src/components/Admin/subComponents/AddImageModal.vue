@@ -209,7 +209,4 @@ textarea {
 .modal-content::-webkit-scrollbar {
   display: none;
 }
-
-#imageResult {
-}
 </style>

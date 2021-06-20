@@ -10,10 +10,10 @@ export const dashboardService =  {
 	addProject(project) {
 		return Api().post('/dashboard/project', project);
 	},
-	addPortfolio(portfolio) {
-		return Api().post('/dashboard/portfolio', portfolio, { headers: { 'Content-Type': 'multipart/form-data' }});
-	},
 	addImage(image) {
 		return Api().post('/dashboard/image', image, { headers: { 'Content-Type': 'multipart/form-data' }});
-	}
+	},
+	addSection(section) {
+		return Api().post('/dashboard/section', section);
+	},
 }

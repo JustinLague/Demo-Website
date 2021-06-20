@@ -3,7 +3,7 @@
     <div class="container-fluid" v-if=show>
       <div class="row">
         <div class="col-lg-2">
-          <Menu></Menu>
+          <Menu :is-dashboard=showDashboardMenu></Menu>
         </div>
         <div class="col-lg-10">
             <router-view></router-view>
@@ -24,9 +24,11 @@ export default {
   },
   computed: {
     show() {
-      return !(this.$route.name === "Login" || 
-               this.$route.name === "Dashboard" || 
-               this.$route.name.includes("add"));
+      return !(this.$route.name === "Login");
+    },
+    showDashboardMenu() {
+      return (this.$route.name === "Dashboard" || 
+               this.$route.name.includes("Admin"));
     }
   }
 };
@@ -40,7 +42,7 @@ body {
 }
 
 .content {
-    padding-top: 85px;
+  padding-top: 85px;
 }
 
 img {

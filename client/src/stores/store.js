@@ -3,7 +3,7 @@ import Vuex from "vuex";
 import user from "./modules/user.store";
 import VuexPersist from "vuex-persist";
 import project from "./modules/project.store";
-import section from "./modules/section.store";
+import portfolio from "./modules/portfolio.store";
 import dashboard from "./modules/dashboard.store";
 import gallery from "./modules/gallery.store";
 
@@ -28,7 +28,7 @@ export default new Vuex.Store({
   modules: {
     project,
     user,
-    section,
+    portfolio,
     dashboard,
     gallery
   },

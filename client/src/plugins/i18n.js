@@ -46,6 +46,10 @@ const messages = {
         },
         menu: { 
             artist: 'Artiste visuelle'
+        },
+        admin: {
+            add: "Ajouter",
+            cancel: "Annuler"
         }
       },
     en: {
@@ -90,6 +94,10 @@ const messages = {
         },
         menu: { 
             artist: 'Visual artist'
+        },
+        admin: {
+            add: "Add",
+            cancel: "Cancel"
         }
     }
 };

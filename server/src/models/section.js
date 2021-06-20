@@ -5,8 +5,11 @@ const SectionSchema = new Schema({
     id: { type: mongoose.Schema.Types.ObjectId, index: { unique: true }},
     title: [String],
     projects: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Project"
+        project: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Project",
+        },
+        index: Number
     }]
 });
 

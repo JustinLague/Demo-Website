@@ -5,10 +5,10 @@
             <h5 class="sub-section">{{ $t('portfolio.sectionTitle', section.title) }}</h5>
             <div v-if="section.projects">
                 <div class="row">
-                    <div class="col-lg-12 project" v-for="project in section.projects" :key="project.id">
-                        <router-link :to="{name: 'Project', params: { projectId: project.id }}">
+                    <div class="col-lg-12 project" v-for="p in section.projects" :key="p.index">
+                        <router-link :to="{name: 'Project', params: { projectId: p.project.id }}">
                             <p>
-                                {{ $t('project.title', project.title) }}
+                                {{ $t('project.title', p.project.title) }}
                             </p>
                         </router-link>
                     </div>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, } from "vuex";
 
 export default {
     created() {
@@ -27,10 +27,10 @@ export default {
             this.initSection();
     })},
     computed: {
-        ...mapState("section", ["sections"]),
+        ...mapState("portfolio", ["sections"]),
     },
     methods: {
-        ...mapActions("section", ["initSection"]),
+        ...mapActions("portfolio", ["initSection"]),
     }
 }
 </script>

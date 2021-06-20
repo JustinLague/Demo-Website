@@ -1,4 +1,5 @@
 import { sectionService } from "../../services/section.services";
+import _ from 'lodash';  
 
 /* eslint-disable no-console */
 const state = {
@@ -7,7 +8,6 @@ const state = {
 };
 
 const getters = {
-
 };
 
 const actions = { 
@@ -19,7 +19,10 @@ const actions = {
 
 const mutations = {
   INIT_SECTION(state, data) {
-    console.log(data)
+    data.forEach(section => {
+      section.projects = _.sortBy(section.projects, ["index"]);
+    });
+
     state.sections = data;
   },
 };

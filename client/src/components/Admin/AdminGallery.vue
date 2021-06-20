@@ -1,6 +1,6 @@
 <template>
   <div>
-      image
+      Admin Gallery
   </div>
 </template>
 

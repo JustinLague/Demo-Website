@@ -11,23 +11,10 @@
             </router-link>
         </div>
 
-        <div class="links">
-           <div>
-                <router-link to="/Portfolio">{{ $t('portfolio.title') }}</router-link>
-            </div>
-            <div>
-                <router-link to="/">{{ $t('gallery.title') }}</router-link>
-            </div>
-            <div class="about">
-                <router-link to="/About">{{ $t('about.title') }}</router-link>
-            </div>
-            <div>
-                <router-link to="/Enquiries">{{ $t('enquiries.title') }}</router-link>
-            </div>
-            <div>
-                <router-link to="/resume">{{ $t('resume.title') }}</router-link>
-            </div>
-        </div>  
+        <div>
+            <RouterLinks v-if=!isDashboard></RouterLinks>
+            <AdminRouterLinks v-if=isDashboard></AdminRouterLinks>
+        </div>
 
         <div>
             <button  v-on:click="changeLocal('fr')">FR</button>
@@ -35,7 +22,7 @@
             <button  v-on:click="changeLocal('en')">EN</button>
         </div>
         
-        <div class="links">
+        <div v-if=!isDashboard class="links">
             <span>
                 <a href="https://www.instagram.com/daria.elas/">
                     <b-icon class="instagram" id="icon-env" scale="1.4" icon="instagram"></b-icon>
@@ -54,16 +41,26 @@
             </p>
         </div> -->
 
-        <div id="gif">
+        <div v-if=!isDashboard id="gif">
             <img src="../../assets/img/HappyGif.gif" alt="">
         </div>
     </div>
 </template>
 
 <script>
+import AdminRouterLinks from "./AdminRouterLinks";
+import RouterLinks from "./RouterLinks";
+
 export default {
     name: "MenuLink",
-     methods: {
+    components: {
+        AdminRouterLinks,
+        RouterLinks
+    },
+    props: {
+        isDashboard: Boolean 
+    },
+    methods: {
         changeLocal: function (lang) {
             this.$root.$i18n.locale = lang;
         }
@@ -80,10 +77,6 @@ export default {
     margin-left: 31px;
 
     position: fixed;
-}
-
-.about {
-    padding-top: 20px;
 }
 
 .name {

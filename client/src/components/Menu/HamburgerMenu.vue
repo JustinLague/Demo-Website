@@ -1,22 +1,10 @@
 <template>
   <div class="row menu">
-        <div class="links">
-           <div>
-                <router-link to="/Portfolio">{{ $t('portfolio.title') }}</router-link>
-            </div>
-            <div>
-                <router-link to="/">{{ $t('gallery.title') }}</router-link>
-            </div>
-            <div class="about">
-                <router-link to="/About">{{ $t('about.title') }}</router-link>
-            </div>
-            <div>
-                <router-link to="/Enquiries">{{ $t('enquiries.title') }}</router-link>
-            </div>
-            <div>
-                <router-link to="/resume">{{ $t('resume.title') }}</router-link>
-            </div>
-        </div>  
+
+       <div>
+            <RouterLinks :is-hamburger=true v-if=!isDashboard></RouterLinks>
+            <AdminRouterLinks :is-hamburger=true v-if=isDashboard></AdminRouterLinks>
+        </div>
 
         <div class="lang">
             <button v-on:click="changeLocal('fr')">FR</button>
@@ -50,7 +38,17 @@
 </template>
 
 <script>
+import AdminRouterLinks from "./AdminRouterLinks";
+import RouterLinks from "./RouterLinks";
+
 export default {
+    props: {
+        isDashboard: Boolean
+    },
+    components: {
+        AdminRouterLinks,
+        RouterLinks
+    },
     name: "HamburgerMenu",
     methods: {
         changeLocal: function (lang) {

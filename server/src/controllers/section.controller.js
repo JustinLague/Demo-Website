@@ -6,7 +6,7 @@ class SectionController {
 
     async section(req, res) {
         try {
-            var sections = await Section.find().select("-_id -__v -id").populate("projects", ["title", "id"]).exec();
+            var sections = await Section.find().select("-_id -__v -projects._id").populate("projects.project", ["title", "id"]).exec();
 
             res.send(sections)
         } catch (err) {
@@ -14,24 +14,44 @@ class SectionController {
         }
     }
 
-    async createSection(req, res) {
+    async updateSections(req, res) {
         try {
-            var section = new Section({ 
-                id : new mongoose.mongo.ObjectId(),
-                title: req.body.title,
-            })
-            
-            for (var id of req.body.projectsId) {
-                var project = await Project.findOne({ id: id }).exec();
-                section.projects.push(project);
+            for (var section of req.body.sections) {
+                
+                var updatedSection;
+                
+                //create new section
+                if (section.id === undefined) {
+                    updatedSection = new Section({ 
+                        id : new mongoose.mongo.ObjectId(),
+                        title: section.title,
+                    });
+                
+                //section already exist
+                } else {
+                    updatedSection = await Section.findOne({ id: section.id }).populate("projects.project", ["id"]).exec();
+                    updatedSection.title = section.title;
+                    updatedSection.projects = [];
+                }
+
+                //add project to section
+                for (var project of section.projects) {
+                    var p = await Project.findOne({ id: project.id }).select("id").exec();
+                    var newProject = {
+                        project: p,
+                        index: project.index,
+                    }
+
+                    updatedSection.projects.push(newProject);
+                }
+
+                await updatedSection.save();
             }
 
-            await section.save();
-
-            res.send(section);
+            res.send("Executed correctly");
         } catch (err) {
             res.status(400).send({ error: err.message });
-        }   
+        }  
     }
 }
 

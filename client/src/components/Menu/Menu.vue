@@ -11,9 +11,9 @@
             </router-link>
         </div>
         <slide v-if="showMobileMenu" right :closeOnNavigation="true">
-            <hamburger-menu></hamburger-menu>
+            <hamburger-menu :is-dashboard=isDashboard></hamburger-menu>
         </slide>
-        <menu-link v-if="!showMobileMenu"></menu-link>
+        <menu-link :is-dashboard=isDashboard v-if="!showMobileMenu"></menu-link>
     </div>
 </template>
 
@@ -24,6 +24,9 @@ import HamburgerMenu from './HamburgerMenu'
 
 export default {
     name: "Menu",
+    props: {
+        isDashboard: Boolean
+    },
     data: function () {
         return {
             screenWidth: 0

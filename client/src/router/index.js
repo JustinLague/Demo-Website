@@ -7,9 +7,12 @@ import Resume from "../components/Resume"
 import Gallery from "../components/Gallery"
 import Project from "../components/Project"
 import LoginRegister from "@/components/Login/LoginRegister";
-import Dashboard from "../components/Admin/Dashboard"
-import AddProject from "../components/Admin/AddProject"
-import AddPortfolio from "../components/Admin/AddPortfolio"
+import AdminProject from "../components/Admin/AdminProject";
+import AdminPortfolio from "../components/Admin/AdminPortfolio";
+import AdminGallery from "../components/Admin/AdminGallery";
+import AdminAbout from "../components/Admin/AdminAbout";
+import AdminEnquiries from "../components/Admin/AdminEnquiries";
+import AdminResume from "../components/Admin/AdminResume";
 import store from "../stores/store";
 
 Vue.use(Router);
@@ -52,28 +55,64 @@ const router = new Router({
       name: "Login",
       component: LoginRegister,
       beforeEnter: (to, from, next) => {
-         if (to.name === "Login" && store.state.user.userSignedIn) next({ name: "Dashboard" });
+         if (to.name === "Login" && store.state.user.userSignedIn) next({ name: "AdminPortfolio" });
          else next();
       }
     },
     {
-      path: "/Dashboard/",
-      name: "Dashboard",
-      component: Dashboard,
+      path: "/admin/project/:sectionId",
+      name: "AdminProject",
+      component: AdminProject,
+      props: true,
       beforeEnter: (to, from, next) => {
-         if (to.name === "Dashboard" && !store.state.user.userSignedIn) next({ name: "Login" });
-         else next();
-      }
-    },
-    {
-      path: "/admin/project",
-      name: "addProject",
-      component: AddProject
+        if (to.name === "AdminProject" && !store.state.user.userSignedIn) next({ name: "Login" });
+        else next();
+     }
     },
     {
       path: "/admin/portfolio",
-      name: "addPortfolio",
-      component: AddPortfolio
+      name: "AdminPortfolio",
+      component: AdminPortfolio,
+      beforeEnter: (to, from, next) => {
+        if (to.name === "AdminPortfolio" && !store.state.user.userSignedIn) next({ name: "Login" });
+        else next();
+     }
+    },
+    {
+      path: "/admin/gallery",
+      name: "AdminGallery",
+      component: AdminGallery,
+      beforeEnter: (to, from, next) => {
+        if (to.name === "AdminGallery" && !store.state.user.userSignedIn) next({ name: "Login" });
+        else next();
+     }
+    },
+    {
+      path: "/admin/about",
+      name: "AdminAbout",
+      component: AdminAbout,
+      beforeEnter: (to, from, next) => {
+        if (to.name === "AdminAbout" && !store.state.user.userSignedIn) next({ name: "Login" });
+        else next();
+     }
+    },
+    {
+      path: "/admin/enquiries",
+      name: "AdminEnquiries",
+      component: AdminEnquiries,
+      beforeEnter: (to, from, next) => {
+        if (to.name === "AdminEnquiries" && !store.state.user.userSignedIn) next({ name: "Login" });
+        else next();
+      }
+    },
+    {
+      path: "/admin/resume",
+      name: "AdminResume",
+      component: AdminResume,
+      beforeEnter: (to, from, next) => {
+        if (to.name === "AdminResume" && !store.state.user.userSignedIn) next({ name: "Login" });
+        else next();
+      }
     },
   ],
   scrollBehavior() {
