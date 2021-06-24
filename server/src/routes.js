@@ -21,7 +21,6 @@ module.exports = (app) => {
   //Project
   app.post('/api/dashboard/image', AuthPolicies.verifyToken, upload.array('image', 2),  ProjectController.addImage);
   app.post('/api/dashboard/project', AuthPolicies.verifyToken, ProjectController.createProject);
-  app.get('/api/dashboard/project', ProjectController.getProject);
   app.get("/api/project/:id", ProjectController.projectId);
   app.get("/api/project/", ProjectController.projects);
   

@@ -1,121 +1,119 @@
 <template>
-    <b-container class="form-container">
-        <div class="row">
-            <div class="col-lg-10 content">
-                <h2 class="main-title">Ajouter un nouveau projet</h2>
-                <b-form @submit.prevent="handleSubmit">
-                    <b-form-group>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <h6>Français</h6>
-                                <b-input placeholder="Titre du projet" v-model="project.projectTitle[0]"></b-input>
-                            </div>
-                            <div class="col-lg-6">
-                                <h6>Anglais</h6>
-                                <b-input placeholder="Titre du projet" v-model="project.projectTitle[1]"></b-input>
-                            </div>
-                        </div>
-                    </b-form-group>
-
-                    <b-form-group>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <textarea placeholder="Description de l'art" class="form-control" v-model="project.projectArtDescription[0]" rows="3"></textarea>
-                            </div>
-                            <div class="col-lg-6">
-                                <textarea placeholder="Description de l'art" class="form-control" v-model="project.projectArtDescription[1]" rows="3"></textarea>
-                            </div>
-                        </div>
-                    </b-form-group>
-
-                    <b-form-group>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <textarea placeholder="Description du projet" class="form-control" v-model="project.projectDescription[0]" rows="3"></textarea>
-                            </div>
-                            <div class="col-lg-6">
-                                <textarea placeholder="Description du projet" class="form-control" v-model="project.projectDescription[1]" rows="3"></textarea>
-                            </div>
-                        </div>
-                    </b-form-group>
-
-                    <b-form-group>
-                        <add-image-modal v-on:addImage="addImage" :isProject="true"></add-image-modal>
-                        <b-button variant="primary" @click="$modal.show('modal-add-image')">Ajouter une image</b-button>
-                    </b-form-group>
-
-                    <b-form-group>
-                        <div v-for="image in images" :key="image.name">
-                            <enlargeable-image :src=image.urlThumbnail :src_large=image.urlImage />
-                        </div>
-                    </b-form-group>
-
-                    <b-form-group>
-                        <div v-if="!projectTryingToAdd">
-                            <b-button type="submit" variant="primary">Ajouter un projet</b-button>
-                        </div>
-                        <div v-else>
-                            <b-spinner variant="primary" label="Spinning" class="spinner"></b-spinner>
-                        </div>
-                    </b-form-group>
-
-                    <b-form-group>
-                        <label class="error" :state="hasError">
-                            {{ serverError }}
-                        </label>
-                    </b-form-group>
-                </b-form>
+    <div class="content" v-if="project">
+        <b-form @submit.prevent="handleSubmit">
+            <h2 class="main-title"><clickToEdit :value="$t('project.title', project.title)" @input="updateTitle" class="section-text"></clickToEdit></h2>
+            <h4 class="art-description"><clickToEdit :value="$t('project.artDescription', project.artDescription)" @input="updateArtDescription" class="section-text"></clickToEdit></h4>
+            
+            <div class="row">
+                <div class="col-lg-11">
+                    <h4 class="description"><clickToEdit :value="$t('project.description', project.description)" @input="updateDescription" class="section-text"></clickToEdit></h4>    
+                </div>
             </div>
-        </div>
-    </b-container>
+            
+            <Image-viewer :images=project.images v-if="project.images"></Image-viewer>
+
+            <div v-b-modal.modal-add-image>
+                <b-button variant="primary">Ajouter un projet</b-button>
+            </div>
+            
+            <b-form-group>
+                <div v-if="!projectTryingToAdd" class="float-right">
+                    <b-button type="submit" variant="success">Sauvegarder</b-button>
+                </div>
+                <div v-else>
+                    <b-spinner variant="primary" label="Spinning" class="spinner"></b-spinner>
+                </div>
+            </b-form-group>
+        </b-form>
+
+        <!-- Modal -->
+        <add-image @addImage="addImage"></add-image>
+    </div>
 </template>
 
 <script>
+import ImageViewer from "../subComponents/ImageViewer";
+import clickToEdit from "./subComponents/ClickToEdit";
+import AddImage from './subComponents/AddImage';
 import { mapActions, mapState } from "vuex";
-import AddImageModal from "./subComponents/AddImageModal";
-import EnlargeableImage from "@diracleo/vue-enlargeable-image";
 
 export default {
     components: {
-        AddImageModal,
-        EnlargeableImage
+        AddImage,
+        clickToEdit,
+        ImageViewer
     },
-    props: ["sectionId"],
+    props: {
+        sectionId: String
+    },
     data() {
         return {
             project: {
-                projectTitle: [],
-                projectArtDescription: [],
-                projectDescription: [],
+                title: ["Sans titre", "No title"],
+                artDescription: ["description de l'art", "art description"],
+                description: ["description du project", "project description"],
+                images: []
             },
-            images: [],
-        };
+           
+        }
     },
     computed: {
-        ...mapState("dashboard", ["projectTryingToAdd", "serverError"]),
-        hasError() {
-            return !this.serverError;
-        },
-        //delete this
+        ...mapState("dashboard", ["projectTryingToAdd"]),
         console: () => console,
         window: () => window,
     },
     methods: {
         ...mapActions("dashboard", ["addProject"]),
-        handleSubmit() {
-            const { project, images } = this;
-            project.sectionId = this.sectionId;
-
-            this.addProject({ project, images });
+        updateTitle(value) {
+            if (this.$i18n.locale == "fr")
+                this.project.title[0] = value;
+            else   
+                this.project.title[1] = value;
+        },
+        updateArtDescription(value) {
+             if (this.$i18n.locale == "fr")
+                this.project.artDescription[0] = value;
+            else   
+                this.project.artDescription[1] = value;
+        },
+        updateDescription(value) {
+            if (this.$i18n.locale == "fr")
+                this.project.description[0] = value;
+            else   
+                this.project.description[1] = value;
         },
         addImage(image) {
-            this.images.push({ ...image});
+            this.project.images.push({ ...image});
         },
-    },
+        handleSubmit() {
+            this.addProject({project: this.project, sectionId: this.sectionId});
+        }
+    }
 }
 </script>
 
 <style scoped>
+.art-description {
+    font-size: 1.15em;  
+    font-weight: 300;
+    color: #808080;
+    padding-bottom: 20px;
+}
 
+.description {
+    text-align: justify;
+    font-size: 1.25em;
+    font-weight: 200;
+    padding-bottom: 20px;
+}
 
+a {
+    color: black; 
+    text-decoration: none;
+}
+
+a:hover {
+    color: #808080;
+    text-decoration: none;
+}
 </style>

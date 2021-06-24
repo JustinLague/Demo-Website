@@ -10,6 +10,7 @@ function generateJWT(user) {
 class AuthController {
   async register(req, res) {
     try {
+      console.log(req.body);
       const { username, password } = req.body;
 
       let user = new User({
@@ -24,6 +25,7 @@ class AuthController {
         token: generateJWT(user)
       });
     } catch (err) {
+      console.log(err);
       res.status(400).send({ error: "Le nom d'utilisateur existe déjà." });
     }
   }

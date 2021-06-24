@@ -38,17 +38,6 @@ class ProjectController {
         }
     }
 
-    async getProject(req, res) {
-        try {
-            var project = await Project.find().select("-_id -__v -description -artDescription").exec();
-           
-            res.send({ project });
-      
-        } catch (err) {
-            res.status(400).send({ error: err.message });
-        }
-    }
-
     async createProject(req, res) {
         try {
             var project = new Project({ 

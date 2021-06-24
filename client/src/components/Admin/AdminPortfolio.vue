@@ -15,7 +15,8 @@
                          @draggingend="isDragging(false)" 
                          :section=section 
                          :key="JSON.stringify(section)" 
-                         @update-section="updateSection()"></Section>
+                         @update-section="updateSection()"
+                         @sectionId="setSectionId"></Section>
             </div>
             <button v-if="!preview" class="add-section" @click="addSection()">
                 <b-icon class="add-section-icon" id="icon-env" scale="1.1" icon="plus-circle"></b-icon>
@@ -26,9 +27,9 @@
     <div class="row">
         <div class="col align-self-end">
             <b-form @submit.prevent="handleSubmit">
-               <b-form-group>
+               <b-form-group class="float-right">
                     <div v-if="!sectionTryingToAdd">
-                        <b-button type="submit" variant="primary">Sauvegarder</b-button>
+                        <b-button type="submit" variant="success">Sauvegarder</b-button>
                     </div>
                     <div v-else>
                         <b-spinner variant="primary" label="Spinning" class="spinner"></b-spinner>
@@ -38,7 +39,7 @@
         </div>
     </div>
     <!-- Modal -->
-    <add-project-toSection></add-project-toSection>
+    <add-project-to-section :projects=projects :sectionId=selectedSectionId></add-project-to-section>
 </div>
 </template>
 
@@ -55,7 +56,8 @@ export default {
     data() {
         return {
             preview: false,
-            dragging: false
+            dragging: false,
+            selectedSectionId: null
         }
     },
     created() {
@@ -74,6 +76,9 @@ export default {
     },
     methods: {
         ...mapActions("dashboard", ["addSection", "getProjects", "initSection"]),
+        setSectionId(sectionId) {
+            this.selectedSectionId = sectionId;
+        },
         updateSection() {
             this.$forceUpdate();
         },

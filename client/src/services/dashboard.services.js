@@ -5,7 +5,7 @@ export const dashboardService =  {
 		return Api().get('/dashboard/');
 	},
 	getProjects() {
-		return Api().get('/dashboard/project');
+		return Api().get('/project');
 	},
 	addProject(project) {
 		return Api().post('/dashboard/project', project);

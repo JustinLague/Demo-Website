@@ -49,7 +49,8 @@ const messages = {
         },
         admin: {
             add: "Ajouter",
-            cancel: "Annuler"
+            cancel: "Annuler",
+            createNewProject: "Créer un nouveau projet"
         }
       },
     en: {
@@ -97,7 +98,8 @@ const messages = {
         },
         admin: {
             add: "Add",
-            cancel: "Cancel"
+            cancel: "Cancel",
+            createNewProject: "Create new projet"
         }
     }
 };

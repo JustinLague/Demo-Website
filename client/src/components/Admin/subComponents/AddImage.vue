@@ -1,7 +1,14 @@
 <template>
-    <modal name="modal-add-image" :adaptive="true" width="70%" height="auto" @before-open="clear()">
-        <div class="modal-content">
-              <b-form-group v-if=isProject>
+    <b-modal
+        id="modal-add-image" 
+        size="lg" 
+        title="Ajouter une image"
+        centered
+        @ok="addImage()"
+        @cancel="clear()"
+    >
+        <div class="container-fluid">
+            <b-form-group>
                 <div class="row">
                     <div class="input-group px-2 py-2 bg-white shadow-sm col-lg-6">
                         <input id="upload-thumbnail" type="file" ref="inputThumbnail" @change="onChangeThumbnail" class="form-control border-0">
@@ -34,73 +41,35 @@
                 <div class="row">
                     <div class="image-area col-lg-6 offset-lg-6">
                         <div>
-                            <b-icon class="delete" v-if="image.urlImage" icon="x-circle-fill" font-scale="3" @click="onDeleteImage"></b-icon>
+                            <b-icon class="delete" v-if="image.detailedImageUrl" icon="x-circle-fill" font-scale="3" @click="onDeleteImage"></b-icon>
                         </div>
-                        <img id="imageResult" :src="image.urlImage" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+                        <img id="imageResult" :src="image.detailedImageUrl" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
                     </div>
                 </div>
-            </b-form-group>
-
-            <b-form-group v-if=isProject>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <h6 class="subTitle">Français</h6>
-                        <b-input placeholder="Titre de l'image" v-model="image.title[0]"></b-input>
-                    </div>
-                    <div class="col-lg-6">
-                        <h6 class="subTitle">Anglais</h6>
-                        <b-input placeholder="Titre de l'image" v-model="image.title[1]"></b-input>
-                    </div>
-                </div>
-            </b-form-group>
-
-            <b-form-group v-if=isProject>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <textarea placeholder="Description de l'art" class="form-control" v-model="image.artDescription[0]" rows="3"></textarea>
-                    </div>
-                    <div class="col-lg-6">
-                        <textarea placeholder="Description de l'art" class="form-control" v-model="image.artDescription[1]" rows="3"></textarea>
-                    </div>
-                </div>
-            </b-form-group>
-
-            <b-form-group v-if=isProject>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <textarea placeholder="Description de l'image" class="form-control" v-model="image.description[0]" rows="3"></textarea>
-                    </div>
-                    <div class="col-lg-6">
-                        <textarea placeholder="Description de l'image" class="form-control" v-model="image.description[1]" rows="3"></textarea>
-                    </div>
-                </div>
-            </b-form-group>
-
-            <b-form-group>
-                    <b-button @click="addImage" variant="primary">Ajouter une photo</b-button>
-                    <b-button class="float-right" @click="cancel" variant="danger">Cancel</b-button>
             </b-form-group>
         </div>
-    </modal>
+        <template #modal-footer="{ ok, cancel }">
+            <b-button size="sm" variant="danger" @click="cancel()">
+                {{ $t('admin.cancel') }}
+            </b-button>
+            <b-button size="sm" variant="primary" @click="ok()">
+                {{ $t('admin.add') }}
+            </b-button>
+        </template>
+    </b-modal>
 </template>
 
 <script>
 export default {
-    props: {
-        isProject: Boolean
-    },
     data() {
         return {
             image: {
                 imageName: "",
                 dataImage : null,
-                urlImage: null,
+                detailedImageUrl: null,
                 thumbnailName: "",
                 dataThumbnail : null,
                 urlThumbnail: null,
-                title: [],
-                artDescription: [],
-                description: [],
             }
         }
     },
@@ -109,7 +78,7 @@ export default {
             const file = e.target.files[0];
             this.image.imageName = file.name;
             this.image.dataImage = file;
-            this.image.urlImage = URL.createObjectURL(file);
+            this.image.detailedImageUrl = URL.createObjectURL(file);
         },
         onChangeThumbnail(e) {
             const file = e.target.files[0];
@@ -121,7 +90,7 @@ export default {
             this.clearRef();
             this.image.imageName = "";
             this.image.dataImage = null;
-            this.image.urlImage = "";
+            this.image.detailedImageUrl = "";
         },
         onDeleteThumbnail() {
             this.clearRef();
@@ -133,30 +102,19 @@ export default {
             this.image.dataThumbnail = null;
             this.image.imageName = "";
             this.image.dataImage = null;
-            this.image.urlImage = "";
+            this.image.detailedImageUrl = "";
             this.image.thumbnailName = "";
             this.image.urlThumbnail = "";
-            this.image.title = [];
-            this.image.artDescription = [];
-            this.image.description = [];
         },
         clearRef() {
             this.$refs.inputImage.value = null;
             this.$refs.inputThumbnail.value = null;
         },
-        cancel() {
-            this.$modal.hide('modal-add-image');
-        },
         addImage() {
             this.$emit('addImage', this.image)
-            this.$modal.hide('modal-add-image');
+            this.clear();
         }
     },
-    //delete this.
-    computed: {
-        console: () => console,
-        window: () => window,
-    }
 }
 </script>
 

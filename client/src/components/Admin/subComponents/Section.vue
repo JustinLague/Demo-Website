@@ -2,7 +2,7 @@
 <div>
     <h5 class="sub-section">
         <div class="row">
-            <clickToEdit :preview=!preview :value="$t('portfolio.sectionTitle', section.title)" :input="updateTitle" class="section-text"></clickToEdit>
+            <clickToEdit :preview=!preview :value="$t('portfolio.sectionTitle', section.title)" @input="updateTitle" class="section-text"></clickToEdit>
             <b-icon v-if="!preview" @click="deleteSection(section)" class="delete-icon section" id="icon-env" scale="1" icon="x-circle"></b-icon>
         </div>
     </h5>
@@ -24,7 +24,7 @@
                     </div>
             </div>
             <button v-if="!preview" :class="['b-addProject', dragging ? 'dragging':'']">
-                <div v-b-modal.modal-add-project-to-section> 
+                <div v-b-modal.modal-add-project-to-section @click="setSectionId()">
                     <b-icon class="plus-icon" id="icon-env" scale="1.1" icon="plus-circle"></b-icon>
                     Ajouter un projet
                 </div>
@@ -57,7 +57,13 @@ export default {
     methods: {
         ...mapActions("dashboard", ["updateSection", "removeProject", "removeSection"]),
         updateTitle(value) {
-            this.section.title[0] = value;
+            if (this.$i18n.locale == "fr")
+                this.section.title[0] = value;
+            else  
+                this.section.title[1] = value; 
+        },
+        setSectionId() {
+            this.$emit("sectionId", this.section.id);
         },
         startDrag(evt, subSection){
             this.$emit("draggingstart");

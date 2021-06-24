@@ -28,7 +28,7 @@ export default {
 
 <style scoped>
 a {
-    color: black; 
+    color: #AFBED1; 
     text-decoration: none;
 }
 

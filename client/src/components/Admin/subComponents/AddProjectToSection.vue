@@ -5,24 +5,20 @@
         title="Ajouter une nouveau projet"
         centered
         modal-ok="Sauvegarder"
+        @ok="addProject()"
     >
         <div class="container-fluid">
             <div class="row">
                 <div class="col-6">
                 <div class="row">
                         <div>
-                            <b-dropdown id="dropdown-1" text="Dropdown Button" class="m-md-2">
-                                <b-dropdown-item>First Action</b-dropdown-item>
-                                <b-dropdown-item>Second Action</b-dropdown-item>
-                                <b-dropdown-item>Third Action</b-dropdown-item>
-                                <b-dropdown-divider></b-dropdown-divider>
-                                <b-dropdown-item active>Active action</b-dropdown-item>
-                                <b-dropdown-item disabled>Disabled action</b-dropdown-item>
-                            </b-dropdown>
+                            <b-form-select v-model="selected">
+                                <b-form-select-option v-for="project in projects" :key="project.id" :value="project">{{ $t('project.title', project.title) }}</b-form-select-option>
+                            </b-form-select>
                         </div>
                 </div>
                 <div class="row">
-                    Description du projet
+                    {{ this.selected != null ?  $t('project.description', this.selected.description) : "description" }}
                 </div>
                 </div>
                 <div class="col-6">
@@ -31,6 +27,9 @@
             </div>
         </div>
         <template #modal-footer="{ ok, cancel }">
+            <b-button size="sm" variant="success" @click="createProject()">
+                {{ $t('admin.createNewProject') }}
+            </b-button>
             <b-button size="sm" variant="danger" @click="cancel()">
                 {{ $t('admin.cancel') }}
             </b-button>
@@ -42,12 +41,34 @@
 </template>
 
 <script>
-export default {
-    methods: {
-        ok() {
-        },
-        cancel() {
+import { mapActions } from "vuex";
 
+export default {
+    props: {
+        projects: Array,
+        sectionId: String
+    },
+    data() {
+      return {
+        selected: null,
+      }
+    },
+    computed: {
+        console: () => console,
+        window: () => window,
+    },
+    methods: {
+        ...mapActions("dashboard", ["addProjectToSection"]),
+        addProject() {
+            if (this.selected == null)
+                return;
+
+            let payload = { sectionId: this.sectionId, projectId: this.selected.id}
+            this.addProjectToSection(payload);
+            this.$forceUpdate();
+        },  
+        createProject() {
+            this.$router.push({name: 'AdminProject', params: { sectionId: this.sectionId }});
         }
     }
 }

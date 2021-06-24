@@ -20,9 +20,19 @@ const vueLocalStorage = new VuexPersist({
       user: state.user.username,
       token: state.user.token,
       userSignedIn: state.user.userSignedIn
-    }
+    },
   })
 });
+
+const vuexLocal = new VuexPersist({
+  storage: window.localStorage,
+  reducer: (state) => ({ 
+    dashboard: {
+      products: state.dashboard.projects,
+      sections: state.dashboard.sections,
+    },
+  }),
+})
 
 export default new Vuex.Store({
   modules: {
@@ -32,6 +42,6 @@ export default new Vuex.Store({
     dashboard,
     gallery
   },
-  plugins: [vueLocalStorage.plugin],
+  plugins: [vueLocalStorage.plugin, vuexLocal.plugin],
   strict: debug
 });
