@@ -20,7 +20,7 @@ const actions = {
 const mutations = {
   INIT_SECTION(state, data) {
     data.forEach(section => {
-      section.projects = _.sortBy(section.projects, ["index"]);
+      section.metaProjects = _.sortBy(section.metaProjects, ["index"]);
     });
 
     state.sections = data;

@@ -12,7 +12,7 @@ Vue.use(Vuex);
 const debug = process.env.NODE_ENV !== "production";
 
 
-const vueLocalStorage = new VuexPersist({
+const vueSessionStorage = new VuexPersist({
   key: "STORAGE_KEY",
   storage: window.sessionStorage,
   reducer: (state) => ({
@@ -21,18 +21,13 @@ const vueLocalStorage = new VuexPersist({
       token: state.user.token,
       userSignedIn: state.user.userSignedIn
     },
+    dashboard: {
+      projects: state.dashboard.projects,
+      sections: state.dashboard.sections,
+    },
   })
 });
 
-const vuexLocal = new VuexPersist({
-  storage: window.localStorage,
-  reducer: (state) => ({ 
-    dashboard: {
-      products: state.dashboard.projects,
-      sections: state.dashboard.sections,
-    },
-  }),
-})
 
 export default new Vuex.Store({
   modules: {
@@ -42,6 +37,6 @@ export default new Vuex.Store({
     dashboard,
     gallery
   },
-  plugins: [vueLocalStorage.plugin, vuexLocal.plugin],
+  plugins: [vueSessionStorage.plugin],
   strict: debug
 });

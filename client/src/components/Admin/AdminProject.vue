@@ -12,9 +12,7 @@
             
             <Image-viewer :images=project.images v-if="project.images"></Image-viewer>
 
-            <div v-b-modal.modal-add-image>
-                <b-button variant="primary">Ajouter un projet</b-button>
-            </div>
+            <b-button v-b-modal.modal-add-image variant="primary">Ajouter une image</b-button>
             
             <b-form-group>
                 <div v-if="!projectTryingToAdd" class="float-right">

@@ -1,7 +1,7 @@
 import Api from './api.services'
 
 export const sectionService =  {
-  get() {
+  init() {
     return Api().get('/section/');
   }
 }

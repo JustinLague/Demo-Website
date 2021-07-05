@@ -6,7 +6,7 @@ class SectionController {
 
     async section(req, res) {
         try {
-            var sections = await Section.find().select("-_id -__v -projects._id").populate("projects.project", ["title", "id"]).exec();
+            var sections = await Section.find().select("-_id -__v -projects._id").populate("metaProjects.project", ["title", "id"]).exec();
 
             res.send(sections)
         } catch (err) {
@@ -21,7 +21,7 @@ class SectionController {
                 var updatedSection;
                 
                 //create new section
-                if (section.id === undefined) {
+                if (section.id.includes("temp")) {
                     updatedSection = new Section({ 
                         id : new mongoose.mongo.ObjectId(),
                         title: section.title,
@@ -31,18 +31,18 @@ class SectionController {
                 } else {
                     updatedSection = await Section.findOne({ id: section.id }).populate("projects.project", ["id"]).exec();
                     updatedSection.title = section.title;
-                    updatedSection.projects = [];
+                    updatedSection.metaProjects = [];
                 }
 
                 //add project to section
-                for (var project of section.projects) {
-                    var p = await Project.findOne({ id: project.id }).select("id").exec();
-                    var newProject = {
+                for (var metaProject of section.metaProjects) {
+                    var p = await Project.findOne({ id: metaProject.project.id }).select("id").exec();
+                    var newMetaProject = {
                         project: p,
                         index: project.index,
                     }
 
-                    updatedSection.projects.push(newProject);
+                    updatedSection.metaProjects.push(newMetaProject);
                 }
 
                 await updatedSection.save();

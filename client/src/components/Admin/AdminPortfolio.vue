@@ -28,7 +28,7 @@
         <div class="col align-self-end">
             <b-form @submit.prevent="handleSubmit">
                <b-form-group class="float-right">
-                    <div v-if="!sectionTryingToAdd">
+                    <div v-if="!saving">
                         <b-button type="submit" variant="success">Sauvegarder</b-button>
                     </div>
                     <div v-else>
@@ -40,18 +40,21 @@
     </div>
     <!-- Modal -->
     <add-project-to-section :projects=projects :sectionId=selectedSectionId></add-project-to-section>
+    <confirm-dialogue-simple ref="confirmDialogueSimple"></confirm-dialogue-simple>
 </div>
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 import Section from "./subComponents/Section"
 import AddProjectToSection from './subComponents/AddProjectToSection'
+import ConfirmDialogueSimple from './subComponents/ConfirmDialogueSimple'
 
 export default {
     components: {
         Section,
-        AddProjectToSection
+        AddProjectToSection,
+        ConfirmDialogueSimple
     },
     data() {
         return {
@@ -62,12 +65,13 @@ export default {
     },
     created() {
         this.$nextTick(function () {
-            this.initSection();
-            this.getProjects();
+            this.initProjects();
+            this.initSections();
         })
     },
     computed: {
-        ...mapState("dashboard", ["sections", "projects", "sectionTryingToAdd", "serverError"]),
+        ...mapState("dashboard", ["sections", "projects", "saving", "serverError"]),
+        ...mapGetters("dashboard", ["getProjects"]),
         hasError() {
             return !this.serverError;
         },
@@ -75,7 +79,7 @@ export default {
         window: () => window,
     },
     methods: {
-        ...mapActions("dashboard", ["addSection", "getProjects", "initSection"]),
+        ...mapActions("dashboard", ["updateProject", "saveSections", "addSection", "initProjects", "initSections"]),
         setSectionId(sectionId) {
             this.selectedSectionId = sectionId;
         },
@@ -84,6 +88,25 @@ export default {
         },
         isDragging(isDragging) {
             this.dragging = isDragging;
+        },
+        async handleSubmit() {
+
+            /* condition pour verifier si la partie anglais est rempli  if() */
+            
+            const ok = await this.$refs.confirmDialogueSimple.show({
+                title: 'Confirmation',
+                message: "Il semblerait que vous avez oublier la section anglais.",
+                okButton: 'Sauvegarder',
+            })
+
+            if (ok) {
+                this.getProjects.forEach(async project => {
+                   await this.updateProject(project);
+                });
+                await this.saveSections();
+            } 
+
+            this.console.log(ok);
         }
     },
 }

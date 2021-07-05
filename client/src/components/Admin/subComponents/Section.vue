@@ -6,20 +6,20 @@
             <b-icon v-if="!preview" @click="deleteSection(section)" class="delete-icon section" id="icon-env" scale="1" icon="x-circle"></b-icon>
         </div>
     </h5>
-    <div v-if="section.projects">
+    <div v-if="section.metaProjects">
         <div :class="['row', dragging ? 'dragging':'']" @drop="onDrop($event, section)" 
                          @dragover.prevent 
                          @dragenter.prevent>
             <div 
                 class="col-lg-12 project" 
-                 v-for="subSection in section.projects" 
-                 :key="subSection.project.id" 
+                 v-for="metaProject in section.metaProjects" 
+                 :key="metaProject.project.id" 
                  draggable="true" 
-                 @dragstart="startDrag($event, subSection)">
-                    <div :key="subSection.project.id">
+                 @dragstart="startDrag($event, metaProject)">
+                    <div :key="metaProject.project.id">
                         <p>
-                            {{ $t('project.title', subSection.project.title) }}
-                            <b-icon v-if="!preview" @click="deleteProject(subSection.project, section)" class="delete-icon" id="icon-env" scale="0.9" icon="x-circle"></b-icon>
+                            {{ $t('project.title', metaProject.project.title) }}
+                            <b-icon v-if="!preview" @click="deleteProject(metaProject.project, section)" class="delete-icon" id="icon-env" scale="0.9" icon="x-circle"></b-icon>
                         </p>
                     </div>
             </div>
@@ -29,6 +29,8 @@
                     Ajouter un projet
                 </div>
             </button>
+
+            <!-- modal -->
             <confirm-dialogue ref="confirmDialogue"></confirm-dialogue>
         </div>
     </div>
@@ -65,16 +67,18 @@ export default {
         setSectionId() {
             this.$emit("sectionId", this.section.id);
         },
-        startDrag(evt, subSection){
+        startDrag(evt, metaProject){
             this.$emit("draggingstart");
             
             evt.dataTransfer.dropEffect = 'move';
             evt.dataTransfer.effectAllowed = 'move';
-            evt.dataTransfer.setData('projectID', subSection.project.id);
+            evt.dataTransfer.setData('projectID', metaProject.project.id);
             evt.dataTransfer.setData('prevSectionID', this.section.id);
         },
         onDrop(evt, section) {
             this.$emit("draggingend");
+
+            this.console.log(evt);
 
             const projectID = evt.dataTransfer.getData('projectID');
             const prevSectionID = evt.dataTransfer.getData('prevSectionID');

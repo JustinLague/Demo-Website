@@ -15,14 +15,13 @@ module.exports = (app) => {
   
   //Section
   app.get("/api/section/", SectionController.section);
-  app.post("/api/dashboard/section", AuthPolicies.verifyToken, SectionController.updateSections)
+  app.post("/api/dashboard/sections", AuthPolicies.verifyToken, SectionController.updateSections)
   
 
   //Project
-  app.post('/api/dashboard/image', AuthPolicies.verifyToken, upload.array('image', 2),  ProjectController.addImage);
-  app.post('/api/dashboard/project', AuthPolicies.verifyToken, ProjectController.createProject);
-  app.get("/api/project/:id", ProjectController.projectId);
   app.get("/api/project/", ProjectController.projects);
+  app.get("/api/project/:id", ProjectController.projectId);
+  app.post('/api/dashboard/project', AuthPolicies.verifyToken, ProjectController.updateProject);
   
 
   //Gallery
@@ -31,6 +30,5 @@ module.exports = (app) => {
   
   //Image
   app.get("/api/image/:id", ImageController.image);
-
-  //Dashboard
+  app.post('/api/dashboard/image', AuthPolicies.verifyToken, upload.array('image', 2),   ImageController.addImage);
 };

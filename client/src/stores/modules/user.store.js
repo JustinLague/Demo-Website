@@ -17,7 +17,7 @@ const actions = {
       const login = await userService.login(credential);
       if (login.status === 200) {
         commit("LOGIN", login.data);
-        router.push({ name: "Dashboard" });
+        router.push({ name: "AdminPortfolio" });
       }
     } catch (err) {
       const serverError = err.response.data.error;
@@ -30,7 +30,7 @@ const actions = {
       const login = await userService.register(credential);
       if (login.status === 200) {
         commit("LOGIN", login.data);
-        router.push({ name: "Dashboard" });
+        router.push({ name: "AdminPortfolio" });
       }
     } catch (err) {
       const serverError = err.response.data.error;

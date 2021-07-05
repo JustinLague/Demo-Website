@@ -1,9 +1,6 @@
 const Project = require("../models/project").Project;
 const Image = require('../models/image').Image;
-const ImageData = require('../models/imageData').ImageData;
-const Section = require('../models/section').Section;
 const mongoose = require('mongoose');
-const fs = require('fs');
 
 class ProjectController {
    
@@ -11,10 +8,7 @@ class ProjectController {
         try {
             var projects = await Project.find().select("-_id -__v").exec();
            
-            res.send({
-              projects
-            });
-      
+            res.send(projects);
           } catch (err) {
               err.status(400).send({ error: err.message });
           }
@@ -38,57 +32,31 @@ class ProjectController {
         }
     }
 
-    async createProject(req, res) {
+    async updateProject(req, res) {
         try {
-            var project = new Project({ 
-                id : new mongoose.mongo.ObjectId(),
-                title: req.body.projectTitle,
-                description: req.body.projectDescription,
-                artDescription: req.body.projectArtDescription,
-            })
+            var project = req.body.project
+            var updatedProject;
             
-            await project.save();
+            if (project.id.includes("temp")) {
+                updatedProject = new Project({ 
+                    id : new mongoose.mongo.ObjectId(),
+                    title: project.title,
+                    description: project.artDescription,
+                    artDescription: project.description,
+                })
+            } else {
+                updatedProject = await Project.findOne({ id: project.id }).exec();
+                updatedProject.title = project.title;
+                updatedProject.description = project.artDescription;
+                updatedProject.artDescription = project.description;
+            }
 
-            res.send(project.id);
+            await updatedProject.save();
+
+            res.send(updatedProject.id);
         } catch (err) {
             res.status(400).send({ error: err.message });
-        }
-    }
-
-    async addImage(req, res) {
-        var image = new Image({
-            id : new mongoose.mongo.ObjectId(),
-            projectId : req.body.projectId,
-        });
-
-        image.name[0] = req.body.name;
-        image.name[1] = req.body.nameEN;
-
-        image.description[0] = req.body.description;
-        image.description[1] = req.body.descriptionEN;
-
-        image.artDescription[0] = req.body.artDescription;
-        image.artDescription[1] = req.body.artDescriptionEN;
-
-        var thumbnail = new ImageData({
-            id : new mongoose.mongo.ObjectId(),
-            contentType: req.files[0].mimetype,
-            data: new Buffer.from(fs.readFileSync(req.files[0].path), 'base64'),
-        });
-
-        var detailedImage = new ImageData({
-            id : new mongoose.mongo.ObjectId(),
-            contentType: req.files[1].mimetype,
-            data: new Buffer.from(fs.readFileSync(req.files[1].path), 'base64'),
-        });
-
-        thumbnail.save();
-        detailedImage.save();
-
-        image.thumbnail = thumbnail;
-        image.detailedImage = detailedImage;
-
-        image.save();
+        }  
     }
 }
 
