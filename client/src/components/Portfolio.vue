@@ -24,7 +24,7 @@ import { mapActions, mapState, } from "vuex";
 export default {
     created() {
         this.$nextTick(function () {
-            this.initSection();
+            this.initSections();
     })},
     computed: {
         ...mapState("portfolio", ["sections"]),

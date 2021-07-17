@@ -1,10 +1,5 @@
 <template>
 <div class="container-fluid">
-    <!--
-        <b-form-checkbox v-model="preview" name="check-button" switch>
-            Preview
-        </b-form-checkbox>
-    -->
     <div class="row">
         <div class="col-lg-10 content">
             <h2 class="main-title">{{ $t('portfolio.title') }}</h2>
@@ -16,7 +11,8 @@
                          :section=section 
                          :key="JSON.stringify(section)" 
                          @update-section="updateSection()"
-                         @sectionId="setSectionId"></Section>
+                         @sectionId="setSectionId"
+                         v-if=section.visible></Section>
             </div>
             <button v-if="!preview" class="add-section" @click="addSection()">
                 <b-icon class="add-section-icon" id="icon-env" scale="1.1" icon="plus-circle"></b-icon>
@@ -45,7 +41,7 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters } from "vuex";
+import { mapActions, mapState } from "vuex";
 import Section from "./subComponents/Section"
 import AddProjectToSection from './subComponents/AddProjectToSection'
 import ConfirmDialogueSimple from './subComponents/ConfirmDialogueSimple'
@@ -71,7 +67,6 @@ export default {
     },
     computed: {
         ...mapState("dashboard", ["sections", "projects", "saving", "serverError"]),
-        ...mapGetters("dashboard", ["getProjects"]),
         hasError() {
             return !this.serverError;
         },
@@ -79,7 +74,7 @@ export default {
         window: () => window,
     },
     methods: {
-        ...mapActions("dashboard", ["updateProject", "saveSections", "addSection", "initProjects", "initSections"]),
+        ...mapActions("dashboard", ["saveSections", "addSection", "initProjects", "initSections"]),
         setSectionId(sectionId) {
             this.selectedSectionId = sectionId;
         },
@@ -100,9 +95,6 @@ export default {
             })
 
             if (ok) {
-                this.getProjects.forEach(async project => {
-                   await this.updateProject(project);
-                });
                 await this.saveSections();
             } 
 

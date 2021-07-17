@@ -9,14 +9,14 @@
     />
     <p v-else @dblclick="edit = true;">
         {{ valueLocal }}
-        <b-icon v-if="preview" @click="edit = true;" class="pencil-icon" id="icon-env" scale="0.7" icon="pencil-fill"></b-icon>
+        <b-icon @click="edit = true;" class="pencil-icon" id="icon-env" scale="0.7" icon="pencil-fill"></b-icon>
     </p>
 </div>
 </template>
 
 <script>
   export default {
-  props: ['value', 'preview'],
+  props: ['value'],
   data () {
   return {
       edit: false,

@@ -2,10 +2,11 @@
     <b-modal
         id="modal-add-project-to-section" 
         size="lg" 
-        title="Ajouter une nouveau projet"
+        title="Ajouter un nouveau projet"
         centered
         modal-ok="Sauvegarder"
         @ok="addProject()"
+        @cancel="clear()"
     >
         <div class="container-fluid">
             <div class="row">
@@ -22,7 +23,10 @@
                 </div>
                 </div>
                 <div class="col-6">
-                    image
+                    <Image-viewer :images=this.selected.images v-if="this.selected"></Image-viewer>
+                    <div v-else>
+                        images
+                    </div>
                 </div>
             </div>
         </div>
@@ -41,9 +45,13 @@
 </template>
 
 <script>
+import ImageViewer from "../../subComponents/ImageViewer";
 import { mapActions } from "vuex";
 
 export default {
+    components: {
+        ImageViewer
+    },
     props: {
         projects: Array,
         sectionId: String
@@ -63,12 +71,16 @@ export default {
             if (this.selected == null)
                 return;
 
-            let payload = { sectionId: this.sectionId, projectId: this.selected.id}
+            let payload = { sectionId: this.sectionId, project: this.selected}
             this.addProjectToSection(payload);
             this.$forceUpdate();
+            this.selected = null;
         },  
         createProject() {
             this.$router.push({name: 'AdminProject', params: { sectionId: this.sectionId }});
+        },
+        clear() {
+            this.selected = null;
         }
     }
 }

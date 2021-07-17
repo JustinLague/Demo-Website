@@ -20,6 +20,13 @@ class SectionController {
                 
                 var updatedSection;
                 
+                //delete section
+                if (section.id.includes("REMOVED")) {
+                    let id = section.id.substring(7);
+                    Section.findOneAndDelete({ id: id }).exec();
+                    continue;
+                }
+
                 //create new section
                 if (section.id.includes("temp")) {
                     updatedSection = new Section({ 
@@ -39,7 +46,7 @@ class SectionController {
                     var p = await Project.findOne({ id: metaProject.project.id }).select("id").exec();
                     var newMetaProject = {
                         project: p,
-                        index: project.index,
+                        index: metaProject.index,
                     }
 
                     updatedSection.metaProjects.push(newMetaProject);

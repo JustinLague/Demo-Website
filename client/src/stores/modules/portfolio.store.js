@@ -11,14 +11,14 @@ const getters = {
 };
 
 const actions = { 
-  async initSection({ commit }) {
-    const sections = await sectionService.get();
-    commit("INIT_SECTION", sections.data);
+  async initSections({ commit }) {
+    const sections = await sectionService.init();
+    commit("INIT_SECTIONS", sections.data);
   },
 };
 
 const mutations = {
-  INIT_SECTION(state, data) {
+  INIT_SECTIONS(state, data) {
     data.forEach(section => {
       section.metaProjects = _.sortBy(section.metaProjects, ["index"]);
     });

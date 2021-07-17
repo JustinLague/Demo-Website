@@ -42,7 +42,8 @@ export default {
         ImageViewer
     },
     props: {
-        sectionId: String
+        sectionId: String,
+        projectId: String
     },
     data() {
         return {
@@ -55,13 +56,22 @@ export default {
            
         }
     },
+    created() {
+        this.$nextTick(function () {
+            this.initProject();
+        })
+    },
     computed: {
-        ...mapState("dashboard", ["projectTryingToAdd"]),
+        ...mapState("dashboard", ["projectTryingToAdd", "projects"]),
         console: () => console,
         window: () => window,
     },
     methods: {
-        ...mapActions("dashboard", ["addProject"]),
+        ...mapActions("dashboard", ["updateProject"]),
+        initProject() {
+            if (this.projectId)
+                this.project = this.projects.find(project => project.id === this.projectId);
+        },
         updateTitle(value) {
             if (this.$i18n.locale == "fr")
                 this.project.title[0] = value;
@@ -84,7 +94,7 @@ export default {
             this.project.images.push({ ...image});
         },
         handleSubmit() {
-            this.addProject({project: this.project, sectionId: this.sectionId});
+            this.updateProject({project: this.project, sectionId: this.sectionId});
         }
     }
 }

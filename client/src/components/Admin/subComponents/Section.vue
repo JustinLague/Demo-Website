@@ -2,8 +2,8 @@
 <div>
     <h5 class="sub-section">
         <div class="row">
-            <clickToEdit :preview=!preview :value="$t('portfolio.sectionTitle', section.title)" @input="updateTitle" class="section-text"></clickToEdit>
-            <b-icon v-if="!preview" @click="deleteSection(section)" class="delete-icon section" id="icon-env" scale="1" icon="x-circle"></b-icon>
+            <clickToEdit :value="$t('portfolio.sectionTitle', section.title)" @input="updateTitle" class="section-text"></clickToEdit>
+            <b-icon @click="deleteSection(section)" class="delete-icon section" id="icon-env" scale="1" icon="x-circle"></b-icon>
         </div>
     </h5>
     <div v-if="section.metaProjects">
@@ -17,10 +17,12 @@
                  draggable="true" 
                  @dragstart="startDrag($event, metaProject)">
                     <div :key="metaProject.project.id">
-                        <p>
-                            {{ $t('project.title', metaProject.project.title) }}
-                            <b-icon v-if="!preview" @click="deleteProject(metaProject.project, section)" class="delete-icon" id="icon-env" scale="0.9" icon="x-circle"></b-icon>
-                        </p>
+                            <p>
+                                <router-link :to="{name: 'AdminProject', params: { sectionId: section.id , projectId: metaProject.project.id }}">
+                                    {{ $t('project.title', metaProject.project.title) }}
+                                </router-link>
+                                <b-icon v-if="!preview" @click="deleteProject(metaProject.project, section)" class="delete-icon" id="icon-env" scale="0.9" icon="x-circle"></b-icon>
+                            </p>
                     </div>
             </div>
             <button v-if="!preview" :class="['b-addProject', dragging ? 'dragging':'']">

@@ -45,6 +45,8 @@ class ImageController {
         image.detailedImage = detailedImage;
 
         image.save();
+
+        res.status(200).send();
     } catch (err) {
         res.status(400).send({ error: err.message });
     }
