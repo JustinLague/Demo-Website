@@ -13,12 +13,17 @@ class SectionController {
             es.status(400).send({ error: err.message });
         }
     }
-
+    
     async updateSections(req, res) {
         try {
             for (var section of req.body.sections) {
                 
                 var updatedSection;
+                
+                //if section didn't changed
+                if(!section.id.includes("REMOVED") && !section.id.includes("TEMP") && !section.id.includes("UPDATED")) {
+                    continue;
+                }
                 
                 //delete section
                 if (section.id.includes("REMOVED")) {
@@ -28,18 +33,22 @@ class SectionController {
                 }
 
                 //create new section
-                if (section.id.includes("temp")) {
+                if (section.id.includes("TEMP")) {
                     updatedSection = new Section({ 
                         id : new mongoose.mongo.ObjectId(),
                         title: section.title,
                     });
+                }
                 
                 //section already exist
-                } else {
-                    updatedSection = await Section.findOne({ id: section.id }).populate("projects.project", ["id"]).exec();
+                if (section.id.includes("UPDATED")) {
+                    let id = section.id.substring(7);
+
+                    updatedSection = await Section.findOne({ id: id }).populate("projects.project", ["id"]).exec();
                     updatedSection.title = section.title;
                     updatedSection.metaProjects = [];
-                }
+                } 
+
 
                 //add project to section
                 for (var metaProject of section.metaProjects) {

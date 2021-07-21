@@ -10,7 +10,7 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 import EnlargeableImage from '@diracleo/vue-enlargeable-image';
 import { BootstrapVue, BootstrapVueIcons, DropdownPlugin } from "bootstrap-vue";
 
-i18n.locale = "fr"
+i18n.locale = "fr";
 
 Vue.use(BootstrapVueIcons);
 Vue.use(EnlargeableImage);

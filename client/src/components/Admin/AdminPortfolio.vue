@@ -5,18 +5,15 @@
             <h2 class="main-title">{{ $t('portfolio.title') }}</h2>
             <div class="section" v-for="section in sections" :key="JSON.stringify(section)">
                 <Section :preview=preview
-                         :dragging=dragging
-                         @draggingstart="isDragging(true)"
-                         @draggingend="isDragging(false)" 
                          :section=section 
                          :key="JSON.stringify(section)" 
-                         @update-section="updateSection()"
+                         @refresh-section="refreshSection()"
                          @sectionId="setSectionId"
                          v-if=section.visible></Section>
             </div>
             <button v-if="!preview" class="add-section" @click="addSection()">
-                <b-icon class="add-section-icon" id="icon-env" scale="1.1" icon="plus-circle"></b-icon>
                 Ajouter une section
+                <b-icon class="add-section-icon" id="icon-env" scale="1.1" icon="plus-circle"></b-icon>
             </button>
         </div>
     </div>
@@ -34,6 +31,7 @@
             </b-form>
         </div>
     </div>
+
     <!-- Modal -->
     <add-project-to-section :projects=projects :sectionId=selectedSectionId></add-project-to-section>
     <confirm-dialogue-simple ref="confirmDialogueSimple"></confirm-dialogue-simple>
@@ -55,7 +53,6 @@ export default {
     data() {
         return {
             preview: false,
-            dragging: false,
             selectedSectionId: null
         }
     },
@@ -78,11 +75,8 @@ export default {
         setSectionId(sectionId) {
             this.selectedSectionId = sectionId;
         },
-        updateSection() {
+        refreshSection() {
             this.$forceUpdate();
-        },
-        isDragging(isDragging) {
-            this.dragging = isDragging;
         },
         async handleSubmit() {
 
@@ -97,8 +91,6 @@ export default {
             if (ok) {
                 await this.saveSections();
             } 
-
-            this.console.log(ok);
         }
     },
 }
@@ -112,10 +104,6 @@ export default {
 
 .project {
     margin-bottom: -10px;
-}
-
-.dropzone.dragging {
-    border: 1px solid;
 }
 
 .sub-section {

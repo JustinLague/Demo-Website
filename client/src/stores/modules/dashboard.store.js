@@ -109,8 +109,8 @@ const actions = {
     async addSection({ commit }) {
         commit("ADD_SECTION");
     },
-    async updateSection({ commit }, payload) {
-        commit("UPDATE_SECTION", payload);
+    async updateSectionTitle({ commit }, payload) {
+        commit("UPDATE_SECTION_TITLE", payload);
     },
     async removeProject({ commit }, payload) {
         commit("REMOVE_PROJECT", payload);
@@ -131,6 +131,8 @@ const actions = {
             commit("REMOVE_TEMP");
             
             commit("SAVED");
+
+            dispatch("initSections");
         } catch (err) {
             console.error(err);
             if (err.response && err.response.status === 403) {
@@ -140,6 +142,12 @@ const actions = {
                 commit("SERVER_ERROR", serverError);
             }
         }
+    },
+    async up({ commit }, payload) {
+        commit("UP", payload);
+    },
+    async down({ commit }, payload) {
+        commit("DOWN", payload);
     }
 };
 
@@ -168,7 +176,7 @@ const mutations = {
     },
     INIT_SECTIONS(state, sections) {
         state.sections.forEach(section => {
-            if (section.id.includes("temp"))
+            if (section.id.includes("TEMP") || section.id.includes("UPDATED"))
                 sections.push(section);
         })
         
@@ -180,11 +188,11 @@ const mutations = {
         state.sections = sections;
     },
     ADD_SECTION(state) {
-        let randomId = "tempId" + Math.floor(Math.random() * 10000000000); 
+        let randomId = "TEMP" + Math.floor(Math.random() * 10000000000); 
         
         //making sure its a unique ID
         while (state.sections.find(section => section.id === randomId) != undefined) {
-            randomId = "tempId" + Math.floor(Math.random() * 10000000000); 
+            randomId = "TEMP" + Math.floor(Math.random() * 10000000000); 
         }
         
         let newSection = { id: randomId, title: ["Sans titre", "Untitled"], metaProjects: [], visible: true};
@@ -196,18 +204,24 @@ const mutations = {
     ADD_PROJECT_TO_SECTION(state, payload) {
         let sectionIndex = state.sections.findIndex(section => section.id === payload.sectionId);
 
-        if (state.sections[sectionIndex].metaProjects.find(metaProject => metaProject.project.id === payload.project.id) !== undefined) 
+        if (state.sections[sectionIndex].metaProjects.find(metaProject => metaProject.project.id === payload.project.id) !== undefined) {
             return
+        }
         
-        let randomId = "tempId" + Math.floor(Math.random() * 10000000000); 
+        let randomId = "TEMP" + Math.floor(Math.random() * 10000000000); 
 
         let project = state.projects.find(p => p.id == payload.project.id);
         
-        let metaProjectIndex = state.sections.metaProjects == undefined ? 0 : state.sections.metaProjects.length;
+        let metaProjectIndex = state.sections[sectionIndex].metaProjects == undefined ? 0 : state.sections[sectionIndex].metaProjects.length;
 
         let metaProject = {id: randomId, index: metaProjectIndex, project: project};
 
         state.sections[sectionIndex].metaProjects.push(metaProject);
+
+        // ajouter une propriete status pour que ca soit plus clean
+        if (!state.sections[sectionIndex].id.includes("TEMP") && !state.sections[sectionIndex].id.includes("UPDATED")) {
+            state.sections[sectionIndex].id = "UPDATED" + state.sections[sectionIndex].id
+        }
     },
     REMOVE_PROJECT(state, payload) {
         let sectionIndex = state.sections.findIndex(section => section.id === payload.section.id);
@@ -217,8 +231,7 @@ const mutations = {
     REMOVE_SECTION(state, payload) {
         let index = state.sections.findIndex(section => section.id === payload.id);
 
-        if (state.sections[index].id.includes("temp")) {
-            console.log("delete");
+        if (state.sections[index].id.includes("TEMP")) {
             _.remove(state.sections, s => s.id === payload.id);
         }
         else {
@@ -229,18 +242,56 @@ const mutations = {
     },
     REMOVE_TEMP(state) {
         state.sections = state.sections.filter(section => {
-            return !section.id.includes("temp");
-        })
+            return !section.id.includes("TEMP") && !section.id.includes("UPDATED");
+        });
     },
-    UPDATE_SECTION(state, payload) {
-        let prevSectionIndex = state.sections.findIndex(section => section.id === payload.prevSectionID);
+    UPDATE_SECTION_TITLE(state, payload) {
+        console.log(payload);
 
-        let metaProject = _.remove(state.sections[prevSectionIndex].projects, metaProject => metaProject.project.id === payload.projectID)[0];
+        let sectionIndex = state.sections.findIndex(section => section.id === payload.sectionId);
+        
+        switch(payload.lang) {
+            case("fr"):
+                state.sections[sectionIndex].title[0] = payload.title;
+                break;
+            case("en"):
+                state.sections[sectionIndex].title[1] = payload.title;
+                break;
+        }
 
-        let newSection = state.sections.find(section => section.id === payload.newSectionID);
-
-        newSection.metaProjects.push(metaProject);
+        // ajouter une propriete status pour que ca soit plus clean
+        if (!state.sections[sectionIndex].id.includes("TEMP") && !state.sections[sectionIndex].id.includes("UPDATED"))  {
+            state.sections[sectionIndex].id = "UPDATED" + state.sections[sectionIndex].id;
+        }
     },
+    UP(state, payload) {
+        let sectionIndex = state.sections.findIndex(section => section.id === payload.sectionId);
+       
+        state.sections[sectionIndex].metaProjects[payload.index].index--;
+
+        state.sections[sectionIndex].metaProjects[payload.index - 1].index++; 
+
+        state.sections[sectionIndex].metaProjects = _.sortBy(state.sections[sectionIndex].metaProjects, ["index"]);
+
+        // ajouter une propriete status pour que ca soit plus clean
+        if (!state.sections[sectionIndex].id.includes("TEMP") && !state.sections[sectionIndex].id.includes("UPDATED"))  {
+            state.sections[sectionIndex].id = "UPDATED" + state.sections[sectionIndex].id;
+        }
+    },
+    DOWN(state, payload) {
+        let sectionIndex = state.sections.findIndex(section => section.id === payload.sectionId);
+       
+        state.sections[sectionIndex].metaProjects[payload.index].index++;
+
+        state.sections[sectionIndex].metaProjects[payload.index + 1].index--;
+
+        state.sections[sectionIndex].metaProjects = _.sortBy(state.sections[sectionIndex].metaProjects, ["index"]);
+
+        // ajouter une propriete status pour que ca soit plus clean
+        if (!state.sections[sectionIndex].id.includes("TEMP") && !state.sections[sectionIndex].id.includes("UPDATED"))  {
+            state.sections[sectionIndex].id = "UPDATED" + state.sections[sectionIndex].id;
+        }
+    }
 };
 
 export default {
