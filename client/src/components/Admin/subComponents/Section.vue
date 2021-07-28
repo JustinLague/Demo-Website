@@ -3,7 +3,7 @@
     <h5 class="sub-section">
         <div class="row">
             <clickToEdit :value="$t('portfolio.sectionTitle', section.title)" @input="updateTitle" class="section-text"></clickToEdit>
-            <b-icon @click="deleteSection(section)" class="delete-icon section" id="icon-env" scale="1" icon="x-circle"></b-icon>
+            <b-icon @click="deleteSection(section)" class="icon delete-icon section" id="icon-env" scale="1" icon="x-circle"></b-icon>
         </div>
     </h5>
 
@@ -11,14 +11,14 @@
         <div class="col-lg-12 project" v-for="metaProject in section.metaProjects" :key="metaProject.project.id" >
             <div :key="metaProject.project.id">
                     <p>  
-                        <span class="up" v-if="metaProject.index != 0" @click="up({index: metaProject.index, sectionId: section.id})"><i class="far fa-arrow-alt-circle-up"></i></span>                   
-                        <span class="down" v-if="metaProject.index != section.metaProjects.length - 1" @click="down({index: metaProject.index, sectionId: section.id})"><i class="far fa-arrow-alt-circle-down"></i></span>
+                        <span class="icon up" v-if="metaProject.index != 0" @click="up({index: metaProject.index, sectionId: section.id})"><i class="far fa-arrow-alt-circle-up"></i></span>                   
+                        <span class="icon down" v-if="metaProject.index != section.metaProjects.length - 1" @click="down({index: metaProject.index, sectionId: section.id})"><i class="far fa-arrow-alt-circle-down"></i></span>
 
                         <router-link class="name" :to="{name: 'AdminProject', params: { sectionId: section.id , projectId: metaProject.project.id }}">
                             {{ $t('project.title', metaProject.project.title) }}
                         </router-link>
 
-                        <b-icon @click="deleteProject(metaProject.project, section)" class="delete-icon" id="icon-env" scale="0.9" icon="x-circle"></b-icon>
+                        <b-icon @click="deleteProject(metaProject.project, section)" class="icon delete-icon" id="icon-env" scale="0.9" icon="x-circle"></b-icon>
                     </p>
             </div>
         </div>
@@ -111,7 +111,6 @@ a:hover {
     margin-bottom: -10px;
 }
 
-
 .sub-section {
     padding-left: 15px;
     padding-top: 30px;
@@ -157,6 +156,8 @@ a:hover {
     top: 0px;
     bottom: 0px;
     left: -30px;
+    cursor: pointer;
+    transition: all .1s ease-in-out;
 }
 
 .down {
@@ -164,5 +165,20 @@ a:hover {
     top: 0px;
     bottom: 0px;
     left: -10px;
+    cursor: pointer;
+    transition: all .1s ease-in-out;
+}
+
+.icon {
+    transition: all .1s ease-in-out;
+}
+
+.icon:hover {
+    transform: scale(1.3);
+}
+
+p > span {
+    width: 20px;
+    transform: translateY(-3px);
 }
 </style>

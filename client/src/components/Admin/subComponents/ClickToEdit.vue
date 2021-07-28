@@ -81,5 +81,10 @@ textarea {
 .pencil-icon {
   cursor: pointer;
   color: rgb(28 103 206);
+  transition: all .1s ease-in-out;
+}
+
+.pencil-icon:hover {
+  transform: scale(1.4);
 }
 </style>

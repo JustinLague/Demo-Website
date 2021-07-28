@@ -129,5 +129,6 @@ export default {
 
 .add-section-icon {
     color: rgb(0, 0, 255);
+   
 }
 </style>
