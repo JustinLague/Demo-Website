@@ -14,7 +14,7 @@
                         <span class="up" v-if="metaProject.index != 0" @click="up({index: metaProject.index, sectionId: section.id})"><i class="far fa-arrow-alt-circle-up"></i></span>                   
                         <span class="down" v-if="metaProject.index != section.metaProjects.length - 1" @click="down({index: metaProject.index, sectionId: section.id})"><i class="far fa-arrow-alt-circle-down"></i></span>
 
-                        <router-link :to="{name: 'AdminProject', params: { sectionId: section.id , projectId: metaProject.project.id }}">
+                        <router-link class="name" :to="{name: 'AdminProject', params: { sectionId: section.id , projectId: metaProject.project.id }}">
                             {{ $t('project.title', metaProject.project.title) }}
                         </router-link>
 
@@ -146,5 +146,23 @@ a:hover {
 
 .plus-icon {
     color: rgb(0, 0, 255);
+}
+
+.name {
+    position: relative;
+}
+
+.up {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: -30px;
+}
+
+.down {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: -10px;
 }
 </style>
