@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const SectionSchema = new Schema({
     id: { type: mongoose.Schema.Types.ObjectId, index: { unique: true }},
     title: [String],
+    status: String,
     metaProjects: [{
         project: {
             type: mongoose.Schema.Types.ObjectId,

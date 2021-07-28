@@ -7,33 +7,32 @@
         </div>
     </h5>
 
-    <div v-if="section.metaProjects">
-        <div class="">
-            <div class="col-lg-12 project" v-for="metaProject in section.metaProjects" :key="metaProject.project.id" >
-                <div :key="metaProject.project.id">
-                        <p>  
-                            <span class="up" v-if="metaProject.index != 0" @click="up({index: metaProject.index, sectionId: section.id})"><i class="far fa-arrow-alt-circle-up"></i></span>                   
-                            <span class="down" v-if="metaProject.index != section.metaProjects.length - 1" @click="down({index: metaProject.index, sectionId: section.id})"><i class="far fa-arrow-alt-circle-down"></i></span>
+    <div class="row" v-if="section.metaProjects">
+        <div class="col-lg-12 project" v-for="metaProject in section.metaProjects" :key="metaProject.project.id" >
+            <div :key="metaProject.project.id">
+                    <p>  
+                        <span class="up" v-if="metaProject.index != 0" @click="up({index: metaProject.index, sectionId: section.id})"><i class="far fa-arrow-alt-circle-up"></i></span>                   
+                        <span class="down" v-if="metaProject.index != section.metaProjects.length - 1" @click="down({index: metaProject.index, sectionId: section.id})"><i class="far fa-arrow-alt-circle-down"></i></span>
 
-                            <router-link :to="{name: 'AdminProject', params: { sectionId: section.id , projectId: metaProject.project.id }}">
-                                {{ $t('project.title', metaProject.project.title) }}
-                            </router-link>
+                        <router-link :to="{name: 'AdminProject', params: { sectionId: section.id , projectId: metaProject.project.id }}">
+                            {{ $t('project.title', metaProject.project.title) }}
+                        </router-link>
 
-                            <b-icon @click="deleteProject(metaProject.project, section)" class="delete-icon" id="icon-env" scale="0.9" icon="x-circle"></b-icon>
-                        </p>
-                </div>
+                        <b-icon @click="deleteProject(metaProject.project, section)" class="delete-icon" id="icon-env" scale="0.9" icon="x-circle"></b-icon>
+                    </p>
             </div>
-            <button class="b-addProject">
-                <div v-b-modal.modal-add-project-to-section @click="setSectionId()">
-                    Ajouter un projet
-                    <b-icon class="plus-icon" id="icon-env" scale="1.1" icon="plus-circle"></b-icon>
-                </div>
-            </button>
-
-            <!-- modal -->
-            <confirm-dialogue ref="confirmDialogue"></confirm-dialogue>
         </div>
     </div>
+
+    <button class="b-addProject">
+        <div v-b-modal.modal-add-project-to-section @click="setSectionId()">
+            Ajouter un projet
+            <b-icon class="plus-icon" id="icon-env" scale="1.1" icon="plus-circle"></b-icon>
+        </div>
+    </button>
+
+    <!-- modal -->
+    <confirm-dialogue ref="confirmDialogue"></confirm-dialogue>
 </div>
 </template>
 

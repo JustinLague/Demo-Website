@@ -126,13 +126,13 @@ const actions = {
     async saveSections({ commit, dispatch, getters }) {
         commit("TRYING_SAVE");
         try {
-            await dashboardService.saveSections({sections: getters.getSections});
+            let sections = await dashboardService.saveSections({sections: getters.getSections});
 
             commit("REMOVE_TEMP");
             
             commit("SAVED");
 
-            dispatch("initSections");
+            commit("INIT_SECTIONS", sections.data);
         } catch (err) {
             console.error(err);
             if (err.response && err.response.status === 403) {
@@ -175,27 +175,32 @@ const mutations = {
         state.projects = projects;
     },
     INIT_SECTIONS(state, sections) {
-        state.sections.forEach(section => {
-            if (section.id.includes("TEMP") || section.id.includes("UPDATED"))
-                sections.push(section);
-        })
-        
         sections = sections.map(s => ({
             ...s,
             visible: true
         }));
 
+        state.sections.forEach(section => {
+            if (section.status == "NEW")
+                sections.push(section);
+            
+            if (section.status == "UPDATED") {
+                let index = sections.findIndex(s => s.id === section.id)
+                sections.splice(index, 1, section);
+            }
+        });
+        
         state.sections = sections;
     },
     ADD_SECTION(state) {
-        let randomId = "TEMP" + Math.floor(Math.random() * 10000000000); 
+        let randomId = "NEW" + Math.floor(Math.random() * 10000000000); 
         
         //making sure its a unique ID
         while (state.sections.find(section => section.id === randomId) != undefined) {
-            randomId = "TEMP" + Math.floor(Math.random() * 10000000000); 
+            randomId = "NEW" + Math.floor(Math.random() * 10000000000); 
         }
         
-        let newSection = { id: randomId, title: ["Sans titre", "Untitled"], metaProjects: [], visible: true};
+        let newSection = { id: randomId, status: "NEW", title: ["Sans titre", "Untitled"], metaProjects: [], visible: true};
         state.sections.push(newSection);
     },
     ADD_PROJECT(state, payload) {
@@ -208,7 +213,7 @@ const mutations = {
             return
         }
         
-        let randomId = "TEMP" + Math.floor(Math.random() * 10000000000); 
+        let randomId = "NEW" + Math.floor(Math.random() * 10000000000); 
 
         let project = state.projects.find(p => p.id == payload.project.id);
         
@@ -217,11 +222,9 @@ const mutations = {
         let metaProject = {id: randomId, index: metaProjectIndex, project: project};
 
         state.sections[sectionIndex].metaProjects.push(metaProject);
-
-        // ajouter une propriete status pour que ca soit plus clean
-        if (!state.sections[sectionIndex].id.includes("TEMP") && !state.sections[sectionIndex].id.includes("UPDATED")) {
-            state.sections[sectionIndex].id = "UPDATED" + state.sections[sectionIndex].id
-        }
+        
+        if (state.sections[sectionIndex].status != "NEW")
+            state.sections[sectionIndex].status = "UPDATED";
     },
     REMOVE_PROJECT(state, payload) {
         let sectionIndex = state.sections.findIndex(section => section.id === payload.section.id);
@@ -231,23 +234,21 @@ const mutations = {
     REMOVE_SECTION(state, payload) {
         let index = state.sections.findIndex(section => section.id === payload.id);
 
-        if (state.sections[index].id.includes("TEMP")) {
+        if (state.sections[index].status == "NEW") {
             _.remove(state.sections, s => s.id === payload.id);
         }
         else {
-            state.sections[index].id = "REMOVED" + payload.id;
+            state.sections[index].status = "REMOVED";
             state.sections[index].visible = false;
         }
 
     },
     REMOVE_TEMP(state) {
         state.sections = state.sections.filter(section => {
-            return !section.id.includes("TEMP") && !section.id.includes("UPDATED");
+            return section.status !== "NEW" && section.status !== "UPDATED";
         });
     },
     UPDATE_SECTION_TITLE(state, payload) {
-        console.log(payload);
-
         let sectionIndex = state.sections.findIndex(section => section.id === payload.sectionId);
         
         switch(payload.lang) {
@@ -258,11 +259,9 @@ const mutations = {
                 state.sections[sectionIndex].title[1] = payload.title;
                 break;
         }
-
-        // ajouter une propriete status pour que ca soit plus clean
-        if (!state.sections[sectionIndex].id.includes("TEMP") && !state.sections[sectionIndex].id.includes("UPDATED"))  {
-            state.sections[sectionIndex].id = "UPDATED" + state.sections[sectionIndex].id;
-        }
+        
+        if (state.sections[sectionIndex].status != "NEW")
+            state.sections[sectionIndex].status = "UPDATED";
     },
     UP(state, payload) {
         let sectionIndex = state.sections.findIndex(section => section.id === payload.sectionId);
@@ -273,10 +272,8 @@ const mutations = {
 
         state.sections[sectionIndex].metaProjects = _.sortBy(state.sections[sectionIndex].metaProjects, ["index"]);
 
-        // ajouter une propriete status pour que ca soit plus clean
-        if (!state.sections[sectionIndex].id.includes("TEMP") && !state.sections[sectionIndex].id.includes("UPDATED"))  {
-            state.sections[sectionIndex].id = "UPDATED" + state.sections[sectionIndex].id;
-        }
+        if (state.sections[sectionIndex].status != "NEW")
+            state.sections[sectionIndex].status = "UPDATED";
     },
     DOWN(state, payload) {
         let sectionIndex = state.sections.findIndex(section => section.id === payload.sectionId);
@@ -287,10 +284,8 @@ const mutations = {
 
         state.sections[sectionIndex].metaProjects = _.sortBy(state.sections[sectionIndex].metaProjects, ["index"]);
 
-        // ajouter une propriete status pour que ca soit plus clean
-        if (!state.sections[sectionIndex].id.includes("TEMP") && !state.sections[sectionIndex].id.includes("UPDATED"))  {
-            state.sections[sectionIndex].id = "UPDATED" + state.sections[sectionIndex].id;
-        }
+        if (state.sections[sectionIndex].status != "NEW")
+            state.sections[sectionIndex].status = "UPDATED";
     }
 };
 

@@ -17,38 +17,36 @@ class SectionController {
     async updateSections(req, res) {
         try {
             for (var section of req.body.sections) {
-                
+
                 var updatedSection;
                 
                 //if section didn't changed
-                if(!section.id.includes("REMOVED") && !section.id.includes("TEMP") && !section.id.includes("UPDATED")) {
+                if (section.status == "SAVED") {
                     continue;
                 }
                 
                 //delete section
-                if (section.id.includes("REMOVED")) {
-                    let id = section.id.substring(7);
-                    Section.findOneAndDelete({ id: id }).exec();
+                if (section.status == "REMOVED") {
+                    Section.findOneAndDelete({ id: section.id }).exec();
                     continue;
                 }
 
                 //create new section
-                if (section.id.includes("TEMP")) {
+                if (section.status == "NEW") {
                     updatedSection = new Section({ 
                         id : new mongoose.mongo.ObjectId(),
                         title: section.title,
+                        status: "SAVED"
                     });
                 }
                 
                 //section already exist
-                if (section.id.includes("UPDATED")) {
-                    let id = section.id.substring(7);
-
-                    updatedSection = await Section.findOne({ id: id }).populate("projects.project", ["id"]).exec();
+                if (section.status == "UPDATED") {
+                    updatedSection = await Section.findOne({ id: section.id }).populate("projects.project", ["id"]).exec();
                     updatedSection.title = section.title;
                     updatedSection.metaProjects = [];
+                    updatedSection.status = "SAVED";
                 } 
-
 
                 //add project to section
                 for (var metaProject of section.metaProjects) {
@@ -64,7 +62,9 @@ class SectionController {
                 await updatedSection.save();
             }
 
-            res.send("Executed correctly");
+            var sections = await Section.find().select("-_id -__v -projects._id").populate("metaProjects.project", ["title", "id"]).exec();
+
+            res.send(sections)
         } catch (err) {
             res.status(400).send({ error: err.message });
         }  
