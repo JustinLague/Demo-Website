@@ -15,6 +15,7 @@ const ImageSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "ImageData"
     },
+    index: Number
 });
 
 const Image =  mongoose.model("Image", ImageSchema)

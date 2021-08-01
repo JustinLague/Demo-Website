@@ -9,9 +9,12 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import EnlargeableImage from '@diracleo/vue-enlargeable-image';
 import { BootstrapVue, BootstrapVueIcons, DropdownPlugin } from "bootstrap-vue";
+import VueDndZone from 'vue-dnd-zone'
+import 'vue-dnd-zone/vue-dnd-zone.css'
 
 i18n.locale = "fr";
 
+Vue.use(VueDndZone);
 Vue.use(BootstrapVueIcons);
 Vue.use(EnlargeableImage);
 Vue.use(DropdownPlugin)

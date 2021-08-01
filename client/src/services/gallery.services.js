@@ -1,7 +1,7 @@
 import Api from './api.services'
 
 export const galleryService =  {
-  get() {
+  init() {
     return Api().get('/gallery/');
   }
 }

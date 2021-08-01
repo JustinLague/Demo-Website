@@ -12,5 +12,8 @@ export const dashboardService =  {
 	},
 	saveSections(sections) {
 		return Api().post('/dashboard/sections', sections);
+	},
+	updateIndex(images) {
+		return Api().post('/dashboard/updateIndex', images);
 	}
 }

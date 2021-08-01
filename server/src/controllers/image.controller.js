@@ -21,10 +21,22 @@ class ImageController {
 
   async addImage(req, res) {
     try {
-        var image = new Image({
+
+        //find next index 
+        var image = await Image.find().sort({index: "desc"}).limit(1).exec();
+        var index = 0;
+        
+        if (image != undefined) {
+          index = ++image[0].index;
+        } 
+
+        image = new Image({
             id : new mongoose.mongo.ObjectId(),
             projectId : req.body.projectId,
+            index: index
         });
+
+        console.log("deuxime image", image)
 
         var thumbnail = new ImageData({
             id : new mongoose.mongo.ObjectId(),
@@ -50,7 +62,29 @@ class ImageController {
     } catch (err) {
         res.status(400).send({ error: err.message });
     }
-}
+  }
+
+  async updateIndex(req, res) {
+	try {
+		// image.id image.index thats all i need here
+
+		for (var image of req.body.images) {
+			
+			var updatedImage = await Image.findOne({ id: image.id }).exec();
+
+			console.log(updatedImage);
+
+			updatedImage.index = image.index;
+
+			await updatedImage.save();
+		}
+
+		res.status(200).send();
+
+	} catch (err) {
+		res.status(400).send({ error: err.message });
+	}
+  }
 }
 
 module.exports = new ImageController();

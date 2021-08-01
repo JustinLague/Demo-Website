@@ -1,6 +1,7 @@
 import { dashboardService } from "../../services/dashboard.services";
 import { sectionService } from "../../services/section.services";
 import { projectService } from "../../services/project.services";
+import { galleryService } from "../../services/gallery.services";
 import router from "../../router";
 import _ from 'lodash'; 
 
@@ -9,7 +10,8 @@ const state = {
     serverError: null,
     saving: false,
     projects: [],
-    sections: []
+    sections: [],
+    galleryImages: []
 };
 
 const getters = {
@@ -19,9 +21,27 @@ const getters = {
     getProjects(state) {
         return state.projects;
     },
+    getGalleryImages(state) {
+        return state.galleryImages;
+    }
 };
 
 const actions = { 
+    async initGallery({ dispatch, commit}) {
+        try {
+            var galleryImages = await galleryService.init();
+
+            commit("INIT_GALLERY", galleryImages.data);
+        } catch (err) {
+            console.error(err)
+            if (err.response && err.response.status === 403) {
+                dispatch('user/logout', null, { root: true })
+            } else {
+                const serverError = err.response.data.error;
+                commit("LOGIN_ERROR", serverError);
+            }
+        }
+    },
     async initProjects({ dispatch, commit }) {
         try {
             var projects = await projectService.init();
@@ -148,6 +168,25 @@ const actions = {
     },
     async down({ commit }, payload) {
         commit("DOWN", payload);
+    },
+    async moveImage({ commit }, payload) {
+        commit("MOVE_IMAGE", payload);
+    },
+    async updateIndex({ commit, getters, dispatch }) {
+        commit("TRYING_SAVE");
+        try {
+            await dashboardService.updateIndex({images: getters.getGalleryImages});
+
+            commit("SAVED");
+        } catch (err) {
+            console.error(err);
+            if (err.response && err.response.status === 403) {
+                dispatch('user/logout', null, { root: true })
+            } else {
+                const serverError = err.response.data.error;
+                commit("SERVER_ERROR", serverError);
+            }
+        }
     }
 };
 
@@ -163,6 +202,14 @@ const mutations = {
     },
     SERVER_ERROR(state, serverError) {
         state.serverError = serverError;
+    },
+    INIT_GALLERY(state, galleryImages){
+        state.galleryImages = _.sortBy(galleryImages, ["index"]);
+        
+        state.galleryImages.forEach((image) => {
+            image.thumnailUrl = process.env.VUE_APP_API_URL + "/image/" + image.thumbnail;
+            image.detailedImageUrl = process.env.VUE_APP_API_URL + "/image/" + image.detailedImage;  
+        })
     },
     INIT_PROJECTS(state, projects) {
         projects.forEach(project => {
@@ -286,7 +333,14 @@ const mutations = {
 
         if (state.sections[sectionIndex].status != "NEW")
             state.sections[sectionIndex].status = "UPDATED";
-    }
+    },
+    MOVE_IMAGE(state, payload) {
+        state.galleryImages[payload.prevIndex].index = payload.newIndex;
+
+        state.galleryImages[payload.newIndex].index = payload.prevIndex;
+        
+        state.galleryImages = _.sortBy(state.galleryImages, ["index"]);
+    },
 };
 
 export default {
