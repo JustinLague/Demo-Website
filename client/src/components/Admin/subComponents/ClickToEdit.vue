@@ -17,7 +17,6 @@
     </textarea>
     <p v-if="!edit" @dblclick="edit = true;">
         {{ valueLocal }}
-        <b-icon @click="edit = true;" class="pencil-icon" id="icon-env" scale="0.7" icon="pencil-fill"></b-icon>
     </p>
 </div>
 </template>
@@ -66,25 +65,16 @@
 
 <style scoped>
 p { 
-  margin: 0px !important;  
+  margin: 0px !important; 
+  display: inline; 
 }
 
 input { 
-    width: 100%;
+    width: 65%;
     font-weight: 500;
 }
 
 textarea {
   width: 100%;
-}
-
-.pencil-icon {
-  cursor: pointer;
-  color: rgb(28 103 206);
-  transition: all .1s ease-in-out;
-}
-
-.pencil-icon:hover {
-  transform: scale(1.4);
 }
 </style>

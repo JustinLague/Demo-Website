@@ -3,12 +3,13 @@
         <h2 class="main-title">{{ $t('gallery.title') }}</h2>
 
         <div v-if="galleryImages">
-            <div v-for="(galleryImage, index) in formatedArray" :key="index">
                 <div class="row">
-                    <div class="col-lg-4" v-for="image in galleryImage" :key="image.id">
+                    <div class="col-md-4 col-sm-6" v-for="image in galleryImages" :key="image.id">
                         <div class="image">
-                            <b-icon class="icon" scale="4" icon="zoom-in"></b-icon>
-                            <enlargeable-image :src=image.thumnailUrl :src_large=image.detailedImageUrl />
+                            <enlargeable-image :src=image.thumnailUrl :src_large=image.detailedImageUrl>
+                                <b-icon class=" loupe" icon="zoom-in"></b-icon>
+                                <img :src=image.thumnailUrl />
+                            </enlargeable-image>
                             <router-link :to="{name: 'Project', params: { projectId: image.projectId }}">
                                 <div class="background">
                                     <p class="more">{{ $t('gallery.more') }}</p>
@@ -19,7 +20,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </template>
 
 <script>
@@ -36,12 +36,6 @@ export default {
     })},
     computed: {
         ...mapState("gallery", ["galleryImages"]),
-        formatedArray() {
-            const result = []
-            for (let i = 0; i < this.galleryImages.length; i += 3)
-                result.push(this.galleryImages.slice(i, i + 3))
-            return result
-        }
     },
     methods: {
         ...mapActions("gallery", ["initGallery"]),
@@ -50,7 +44,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 a {
     color: black; 
     text-decoration: none;
@@ -68,10 +62,20 @@ a:hover {
 
 .more {
     position: absolute;
-    bottom: 0px;
-    right: 20px;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center; /** Y-axis align **/
+    justify-content: center; /** X-axis align **/
     font-weight: bold;
-    color: white;  
+    color: white;
+    text-decoration: none;
+    font-size: 0.9em;
+    text-transform: uppercase;
+}
+
+.more:hover {
     text-decoration: none;
 }
 
@@ -80,34 +84,35 @@ a:hover {
     bottom: 0px;
     width: 100%;
     height: 60px;
-    background-color: gray;
-    mix-blend-mode: lighten;
+    background-color: rgba(0,0,0,0.3);
     opacity: 0;
     transition: all .2s ease-in-out;
 }
 
-.more:hover {
-    color: #dfdfdf;
-    text-decoration: none;
+.background:hover {
+    background-color: rgba(0,0,0,0.6);
 }
 
 .image:hover .background {
     opacity: 1;
 }
 
-.icon {
+.loupe {
     position: absolute;
+    width: 25%;
+    height: 25%;
     top: 50%;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     opacity: 0;
     color: lightgrey;
-    mix-blend-mode: lighten;
     transition: all .2s ease-in-out;
+    -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+    filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
 }
 
-.image:hover .icon {
+.image:hover .loupe {
     opacity: 1;
 }
 

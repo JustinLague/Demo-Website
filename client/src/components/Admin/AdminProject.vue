@@ -1,45 +1,47 @@
 <template>
     <div class="content" v-if="project">
-        <b-form @submit.prevent="handleSubmit">
-            <h2 class="main-title">
-                <clickToEdit :value="$t('project.title', project.title)" 
-                             :prop="'title'"
-                             @input="updateValue" 
-                             class="section-text"></clickToEdit>
-            </h2>
-            
-            <h4 class="art-description">
-                <clickToEdit :value="$t('project.artDescription', project.artDescription)" 
-                             :prop="'artDescription'"
-                             :textarea="true"
-                             @input="updateValue" 
-                             class="section-text"></clickToEdit>
-            </h4>
-            
-            <h4 class="description">
-                <clickToEdit :value="$t('project.description', project.description)" 
-                                :prop="'description'"
+        <div class="row">
+            <b-form @submit.prevent="handleSubmit">
+                <h2 class="main-title">
+                    <clickToEdit :value="$t('project.title', project.title)" 
+                                :prop="'title'"
+                                @input="updateValue" 
+                                class="section-text"></clickToEdit>
+                </h2>
+                
+                <h4 class="art-description">
+                    <clickToEdit :value="$t('project.artDescription', project.artDescription)" 
+                                :prop="'artDescription'"
                                 :textarea="true"
                                 @input="updateValue" 
                                 class="section-text"></clickToEdit>
-            </h4>    
-            
-            <Image-viewer :images=project.images v-if="project.images"></Image-viewer>
+                </h4>
+                
+                <h4 class="description">
+                    <clickToEdit :value="$t('project.description', project.description)" 
+                                    :prop="'description'"
+                                    :textarea="true"
+                                    @input="updateValue" 
+                                    class="section-text"></clickToEdit>
+                </h4>    
+                
+                <Image-viewer :images=project.images v-if="project.images"></Image-viewer>
 
-            <b-button v-b-modal.modal-add-image variant="primary">Ajouter une image</b-button>
-            
-            <b-form-group>
-                <div v-if="!projectTryingToAdd" class="float-right">
-                    <b-button type="submit" variant="success">Sauvegarder</b-button>
-                </div>
-                <div v-else>
-                    <b-spinner variant="primary" label="Spinning" class="spinner"></b-spinner>
-                </div>
-            </b-form-group>
-        </b-form>
+                <b-button v-b-modal.modal-add-image variant="primary">Ajouter une image</b-button>
+                
+                <b-form-group>
+                    <div v-if="!projectTryingToAdd" class="float-right">
+                        <b-button type="submit" variant="success">Sauvegarder</b-button>
+                    </div>
+                    <div v-else>
+                        <b-spinner variant="primary" label="Spinning" class="spinner"></b-spinner>
+                    </div>
+                </b-form-group>
+            </b-form>
 
-        <!-- Modal -->
-        <add-image @addImage="addImage"></add-image>
+            <!-- Modal -->
+            <add-image @addImage="addImage"></add-image>
+        </div>
     </div>
 </template>
 
@@ -87,35 +89,15 @@ export default {
                 this.project = this.projects.find(project => project.id === this.projectId);
         },
         updateValue(value, prop) {
-            this.console.log(value, prop);
-
             switch(this.$i18n.locale) {
-            case("fr"):
-                this.project[prop][0] = value;
-                break;
-            case("en"):
-                this.project[prop][1] = value;
-                break;
-        }
+                case("fr"):
+                    this.project[prop][0] = value;
+                    break;
+                case("en"):
+                    this.project[prop][1] = value;
+                    break;
+            }
         }, 
-        updateTitle(value) {
-            if (this.$i18n.locale == "fr")
-                this.project.title[0] = value;
-            else   
-                this.project.title[1] = value;
-        },
-        updateArtDescription(value) {
-             if (this.$i18n.locale == "fr")
-                this.project.artDescription[0] = value;
-            else   
-                this.project.artDescription[1] = value;
-        },
-        updateDescription(value) {
-            if (this.$i18n.locale == "fr")
-                this.project.description[0] = value;
-            else   
-                this.project.description[1] = value;
-        },
         addImage(image) {
             this.project.images.push({ ...image});
         },
@@ -127,6 +109,10 @@ export default {
 </script>
 
 <style scoped>
+.content {
+    padding-left: 15px;
+}
+
 .art-description {
     font-size: 1.15em;  
     font-weight: 300;

@@ -14,7 +14,10 @@
                         <input id="upload-thumbnail" type="file" ref="inputThumbnail" @change="onChangeThumbnail" class="form-control border-0">
                         <label id="upload-label" for="upload">{{ image.thumbnailName || "Thumbnail"}}</label>
                         <div class="input-group-append">
-                            <label for="upload-thumbnail" class="btn btn-light m-0 px-4"> <b-icon class="mr-2 text-muted" icon="cloud-upload"></b-icon><small class="text-uppercase font-weight-bold text-muted">Choisir une thumbnail</small></label>
+                            <label for="upload-thumbnail" class="btn btn-light m-0 px-4"> 
+                                <b-icon class="mr-2 text-muted" icon="cloud-upload"></b-icon>
+                                <small class="text-uppercase font-weight-bold text-muted">Choisir une thumbnail</small>
+                            </label>
                         </div>
                     </div>
                 </div>

@@ -59,4 +59,9 @@ img {
     font-weight: 300;
     font-family: 'Montserrat', sans-serif;
 }
+
+div.full.enlarged {
+    background-image: none !important;
+}
+
 </style>

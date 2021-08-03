@@ -26,7 +26,7 @@ class ImageController {
         var image = await Image.find().sort({index: "desc"}).limit(1).exec();
         var index = 0;
         
-        if (image != undefined) {
+        if (image.length > 0) {
           index = ++image[0].index;
         } 
 
@@ -35,8 +35,6 @@ class ImageController {
             projectId : req.body.projectId,
             index: index
         });
-
-        console.log("deuxime image", image)
 
         var thumbnail = new ImageData({
             id : new mongoose.mongo.ObjectId(),
@@ -66,13 +64,9 @@ class ImageController {
 
   async updateIndex(req, res) {
 	try {
-		// image.id image.index thats all i need here
-
 		for (var image of req.body.images) {
 			
 			var updatedImage = await Image.findOne({ id: image.id }).exec();
-
-			console.log(updatedImage);
 
 			updatedImage.index = image.index;
 

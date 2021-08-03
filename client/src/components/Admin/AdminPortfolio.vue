@@ -2,7 +2,14 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-10 content">
-            <h2 class="main-title">{{ $t('portfolio.title') }}</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="main-title ">{{ $t('portfolio.title') }}</h2>
+                    <b-button v-if="!preview" class="add-section" @click="addSection()" variant="outline-primary">
+                        Ajouter une section
+                    </b-button>
+                </div>
+            </div>
             <div class="section" v-for="section in sections" :key="JSON.stringify(section)">
                 <Section :preview=preview
                          :section=section 
@@ -11,24 +18,21 @@
                          @sectionId="setSectionId"
                          v-if=section.visible></Section>
             </div>
-            <button v-if="!preview" class="add-section" @click="addSection()">
-                Ajouter une section
-                <b-icon class="add-section-icon" id="icon-env" scale="1.1" icon="plus-circle"></b-icon>
-            </button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col align-self-end">
-            <b-form @submit.prevent="handleSubmit">
-               <b-form-group class="float-right">
-                    <div v-if="!saving">
-                        <b-button type="submit" variant="success">Sauvegarder</b-button>
-                    </div>
-                    <div v-else>
-                        <b-spinner variant="primary" label="Spinning" class="spinner"></b-spinner>
-                    </div>
-               </b-form-group>
-            </b-form>
+        
+            <div class="row save-button">
+                <div class="col align-self-end">
+                    <b-form @submit.prevent="handleSubmit">
+                    <b-form-group class="float-right">
+                            <div v-if="!saving">
+                                <b-button type="submit" variant="success">Sauvegarder</b-button>
+                            </div>
+                            <div v-else>
+                                <b-spinner variant="primary" label="Spinning" class="spinner"></b-spinner>
+                            </div>
+                    </b-form-group>
+                    </b-form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -101,6 +105,9 @@ export default {
     padding-left: 0px;
 }
 
+.main-title {
+    display: inline;
+}
 
 .project {
     margin-bottom: -10px;
@@ -112,15 +119,9 @@ export default {
 }
 
 .add-section {
-    margin-top: 20px;
-    padding: 0px;
-    background-color: white;
-    border: none;
     font-weight: 700;
-}
-
-.add-section:hover {
-    color: #B5111B;
+    float: right;
+    margin-top: 2px;
 }
 
 .add-section:focus{
@@ -130,5 +131,9 @@ export default {
 .add-section-icon {
     color: rgb(0, 0, 255);
    
+}
+
+.save-button {
+    margin-top: 40px;
 }
 </style>
