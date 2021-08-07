@@ -50,7 +50,8 @@ const messages = {
         admin: {
             add: "Ajouter",
             cancel: "Annuler",
-            createNewProject: "Créer un nouveau projet"
+            createNewProject: "Créer un nouveau projet",
+            addImageErrorMessage: "Vous devez entrez une thumbnail et une image."
         }
       },
     en: {
@@ -99,7 +100,8 @@ const messages = {
         admin: {
             add: "Add",
             cancel: "Cancel",
-            createNewProject: "Create new projet"
+            createNewProject: "Create new projet",
+            addImageErrorMessage: "You must add a thumbnail and an image."
         }
     }
 };

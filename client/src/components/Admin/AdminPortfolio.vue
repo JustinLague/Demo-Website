@@ -5,14 +5,13 @@
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="main-title ">{{ $t('portfolio.title') }}</h2>
-                    <b-button v-if="!preview" class="add-section" @click="addSection()" variant="outline-primary">
+                    <b-button class="add-section" @click="addSection()" variant="outline-primary">
                         Ajouter une section
                     </b-button>
                 </div>
             </div>
             <div class="section" v-for="section in sections" :key="JSON.stringify(section)">
-                <Section :preview=preview
-                         :section=section 
+                <Section :section=section 
                          :key="JSON.stringify(section)" 
                          @refresh-section="refreshSection()"
                          @sectionId="setSectionId"
@@ -56,7 +55,6 @@ export default {
     },
     data() {
         return {
-            preview: false,
             selectedSectionId: null
         }
     },

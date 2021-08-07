@@ -27,6 +27,7 @@ module.exports = (app) => {
   //Gallery
   app.get("/api/gallery", GalleryController.gallery);
   app.post("/api/dashboard/updateIndex", ImageController.updateIndex);
+  app.post("/api/dashboard/deleteImage", ImageController.deleteImage);
   
   
   //Image

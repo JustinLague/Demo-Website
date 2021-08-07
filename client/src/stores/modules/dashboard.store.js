@@ -187,6 +187,19 @@ const actions = {
                 commit("SERVER_ERROR", serverError);
             }
         }
+    },
+    async deleteImage({ commit, dispatch }, image) {
+        try {
+            await dashboardService.deleteImage({ image });
+        } catch (err) {
+            console.error(err);
+            if (err.response && err.response.status === 403) {
+                dispatch('user/logout', null, { root: true })
+            } else {
+                const serverError = err.response.data.error;
+                commit("SERVER_ERROR", serverError);
+            }
+        }
     }
 };
 

@@ -62,23 +62,39 @@ class ImageController {
     }
   }
 
-  async updateIndex(req, res) {
-	try {
-		for (var image of req.body.images) {
-			
-			var updatedImage = await Image.findOne({ id: image.id }).exec();
+	async updateIndex(req, res) {
+		try {
+			for (var image of req.body.images) {
+				
+				var updatedImage = await Image.findOne({ id: image.id }).exec();
 
-			updatedImage.index = image.index;
+				updatedImage.index = image.index;
 
-			await updatedImage.save();
+				await updatedImage.save();
+			}
+
+			res.status(200).send();
+
+		} catch (err) {
+			res.status(400).send({ error: err.message });
 		}
+	}	
 
-		res.status(200).send();
+	async deleteImage(req, res) {
+		try {
+			var image = req.body.image;
+			
+			Image.findOneAndDelete({id: image.id}).exec();
+			
+			ImageData.findOneAndDelete({_id: image.thumbnail}).exec();
+			ImageData.findOneAndDelete({_id: image.detailedImage}).exec();
 
-	} catch (err) {
-		res.status(400).send({ error: err.message });
+			res.status(200).send();
+			
+		} catch (err) {
+			res.status(400).send({ error: err.message });
+		}
 	}
-  }
 }
 
 module.exports = new ImageController();

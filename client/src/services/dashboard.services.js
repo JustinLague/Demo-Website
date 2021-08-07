@@ -15,5 +15,8 @@ export const dashboardService =  {
 	},
 	updateIndex(images) {
 		return Api().post('/dashboard/updateIndex', images);
+	},
+	deleteImage(image) {
+		return Api().post('/dashboard/deleteImage', image);
 	}
 }
