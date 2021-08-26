@@ -4,7 +4,7 @@
 
         <div v-if="galleryImages">
                 <div class="row">
-                    <div class="col-md-4 col-sm-6" v-for="image in galleryImages" :key="image.id">
+                    <div class="col-md-4 col-sm-6" v-for="image in galleryImages" :key="image._id">
                         <div class="image">
                             <enlargeable-image :src=image.thumnailUrl :src_large=image.detailedImageUrl>
                                 <b-icon class=" loupe" icon="zoom-in"></b-icon>
