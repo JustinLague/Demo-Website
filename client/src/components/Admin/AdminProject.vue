@@ -8,7 +8,7 @@
                         <h2 class="main-title">
                             <clickToEdit :value="$t('project.title', project.title)" 
                                         :prop="'title'"
-                                        @input="updateValue" 
+                                        @input="onUpdateValue" 
                                         class="section-text"></clickToEdit>
                             <div class="edit-icon-border">
                                 <b-icon class="icon edit-icon" id="icon-env" scale="0.7" icon="pencil-fill"></b-icon>
@@ -23,7 +23,7 @@
                             <clickToEdit :value="$t('project.artDescription', project.artDescription)" 
                                         :prop="'artDescription'"
                                         :textarea="true"
-                                        @input="updateValue" 
+                                        @input="onUpdateValue" 
                                         class="section-text"></clickToEdit>
                             <div class="edit-icon-border">
                                 <b-icon class="icon edit-icon" id="icon-env" scale="0.7" icon="pencil-fill"></b-icon>
@@ -38,7 +38,7 @@
                             <clickToEdit :value="$t('project.description', project.description)" 
                                         :prop="'description'"
                                         :textarea="true"
-                                        @input="updateValue" 
+                                        @input="onUpdateValue" 
                                         class="section-text"></clickToEdit>
                             <div class="edit-icon-border">
                                 <b-icon class="icon edit-icon" id="icon-env" scale="0.7" icon="pencil-fill"></b-icon>
@@ -62,7 +62,7 @@
                 
                 <b-form-group>
                     <div v-if="!projectTryingToAdd" class="float-right">
-                        <b-button type="submit" variant="success">Sauvegarder</b-button>
+                        <b-button type="submit" variant="success">Retour au portfolio</b-button>
                     </div>
                     <div v-else>
                         <b-spinner variant="primary" label="Spinning" class="spinner"></b-spinner>
@@ -71,7 +71,7 @@
             </b-form>
 
             <!-- Modal -->
-            <add-image @addImage="addImage"></add-image>
+            <add-image @addImage="onAddImage"></add-image>
         </div>
     </div>
 </div>
@@ -81,7 +81,7 @@
 import EnlargeableImage from "@diracleo/vue-enlargeable-image";
 import clickToEdit from "./subComponents/ClickToEdit";
 import AddImage from './subComponents/AddImage';
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 
 export default {
     components: {
@@ -93,51 +93,30 @@ export default {
         sectionId: String,
         projectId: String
     },
-    data() {
-        return {
-            project: {
-                title: ["Sans titre", "No title"],
-                artDescription: ["description de l'art", "art description"],
-                description: ["description du project", "project description"],
-                images: []
-            },
-           
-        }
-    },
-    created() {
-        this.$nextTick(function () {
-            this.initProject();
-        })
-    },
     computed: {
-        ...mapState("dashboard", ["projectTryingToAdd", "projects"]),
+        ...mapState("project", ["projectTryingToAdd"]),
+        ...mapGetters("project", ["getProject"]),
+        project() {
+            return this.getProject(this.projectId);
+        },
         console: () => console,
         window: () => window,
     },
     methods: {
-        ...mapActions("dashboard", ["updateProject", "deleteImage"]),
-        initProject() {
-            if (this.projectId)
-                this.project = this.projects.find(project => project.id === this.projectId);
-        },
-        updateValue(value, prop) {
-            switch(this.$i18n.locale) {
-                case("fr"):
-                    this.project[prop][0] = value;
-                    break;
-                case("en"):
-                    this.project[prop][1] = value;
-                    break;
-            }
+        ...mapActions("project", ["updateValue", "deleteImage", "addImage", "initProject"]),
+        ...mapActions("dashboard", ["addProjectToSection"]),
+        onUpdateValue(value, prop) {
+            this.updateValue({projectId: this.projectId, value, prop, lang: this.$i18n.locale});
         }, 
-        addImage(image) {
-            this.project.images.push({ ...image});
+        onAddImage(image) {
+            this.addImage({ image: {...image}, projectId: this.projectId})
         },
         handleSubmit() {
-            this.updateProject({project: this.project, sectionId: this.sectionId});
+            this.addProjectToSection({ projectId: this.projectId, sectionId: this.sectionId });
+            this.$router.push({name: 'AdminPortfolio'});
         },
         onDeleteImage(image) {
-            this.deleteImage(image);
+            this.deleteImage({ image, projectId: this.projectId});
         }
     }
 }

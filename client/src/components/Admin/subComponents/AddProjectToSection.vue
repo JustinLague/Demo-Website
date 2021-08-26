@@ -14,7 +14,7 @@
                 <div class="row">
                         <div>
                             <b-form-select v-model="selected">
-                                <b-form-select-option v-for="project in projects" :key="project.id" :value="project">{{ $t('project.title', project.title) }}</b-form-select-option>
+                                <b-form-select-option v-for="project in projects" :key="project._id" :value="project">{{ $t('project.title', project.title) }}</b-form-select-option>
                             </b-form-select>
                         </div>
                 </div>
@@ -31,7 +31,7 @@
             </div>
         </div>
         <template #modal-footer="{ ok, cancel }">
-            <b-button size="sm" variant="success" @click="createProject()">
+            <b-button size="sm" variant="success" @click="onCreateProject()">
                 {{ $t('admin.createNewProject') }}
             </b-button>
             <b-button size="sm" variant="danger" @click="cancel()">
@@ -47,13 +47,14 @@
 <script>
 import ImageViewer from "../../subComponents/ImageViewer";
 import { mapActions } from "vuex";
+import { mapState } from "vuex";
+
 
 export default {
     components: {
         ImageViewer
     },
     props: {
-        projects: Array,
         sectionId: String
     },
     data() {
@@ -62,22 +63,23 @@ export default {
       }
     },
     computed: {
+        ...mapState("project", ["projects"]),
         console: () => console,
         window: () => window,
     },
     methods: {
         ...mapActions("dashboard", ["addProjectToSection"]),
+        ...mapActions("project", ["createProject"]),
         addProject() {
             if (this.selected == null)
                 return;
 
-            let payload = { sectionId: this.sectionId, project: this.selected}
-            this.addProjectToSection(payload);
+            this.addProjectToSection({ sectionId: this.sectionId, projectId: this.selected._id});
             this.$forceUpdate();
             this.selected = null;
         },  
-        createProject() {
-            this.$router.push({name: 'AdminProject', params: { sectionId: this.sectionId }});
+        onCreateProject() {
+            this.createProject({ sectionId: this.sectionId });
         },
         clear() {
             this.selected = null;

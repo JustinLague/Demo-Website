@@ -2,7 +2,7 @@
 <div>
     <div v-for="a in formatedArray" :key="a.length">
         <div class="row">
-            <div class="col-lg-6" v-for="image in a" :key="image.id">
+            <div class="col-lg-6" v-for="image in a" :key="image._id">
                 <enlargeable-image class="image" :src=image.detailedImageUrl :src_large=image.detailedImageUrl />
             </div>
         </div>

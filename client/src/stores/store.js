@@ -22,9 +22,11 @@ const vueSessionStorage = new VuexPersist({
       userSignedIn: state.user.userSignedIn
     },
     dashboard: {
-      projects: state.dashboard.projects,
       sections: state.dashboard.sections,
     },
+    project: {
+      projects: state.project.projects
+    }
   })
 });
 

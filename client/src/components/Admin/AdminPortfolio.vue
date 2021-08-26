@@ -36,7 +36,7 @@
     </div>
 
     <!-- Modal -->
-    <add-project-to-section :projects=projects :sectionId=selectedSectionId></add-project-to-section>
+    <add-project-to-section :sectionId=selectedSectionId></add-project-to-section>
     <confirm-dialogue-simple ref="confirmDialogueSimple"></confirm-dialogue-simple>
 </div>
 </template>
@@ -65,7 +65,8 @@ export default {
         })
     },
     computed: {
-        ...mapState("dashboard", ["sections", "projects", "saving", "serverError"]),
+        ...mapState("dashboard", ["sections", "saving", "serverError"]),
+        ...mapState("project", ["projects"]),
         hasError() {
             return !this.serverError;
         },
@@ -73,7 +74,8 @@ export default {
         window: () => window,
     },
     methods: {
-        ...mapActions("dashboard", ["saveSections", "addSection", "initProjects", "initSections"]),
+        ...mapActions("project", ["initProjects", "saveProject"]),
+        ...mapActions("dashboard", ["saveSections", "addSection", "initSections"]),
         setSectionId(sectionId) {
             this.selectedSectionId = sectionId;
         },
@@ -91,7 +93,11 @@ export default {
             })
 
             if (ok) {
-                await this.saveSections();
+                await Promise.all(this.projects.map(async (project) => {
+                    await this.saveProject(project);
+                }));
+
+                this.saveSections()
             } 
         }
     },

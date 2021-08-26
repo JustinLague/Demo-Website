@@ -2,11 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const SectionSchema = new Schema({
-    id: { type: mongoose.Schema.Types.ObjectId, index: { unique: true }},
     title: [String],
     status: String,
     metaProjects: [{
-        project: {
+        projectId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Project",
         },

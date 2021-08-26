@@ -4,7 +4,7 @@
     <b-form @submit.prevent="handleSubmit">
       <b-form-group>
         <label for="feedback-user">Nom d'utilisateur</label>
-        <b-input v-model="username" :state="validationUsername"></b-input>
+        <b-input v-model="username" :state="validationUsername" autocomplete="username"></b-input>
         <div class="invalid-feedback" :state="validationUsername">
           Vous devez entrer un nom d'utilisateur.
         </div>
@@ -12,7 +12,7 @@
 
       <b-form-group>
         <label for="feedback-user">Mot de passe</label>
-        <b-input type="password" v-model="password" :state="validationPassword"></b-input>
+        <b-input type="password" v-model="password" :state="validationPassword" autocomplete="current-password"></b-input>
         <div class="invalid-feedback" :state="validationPassword">
           Vous devez entrer un mot de passe.
         </div>

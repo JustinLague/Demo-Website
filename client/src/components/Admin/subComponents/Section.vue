@@ -22,18 +22,18 @@
     </div>
 
     <div v-if="section.metaProjects">
-        <div class="project" v-for="metaProject in section.metaProjects" :key="metaProject.project.id" >
-            <div class="row" :key="metaProject.project.id">
+        <div class="project" v-for="metaProject in section.metaProjects" :key="metaProject.projectId" >
+            <div class="row" :key="metaProject.projectId">
                 <div class="col-md-12">
                     <p>  
-                        <router-link class="name" :to="{name: 'AdminProject', params: { sectionId: section.id , projectId: metaProject.project.id }}">
-                            {{ $t('project.title', metaProject.project.title) }}
+                        <router-link class="name" :to="{name: 'AdminProject', params: { sectionId: section._id , projectId: metaProject.projectId }}">
+                            {{ $t('project.title', getProject(metaProject.projectId).title) }}
                         </router-link>
                     </p>
                     <section class="project-icons">
-                        <span class="icon up" v-if="metaProject.index != 0" @click="up({index: metaProject.index, sectionId: section.id})"><i class="far fa-arrow-alt-circle-up"></i></span>                   
-                        <span class="icon down" v-if="metaProject.index != section.metaProjects.length - 1" @click="down({index: metaProject.index, sectionId: section.id})"><i class="far fa-arrow-alt-circle-down"></i></span>
-                        <div class="project-delete-icon-border" @click="deleteProject(metaProject.project, section)">
+                        <span class="icon up" v-if="metaProject.index != 0" @click="moveProjectUp({index: metaProject.index, sectionId: section._id})"><i class="far fa-arrow-alt-circle-up"></i></span>                   
+                        <span class="icon down" v-if="metaProject.index != section.metaProjects.length - 1" @click="moveProjectDown({index: metaProject.index, sectionId: section._id})"><i class="far fa-arrow-alt-circle-down"></i></span>
+                        <div class="project-delete-icon-border" @click="deleteProject(metaProject.projectId, section)">
                             <b-icon class="icon project-delete-icon" id="icon-env" scale="1.1" icon="trash"></b-icon>
                         </div>
                     </section>
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 import clickToEdit from "./ClickToEdit";
 import ConfirmDialogue from './ConfirmDialogue.vue';
 
@@ -61,32 +61,42 @@ export default {
         section: Object,
     },
     computed: {
+        ...mapState("project", ["projects"]),
         console: () => console,
         window: () => window,
     },
+    created() {
+        this.$nextTick(function () {
+            this.initProjects();
+        })
+    },
     methods: {
-        ...mapActions("dashboard", ["updateSectionTitle", "removeProject", "removeSection", "up", "down"]),
+        ...mapActions("project", ["initProjects"]),
+        ...mapActions("dashboard", ["updateSectionTitle", "removeProjectFromSection", "removeSection", "moveProjectUp", "moveProjectDown"]),
         updateTitle(value) {
-            this.updateSectionTitle({sectionId: this.section.id, title: value, lang: this.$i18n.locale })
+            this.updateSectionTitle({sectionId: this.section._id, title: value, lang: this.$i18n.locale })
         },
         setSectionId() {
-            this.$emit("sectionId", this.section.id);
+            this.$emit("sectionId", this.section._id);
         },
-        async deleteProject(project, section) {
+        getProject(projectId) {
+            return this.projects.find(project => project._id === projectId);
+        },
+        async deleteProject(projectId, section) {
             let payload = {
-                project,
+                projectId,
                 section
             };
 
             const ok = await this.$refs.confirmDialogue.show({
                 title: 'Supprimer un projet',
                 message: 'Etes-vous sure que vous voulez supprimer ce projet ?',
-                project: project,
+                project: this.getProject(projectId),
                 okButton: 'Supprimer',
             })
 
             if (ok) {
-                this.removeProject(payload);
+                this.removeProjectFromSection(payload);
                 this.$forceUpdate();
             } 
         },

@@ -6,16 +6,17 @@ class ProjectController {
    
     async projects(req, res) {
         try {
-            var projects = await Project.find().select("-_id -__v").exec();
+            var projects = await Project.find().select("-__v").exec();
 
             var projects = await Promise.all(projects.map(async (project) => {
-                var images = await Image.find({ projectId: project.id }).select("-_id -__v -data").exec();
+                var images = await Image.find({ projectId: project._id }).select("-__v -data").exec();
                 
                 return {
-                    id: project.id,
+                    _id: project._id,
                     title : project.title,
                     description : project.description,
                     artDescription: project.artDescription,
+                    status: project.status,
                     images: images
                 };
             }));
@@ -30,9 +31,9 @@ class ProjectController {
         try {
             var id = req.params.id;
 
-            var project = await Project.findOne({ id: id }).select("-_id -__v").exec();
+            var project = await Project.findOne({ _id: id }).select("-__v").exec();
 
-            var images = await Image.find({ projectId: project.id }).select("-_id -__v -data").exec();
+            var images = await Image.find({ projectId: project._id }).select("-__v -data").exec();
 
             res.send({
                 project,
@@ -45,29 +46,47 @@ class ProjectController {
 
     async updateProject(req, res) {
         try {
-            var project = req.body.project
-            var updatedProject;
+            var project = req.body.project;
+
+            var updatedProject = project;
             
-            if (project.id == undefined) {
+            if (project.status == "SAVED") {
+                res.send(project._id);
+                return;
+            }
+
+            if (project.status == "REMOVED") {
+                Project.findOneAndDelete({ _id: project._id }).exec();
+                res.send(project._id);
+                return;
+            }
+
+            //create new project
+            if (project.status == "NEW") {
                 updatedProject = new Project({ 
-                    id : new mongoose.mongo.ObjectId(),
+                    _id: new mongoose.mongo.ObjectId(),
                     title: project.title,
                     description: project.artDescription,
                     artDescription: project.description,
+                    status: "SAVED"
                 })
-            } else {
-                updatedProject = await Project.findOne({ id: project.id }).exec();
+            }
+
+            //project already exist
+            if (project.status == "UPDATED") {
+                updatedProject = await Project.findOne({ _id: project._id }).exec();
                 updatedProject.title = project.title;
                 updatedProject.description = project.artDescription;
                 updatedProject.artDescription = project.description;
-            }
+                updatedProject.status = "SAVED";
+            } 
 
             await updatedProject.save();
 
-            res.send(updatedProject.id);
+            res.send(updatedProject._id);
         } catch (err) {
             res.status(400).send({ error: err.message });
-        }  
+        }
     }
 }
 

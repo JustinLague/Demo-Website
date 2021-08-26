@@ -60,7 +60,7 @@ const router = new Router({
       }
     },
     {
-      path: "/admin/project/:sectionId",
+      path: "/admin/project/:sectionId/:projectId",
       name: "AdminProject",
       component: AdminProject,
       props: true,

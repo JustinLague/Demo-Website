@@ -14,8 +14,8 @@
 				>
 					<dnd-item
 						v-for="image in formatedArray"
-						:key="image.id"
-						:dnd-id="image.id"
+						:key="image._id"
+						:dnd-id="image._id"
 						:dnd-model="image"
 					>
 						<div class="col-lg-4">

@@ -1,15 +1,12 @@
 import { dashboardService } from "../../services/dashboard.services";
 import { sectionService } from "../../services/section.services";
-import { projectService } from "../../services/project.services";
 import { galleryService } from "../../services/gallery.services";
-import router from "../../router";
 import _ from 'lodash'; 
 
 /* eslint-disable no-console */
 const state = {
     serverError: null,
     saving: false,
-    projects: [],
     sections: [],
     galleryImages: []
 };
@@ -17,9 +14,6 @@ const state = {
 const getters = {
     getSections(state) {
         return state.sections;
-    },
-    getProjects(state) {
-        return state.projects;
     },
     getGalleryImages(state) {
         return state.galleryImages;
@@ -32,21 +26,6 @@ const actions = {
             var galleryImages = await galleryService.init();
 
             commit("INIT_GALLERY", galleryImages.data);
-        } catch (err) {
-            console.error(err)
-            if (err.response && err.response.status === 403) {
-                dispatch('user/logout', null, { root: true })
-            } else {
-                const serverError = err.response.data.error;
-                commit("LOGIN_ERROR", serverError);
-            }
-        }
-    },
-    async initProjects({ dispatch, commit }) {
-        try {
-            var projects = await projectService.init();
-
-            commit("INIT_PROJECTS", projects.data);
         } catch (err) {
             console.error(err)
             if (err.response && err.response.status === 403) {
@@ -72,57 +51,6 @@ const actions = {
             }
         }
     },
-    async updateProject({ dispatch, commit }, payload) {
-        try {
-            var projectId = await dashboardService.updateProject({project: payload.project});
-            
-            await dispatch("updateImage", { images: payload.project.images, projectId: projectId.data });
-            
-            payload.project.id = projectId.data;
-            
-            commit("ADD_PROJECT", payload.project);
-
-            commit("ADD_PROJECT_TO_SECTION", payload);
-        } catch (err) {
-            console.error(err)
-            if (err.response && err.response.status === 403) {
-                dispatch("user/logout", null, { root: true })
-            } else {
-                const serverError = err.response.data.error;
-                commit("SERVER_ERROR", serverError);
-            }
-        }
-    },
-    async updateImage({ commit, dispatch }, imagePayload) {
-        try {
-            let formData = new FormData();
-            let images = imagePayload.images;
-            
-            await Promise.all(images.map(async (image) => {
-                formData = new FormData();
-
-                formData.append('projectId', imagePayload.projectId)
-                
-                if (image.dataThumbnail !== undefined && image.dataImage !== undefined) {
-
-                    formData.append('image', image.dataThumbnail);
-                    formData.append('image', image.dataImage);
-                    
-                    await dashboardService.updateImage(formData);
-                }
-            }));
-
-            router.push({ name: "AdminPortfolio" });
-        } catch (err) {
-            console.error(err);
-            if (err.response && err.response.status === 403) {
-                dispatch('user/logout', null, { root: true })
-            } else {
-                const serverError = err.response.data.error;
-                commit("SERVER_ERROR", serverError);
-            }
-        }
-    },
     async addProjectToSection({ commit }, payload) {
         commit("ADD_PROJECT_TO_SECTION", payload);
     },
@@ -132,16 +60,11 @@ const actions = {
     async updateSectionTitle({ commit }, payload) {
         commit("UPDATE_SECTION_TITLE", payload);
     },
-    async removeProject({ commit }, payload) {
-        commit("REMOVE_PROJECT", payload);
+    async removeProjectFromSection({ commit }, payload) {
+        commit("REMOVE_PROJECT_FROM_SECTION", payload);
     },
     async removeSection({ commit }, payload) {
         commit("REMOVE_SECTION", payload);
-    },
-    async saveProjects({dispatch, getters}) {
-        getters.getProjects.forEach(project => {
-           dispatch("updateProject", project);
-        }) 
     },
     async saveSections({ commit, dispatch, getters }) {
         commit("TRYING_SAVE");
@@ -150,8 +73,6 @@ const actions = {
 
             commit("REMOVE_TEMP");
             
-            commit("SAVED");
-
             commit("INIT_SECTIONS", sections.data);
         } catch (err) {
             console.error(err);
@@ -162,12 +83,15 @@ const actions = {
                 commit("SERVER_ERROR", serverError);
             }
         }
+        finally {
+            commit("SAVED");
+        }
     },
-    async up({ commit }, payload) {
-        commit("UP", payload);
+    async moveProjectUp({ commit }, payload) {
+        commit("MOVE_PROJECT_UP", payload);
     },
-    async down({ commit }, payload) {
-        commit("DOWN", payload);
+    async moveProjectDown({ commit }, payload) {
+        commit("MOVE_PROJECT_DOWN", payload);
     },
     async moveImage({ commit }, payload) {
         commit("MOVE_IMAGE", payload);
@@ -188,25 +112,12 @@ const actions = {
             }
         }
     },
-    async deleteImage({ commit, dispatch }, image) {
-        try {
-            await dashboardService.deleteImage({ image });
-        } catch (err) {
-            console.error(err);
-            if (err.response && err.response.status === 403) {
-                dispatch('user/logout', null, { root: true })
-            } else {
-                const serverError = err.response.data.error;
-                commit("SERVER_ERROR", serverError);
-            }
-        }
+    async updateProjectId({ commit }, payload){
+        commit("UPDATE_PROJECT_ID", payload);
     }
 };
 
 const mutations = {
-    SAVING_PROJECT(state) {
-        state.projectSaving += 1;  
-    },
     TRYING_SAVE(state) {
         state.saving = true; 
     },
@@ -224,16 +135,6 @@ const mutations = {
             image.detailedImageUrl = process.env.VUE_APP_API_URL + "/image/" + image.detailedImage;  
         })
     },
-    INIT_PROJECTS(state, projects) {
-        projects.forEach(project => {
-            project.images.forEach((image) => {
-                image.thumnailUrl = process.env.VUE_APP_API_URL + "/image/" + image.thumbnail;
-                image.detailedImageUrl = process.env.VUE_APP_API_URL + "/image/" + image.detailedImage;  
-            })
-        })
-            
-        state.projects = projects;
-    },
     INIT_SECTIONS(state, sections) {
         sections = sections.map(s => ({
             ...s,
@@ -245,57 +146,55 @@ const mutations = {
                 sections.push(section);
             
             if (section.status == "UPDATED") {
-                let index = sections.findIndex(s => s.id === section.id)
+                let index = sections.findIndex(s => s._id === section._id)
                 sections.splice(index, 1, section);
             }
         });
-        
+
         state.sections = sections;
     },
     ADD_SECTION(state) {
         let randomId = "NEW" + Math.floor(Math.random() * 10000000000); 
         
         //making sure its a unique ID
-        while (state.sections.find(section => section.id === randomId) != undefined) {
+        while (state.sections.find(section => section._id === randomId) != undefined) {
             randomId = "NEW" + Math.floor(Math.random() * 10000000000); 
         }
         
-        let newSection = { id: randomId, status: "NEW", title: ["Sans titre", "Untitled"], metaProjects: [], visible: true};
+        let newSection = { _id: randomId, status: "NEW", title: ["Sans titre", "Untitled"], metaProjects: [], visible: true};
         state.sections.push(newSection);
     },
-    ADD_PROJECT(state, payload) {
-        state.projects.push(payload);
-    },
     ADD_PROJECT_TO_SECTION(state, payload) {
-        let sectionIndex = state.sections.findIndex(section => section.id === payload.sectionId);
+        let sectionIndex = state.sections.findIndex(section => section._id === payload.sectionId);
 
-        if (state.sections[sectionIndex].metaProjects.find(metaProject => metaProject.project.id === payload.project.id) !== undefined) {
+        if (state.sections[sectionIndex].metaProjects.find(metaProject => metaProject.projectId === payload.projectId) !== undefined) {
             return
         }
         
         let randomId = "NEW" + Math.floor(Math.random() * 10000000000); 
 
-        let project = state.projects.find(p => p.id == payload.project.id);
-        
         let metaProjectIndex = state.sections[sectionIndex].metaProjects == undefined ? 0 : state.sections[sectionIndex].metaProjects.length;
 
-        let metaProject = {id: randomId, index: metaProjectIndex, project: project};
+        let metaProject = {_id: randomId, index: metaProjectIndex, projectId: payload.projectId};
 
         state.sections[sectionIndex].metaProjects.push(metaProject);
         
         if (state.sections[sectionIndex].status != "NEW")
             state.sections[sectionIndex].status = "UPDATED";
     },
-    REMOVE_PROJECT(state, payload) {
-        let sectionIndex = state.sections.findIndex(section => section.id === payload.section.id);
+    REMOVE_PROJECT_FROM_SECTION(state, payload) {
+        let sectionIndex = state.sections.findIndex(section => section._id === payload.section._id);
 
-       _.remove(state.sections[sectionIndex].metaProjects, metaProject => metaProject.project.id === payload.project.id);
+       _.remove(state.sections[sectionIndex].metaProjects, metaProject => metaProject.projectId === payload.projectId);
+
+        if (state.sections[sectionIndex].status != "NEW")
+            state.sections[sectionIndex].status = "UPDATED";
     },
     REMOVE_SECTION(state, payload) {
-        let index = state.sections.findIndex(section => section.id === payload.id);
+        let index = state.sections.findIndex(section => section._id === payload._id);
 
         if (state.sections[index].status == "NEW") {
-            _.remove(state.sections, s => s.id === payload.id);
+            _.remove(state.sections, s => s._id === payload._id);
         }
         else {
             state.sections[index].status = "REMOVED";
@@ -309,7 +208,7 @@ const mutations = {
         });
     },
     UPDATE_SECTION_TITLE(state, payload) {
-        let sectionIndex = state.sections.findIndex(section => section.id === payload.sectionId);
+        let sectionIndex = state.sections.findIndex(section => section._id === payload.sectionId);
         
         switch(payload.lang) {
             case("fr"):
@@ -323,8 +222,8 @@ const mutations = {
         if (state.sections[sectionIndex].status != "NEW")
             state.sections[sectionIndex].status = "UPDATED";
     },
-    UP(state, payload) {
-        let sectionIndex = state.sections.findIndex(section => section.id === payload.sectionId);
+    MOVE_PROJECT_UP(state, payload) {
+        let sectionIndex = state.sections.findIndex(section => section._id === payload.sectionId);
        
         state.sections[sectionIndex].metaProjects[payload.index].index--;
 
@@ -335,8 +234,8 @@ const mutations = {
         if (state.sections[sectionIndex].status != "NEW")
             state.sections[sectionIndex].status = "UPDATED";
     },
-    DOWN(state, payload) {
-        let sectionIndex = state.sections.findIndex(section => section.id === payload.sectionId);
+    MOVE_PROJECT_DOWN(state, payload) {
+        let sectionIndex = state.sections.findIndex(section => section._id === payload.sectionId);
        
         state.sections[sectionIndex].metaProjects[payload.index].index++;
 
@@ -354,6 +253,18 @@ const mutations = {
         
         state.galleryImages = _.sortBy(state.galleryImages, ["index"]);
     },
+    UPDATE_PROJECT_ID(state, payload) {
+        var sectionIndex = [];
+        state.sections.forEach(section => {
+            if(section.metaProjects.find(metaproject => metaproject.projectId === payload.oldId))
+                sectionIndex.push(state.sections.findIndex(s => s._id === section._id));
+        });
+
+        sectionIndex.forEach (index => {
+            let indexProject = state.sections[index].metaProjects.findIndex(metaproject => metaproject.projectId === payload.oldId);
+            state.sections[index].metaProjects[indexProject].projectId = payload.newId;
+        });
+    }
 };
 
 export default {

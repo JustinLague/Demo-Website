@@ -1,12 +1,12 @@
 <template>
     <div class="content">
         <h2 class="main-title">{{ $t('portfolio.title') }}</h2>
-        <div class="section" v-for="section in sections" :key="section.id">
+        <div class="section" v-for="section in sections" :key="section._id">
             <h5 class="sub-section">{{ $t('portfolio.sectionTitle', section.title) }}</h5>
             <div v-if="section.metaProjects">
                 <div class="row">
                     <div class="col-lg-12 project" v-for="p in section.metaProjects" :key="p.index">
-                        <router-link :to="{name: 'Project', params: { projectId: p.project.id }}">
+                        <router-link :to="{name: 'Project', params: { projectId: p.project._id }}">
                             <p>
                                 {{ $t('project.title', p.project.title) }}
                             </p>

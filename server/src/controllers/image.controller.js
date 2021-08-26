@@ -9,7 +9,7 @@ class ImageController {
     try {
       var id = req.params.id;
 
-      var image = await ImageData.findOne({ _id: id }).select("-_id -__v").exec();
+      var image = await ImageData.findOne({ _id: id }).select("-__v").exec();
 
       res.contentType(image.contentType);
       res.send(image.data)
@@ -31,19 +31,16 @@ class ImageController {
         } 
 
         image = new Image({
-            id : new mongoose.mongo.ObjectId(),
             projectId : req.body.projectId,
             index: index
         });
 
         var thumbnail = new ImageData({
-            id : new mongoose.mongo.ObjectId(),
             contentType: req.files[0].mimetype,
             data: new Buffer.from(fs.readFileSync(req.files[0].path), 'base64'),
         });
 
         var detailedImage = new ImageData({
-            id : new mongoose.mongo.ObjectId(),
             contentType: req.files[1].mimetype,
             data: new Buffer.from(fs.readFileSync(req.files[1].path), 'base64'),
         });
@@ -66,7 +63,7 @@ class ImageController {
 		try {
 			for (var image of req.body.images) {
 				
-				var updatedImage = await Image.findOne({ id: image.id }).exec();
+				var updatedImage = await Image.findOne({ _id: image._id }).exec();
 
 				updatedImage.index = image.index;
 
@@ -84,7 +81,7 @@ class ImageController {
 		try {
 			var image = req.body.image;
 			
-			Image.findOneAndDelete({id: image.id}).exec();
+			Image.findOneAndDelete({_id: image._id}).exec();
 			
 			ImageData.findOneAndDelete({_id: image.thumbnail}).exec();
 			ImageData.findOneAndDelete({_id: image.detailedImage}).exec();
