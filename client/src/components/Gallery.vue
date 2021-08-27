@@ -6,9 +6,9 @@
                 <div class="row">
                     <div class="col-md-4 col-sm-6" v-for="image in galleryImages" :key="image._id">
                         <div class="image">
-                            <enlargeable-image :src=image.thumnailUrl :src_large=image.detailedImageUrl>
+                            <enlargeable-image :src=image.thumbnailUrl :src_large=image.detailedImageUrl>
                                 <b-icon class=" loupe" icon="zoom-in"></b-icon>
-                                <img :src=image.thumnailUrl />
+                                <img :src=image.thumbnailUrl />
                             </enlargeable-image>
                             <router-link :to="{name: 'Project', params: { projectId: image.projectId }}">
                                 <div class="background">

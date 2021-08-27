@@ -35,9 +35,9 @@
                     <div class="row">
                         <div class="image-area col-lg-6">
                             <div>
-                                <b-icon class="delete" v-if="image.urlThumbnail" icon="x-circle-fill" font-scale="2" @click="onDeleteThumbnail"></b-icon>
+                                <b-icon class="delete" v-if="image.thumbnailUrl" icon="x-circle-fill" font-scale="2" @click="onDeleteThumbnail"></b-icon>
                             </div>
-                            <img id="imageResult" :src="image.urlThumbnail" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+                            <img id="imageResult" :src="image.thumbnailUrl" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
                         </div>
                         <div class="image-area col-lg-6">
                             <div>
@@ -76,7 +76,7 @@ export default {
                 detailedImageUrl: null,
                 thumbnailName: "",
                 dataThumbnail : null,
-                urlThumbnail: null,
+                thumbnailUrl: null,
             },
             error: false
         }
@@ -92,7 +92,7 @@ export default {
             const file = e.target.files[0];
             this.image.thumbnailName = file.name;
             this.image.dataThumbnail = file;
-            this.image.urlThumbnail = URL.createObjectURL(file);
+            this.image.thumbnailUrl = URL.createObjectURL(file);
         },
         onDeleteImage() {
             this.clearRef();
@@ -104,7 +104,7 @@ export default {
             this.clearRef();
             this.image.dataThumbnail = null;
             this.image.thumbnailName = "";
-            this.image.urlThumbnail = "";
+            this.image.thumbnailUrl = "";
         },
         clear() {
             this.image.dataThumbnail = null;
@@ -112,7 +112,7 @@ export default {
             this.image.dataImage = null;
             this.image.detailedImageUrl = "";
             this.image.thumbnailName = "";
-            this.image.urlThumbnail = "";
+            this.image.thumbnailUrl = "";
             this.error = false;
         },
         clearRef() {

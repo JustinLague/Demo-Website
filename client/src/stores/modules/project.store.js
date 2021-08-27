@@ -129,7 +129,7 @@ const mutations = {
 		state.project.images = data.images;
 
 		state.project.images.forEach((image) => {
-			image.thumnailUrl = process.env.VUE_APP_API_URL + "/image/" + image.thumbnail;
+			image.thumbnailUrl = process.env.VUE_APP_API_URL + "/image/" + image.thumbnail;
 			image.detailedImageUrl = process.env.VUE_APP_API_URL + "/image/" + image.detailedImage;  
 		})
 
@@ -148,11 +148,6 @@ const mutations = {
     },
 	INIT_PROJECTS(state, projects) {
 		state.projects.forEach(project => {
-			project.images.forEach((image) => {
-				image.thumnailUrl = process.env.VUE_APP_API_URL + "/image/" + image.thumbnail;
-				image.detailedImageUrl = process.env.VUE_APP_API_URL + "/image/" + image.detailedImage;  
-			})
-
             if (project.status == "NEW")
 				projects.push(project);
             
@@ -161,6 +156,13 @@ const mutations = {
                 projects.splice(index, 1, project);
             }
         });
+
+		projects.forEach(project => {
+			project.images.forEach((image) => {
+				image.thumbnailUrl = image.thumbnailUrl === undefined ? process.env.VUE_APP_API_URL + "/image/" + image.thumbnail : image.thumbnailUrl;
+				image.detailedImageUrl = image.detailedImageUrl === undefined ? process.env.VUE_APP_API_URL + "/image/" + image.detailedImage : image.detailedImageUrl;  
+			})
+		})
 
         state.projects = projects;
 	},
