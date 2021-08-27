@@ -3,11 +3,11 @@
     <div class="row section-row">
         <div class="col-md-12">
             <h5 class="sub-section">
-                <clickToEdit class="section-text" :value="$t('portfolio.sectionTitle', section.title)" @input="updateTitle" ></clickToEdit>
+                <clickToEdit class="section-text" :value="$t('portfolio.sectionTitle', section.title)" @input="updateTitle" :edit="edit"></clickToEdit>
             </h5>
             <div class="section-icons">
-                <div class="edit-icon-border">
-                    <b-icon class="icon edit-icon" id="icon-env" scale="1" icon="pencil-fill"></b-icon>
+                <div class="edit-icon-border" @click="edit=true">
+                    <b-icon class="icon edit-icon" id="icon-env" scale="1" icon="pencil-fill" @click="edit=true"></b-icon>
                 </div>
                 <div class="delete-icon-border" @click="deleteSection(section)">
                     <b-icon class="icon delete-icon" id="icon-env" scale="1.1" icon="trash"></b-icon>
@@ -27,7 +27,7 @@
                 <div class="col-md-12">
                     <p>  
                         <router-link class="name" :to="{name: 'AdminProject', params: { sectionId: section._id , projectId: metaProject.projectId }}">
-                            {{ $t('project.title', getProject(metaProject.projectId).title) }}
+                            <p v-html="$t('project.title', getProject(metaProject.projectId).title)"></p>
                         </router-link>
                     </p>
                     <section class="project-icons">
@@ -66,6 +66,11 @@ export default {
     props: {
         section: Object,
     },
+    data () {
+        return {
+            edit: false,
+        }
+    },
     computed: {
         ...mapState("project", ["projects"]),
         console: () => console,
@@ -80,6 +85,7 @@ export default {
         ...mapActions("project", ["initProjects"]),
         ...mapActions("dashboard", ["updateSectionTitle", "removeProjectFromSection", "removeSection", "moveProjectUp", "moveProjectDown"]),
         updateTitle(value) {
+            this.edit = false;
             this.updateSectionTitle({sectionId: this.section._id, title: value, lang: this.$i18n.locale })
         },
         setSectionId() {

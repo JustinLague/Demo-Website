@@ -4,7 +4,7 @@
         <div class="col-lg-10 content">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="main-title ">{{ $t('portfolio.title') }}</h2>
+                    <h2 class="main-title " v-html="$t('portfolio.title')"></h2>
                     <b-button class="add-section" @click="addSection()" variant="outline-primary">
                         Ajouter une section
                     </b-button>

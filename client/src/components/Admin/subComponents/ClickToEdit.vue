@@ -15,8 +15,7 @@
               @keyup.enter="update"
               v-focus="">
     </textarea>
-    <p v-if="!edit" @dblclick="edit = true;">
-        {{ valueLocal }}
+    <p v-if="!edit" @dblclick="edit = true;" v-html="valueLocal">
     </p>
 </div>
 </template>
@@ -26,11 +25,11 @@
   props: {
     value: String,
     prop: String,
-    textarea: Boolean
+    textarea: Boolean,
+    edit: Boolean
   },
   data () {
   return {
-      edit: false,
       valueLocal: this.value,
     }
   },

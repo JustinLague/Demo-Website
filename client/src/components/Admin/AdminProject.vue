@@ -9,9 +9,10 @@
                             <clickToEdit :value="$t('project.title', project.title)" 
                                         :prop="'title'"
                                         @input="onUpdateValue" 
-                                        class="section-text"></clickToEdit>
-                            <div class="edit-icon-border">
-                                <b-icon class="icon edit-icon" id="icon-env" scale="0.7" icon="pencil-fill"></b-icon>
+                                        class="section-text"
+                                        :edit=editTitle></clickToEdit>
+                            <div class="edit-icon-border" @click="editTitle=true">
+                                <b-icon class="icon edit-icon" id="icon-env" scale="0.7" icon="pencil-fill" @click="editTitle=true"></b-icon>
                             </div>
                         </h2>
                     </div>
@@ -24,9 +25,10 @@
                                         :prop="'artDescription'"
                                         :textarea="true"
                                         @input="onUpdateValue" 
-                                        class="section-text"></clickToEdit>
-                            <div class="edit-icon-border">
-                                <b-icon class="icon edit-icon" id="icon-env" scale="0.7" icon="pencil-fill"></b-icon>
+                                        class="section-text"
+                                        :edit=editArtDescription></clickToEdit>
+                            <div class="edit-icon-border" @click="editArtDescription=true">
+                                <b-icon class="icon edit-icon" id="icon-env" scale="0.7" icon="pencil-fill" @click="editArtDescription=true"></b-icon>
                             </div>
                         </h4>
                     </div>
@@ -39,9 +41,10 @@
                                         :prop="'description'"
                                         :textarea="true"
                                         @input="onUpdateValue" 
-                                        class="section-text"></clickToEdit>
-                            <div class="edit-icon-border">
-                                <b-icon class="icon edit-icon" id="icon-env" scale="0.7" icon="pencil-fill"></b-icon>
+                                        class="section-text"
+                                        :edit=editDescription></clickToEdit>
+                            <div class="edit-icon-border" @click="editDescription=true">
+                                <b-icon class="icon edit-icon" id="icon-env" scale="0.7" icon="pencil-fill" @click="editDescription=true"></b-icon>
                             </div>
                         </h4>    
                     </div>
@@ -93,6 +96,13 @@ export default {
         sectionId: String,
         projectId: String
     },
+    data () {
+        return {
+            editTitle: false,
+            editDescription: false,
+            editArtDescription: false,
+        }
+    },
     computed: {
         ...mapState("project", ["projectTryingToAdd"]),
         ...mapGetters("project", ["getProject"]),
@@ -106,6 +116,10 @@ export default {
         ...mapActions("project", ["updateValue", "deleteImage", "addImage", "initProject"]),
         ...mapActions("dashboard", ["addProjectToSection"]),
         onUpdateValue(value, prop) {
+            this.editTitle = false;
+            this.editDescription = false;
+            this.editArtDescription = false;
+            
             this.updateValue({projectId: this.projectId, value, prop, lang: this.$i18n.locale});
         }, 
         onAddImage(image) {

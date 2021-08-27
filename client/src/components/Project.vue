@@ -1,11 +1,11 @@
 <template>
     <div class="content" v-if="loaded">
-        <h2 class="main-title">{{ $t('project.title', project.title) }}</h2>
-        <h4 class="art-description">{{ $t('project.artDescription', project.artDescription) }}</h4>
+        <h2 class="main-title" v-html="$t('project.title', project.title)"></h2>
+        <h4 class="art-description" v-html="$t('project.artDescription', project.artDescription)"></h4>
         
         <div class="row">
             <div class="col-lg-11">
-                <h4 class="description">{{ $t('project.description', project.description) }}</h4>    
+                <h4 class="description" v-html="$t('project.description', project.description)"></h4>    
             </div>
         </div>
         <Image-viewer :images=project.images v-if="project.images"></Image-viewer>

@@ -6,7 +6,7 @@ class SectionController {
 
     async section(req, res) {
         try {
-            var sections = await Section.find().select("-__v").exec();
+            var sections = await Section.find().select("-__v").populate("metaProjects.project", ["title"]).exec();
 
             res.send(sections)
         } catch (err) {
