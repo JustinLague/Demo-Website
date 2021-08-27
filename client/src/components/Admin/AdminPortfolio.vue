@@ -21,14 +21,14 @@
             <div class="row save-button">
                 <div class="col align-self-end">
                     <b-form @submit.prevent="handleSubmit">
-                    <b-form-group class="float-right">
-                            <div v-if="!saving">
-                                <b-button type="submit" variant="success">Sauvegarder</b-button>
-                            </div>
-                            <div v-else>
-                                <b-spinner variant="primary" label="Spinning" class="spinner"></b-spinner>
-                            </div>
-                    </b-form-group>
+                        <b-form-group class="float-right">
+                                <div v-if="!saving">
+                                    <b-button type="submit" variant="success">Sauvegarder</b-button>
+                                </div>
+                                <div v-else>
+                                    <b-spinner variant="primary" label="Spinning" class="spinner"></b-spinner>
+                                </div>
+                        </b-form-group>
                     </b-form>
                 </div>
             </div>

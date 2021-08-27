@@ -31,8 +31,14 @@
                         </router-link>
                     </p>
                     <section class="project-icons">
-                        <span class="icon up" v-if="metaProject.index != 0" @click="moveProjectUp({index: metaProject.index, sectionId: section._id})"><i class="far fa-arrow-alt-circle-up"></i></span>                   
-                        <span class="icon down" v-if="metaProject.index != section.metaProjects.length - 1" @click="moveProjectDown({index: metaProject.index, sectionId: section._id})"><i class="far fa-arrow-alt-circle-down"></i></span>
+                        <div class="project-delete-icon-arrow-up-border" v-if="metaProject.index != 0" @click="moveProjectUp({index: metaProject.index, sectionId: section._id})">
+                            <b-icon class="icon project-arrow-up" id="arrow-up" scale="1.1" icon="arrow-up"></b-icon>
+                        </div>   
+
+                        <div class="project-delete-icon-arrow-down-border" v-if="metaProject.index != section.metaProjects.length - 1" @click="moveProjectDown({index: metaProject.index, sectionId: section._id})">
+                            <b-icon class="icon project-arrow-down" id="arrow-down" scale="1.1" icon="arrow-down"></b-icon>
+                        </div>
+
                         <div class="project-delete-icon-border" @click="deleteProject(metaProject.projectId, section)">
                             <b-icon class="icon project-delete-icon" id="icon-env" scale="1.1" icon="trash"></b-icon>
                         </div>
@@ -239,22 +245,54 @@ p {
     display: inline;
 }
 
-.name {
-    display: inline;
-}
-
-.up {
-    display: inline;
-    cursor: pointer;
-    transition: all .1s ease-in-out;
-}
-
-.down {
+.project-delete-icon-arrow-up-border {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 1px 3px 1px 3px;
     margin-left: 4px;
     display: inline;
+}
+
+.project-arrow-up {
+    display: inline;
     cursor: pointer;
     transition: all .1s ease-in-out;
 }
+
+.project-delete-icon-arrow-up-border:hover {
+    cursor: pointer;
+    background-color: black;
+}
+
+.project-delete-icon-arrow-up-border:hover > .icon {
+    color: white;
+    transform: scale(1.2);
+}
+
+.project-delete-icon-arrow-down-border {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 1px 3px 1px 3px;
+    margin-left: 4px;
+    display: inline;
+}
+
+.project-arrow-down {
+    display: inline;
+    cursor: pointer;
+    transition: all .1s ease-in-out;
+}
+
+.project-delete-icon-arrow-down-border:hover {
+    cursor: pointer;
+    background-color: black;
+}
+
+.project-delete-icon-arrow-down-border:hover > .icon {
+    color: white;
+    transform: scale(1.2);
+}
+
 
 .icon {
     transition: all .1s ease-in-out;
@@ -262,5 +300,9 @@ p {
 
 .icon:hover {
     transform: scale(1.3);
+}
+
+.name {
+    display: inline;
 }
 </style>
