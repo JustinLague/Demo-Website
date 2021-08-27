@@ -1,5 +1,5 @@
 <template>
-    <div class="content" v-if="project">
+    <div class="content" v-if="loaded">
         <h2 class="main-title">{{ $t('project.title', project.title) }}</h2>
         <h4 class="art-description">{{ $t('project.artDescription', project.artDescription) }}</h4>
         
@@ -8,7 +8,7 @@
                 <h4 class="description">{{ $t('project.description', project.description) }}</h4>    
             </div>
         </div>
-        <Image-viewer :images=images v-if="images"></Image-viewer>
+        <Image-viewer :images=project.images v-if="project.images"></Image-viewer>
     </div>
 </template>
 
@@ -22,11 +22,12 @@ export default {
     },
     props: ["projectId"],
     created() {
-        this.$nextTick(function () {
+        this.$nextTick(() => {
             this.initProject(this.projectId);
-    })},
+        })
+    },
     computed: {
-        ...mapState("project", ["project", "images"]),
+        ...mapState("project", ["project", "loaded"]),
     },
     methods: {
         ...mapActions("project", ["initProject"]),

@@ -7,6 +7,7 @@ const state = {
 	saving: false,
 	projects: [], 
 	project: {},
+	loaded: false
 };
 
 const getters = {
@@ -131,6 +132,8 @@ const mutations = {
 			image.thumnailUrl = process.env.VUE_APP_API_URL + "/image/" + image.thumbnail;
 			image.detailedImageUrl = process.env.VUE_APP_API_URL + "/image/" + image.detailedImage;  
 		})
+
+		state.loaded = true;
 	},
 
 	//ADMIN
