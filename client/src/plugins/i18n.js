@@ -16,7 +16,9 @@ const messages = {
             biographieName: 'Daria',
             demarcheArtistiqueBold: "Le travail de Daria Elas",
             demarcheArtistique: "se concentre sur la relation des espaces introspectifs et sociétaires. Se tournant initialement vers le figuratif à travers le dessin pour guider sa pratique, Daria entame désormais une réflexion sur des enjeux communs et personnels à travers l'abstraction des couleurs et un jeu pictural de textures par le biais de la peinture et de la toile. S’inspirant des enjeux sociétaires actuels, elle explore  diverses relations à travers les lignes et les formes géométriques pour créer des œuvres figuratives abstraites. Touchant particulièrement des enjeux féministes et environnementaux, elle initie une introspection et un dialogue utilisant sa propre introspection et d’expériences partagées. ",
-            demarcheArtistique2: "Les peintures de Daria Elas génèrent des interprétations multiples par leur abstraction. Pour sa part, à travers les lignes et un certain chaos, elle puise dans ses souvenirs en quête d’une réconciliation avec soi, laissant entrevoir  des morceaux de toile brute, révélant la nudité de la toile. Ceux-ci s’opposent aux couleurs primaires utilisées qui dirigent le spectateur dans une ambiguïté d’espace paradoxal ou il peut se projeter à son tour dans un univers ludique. "
+            demarcheArtistique2: "Les peintures de Daria Elas génèrent des interprétations multiples par leur abstraction. Pour sa part, à travers les lignes et un certain chaos, elle puise dans ses souvenirs en quête d’une réconciliation avec soi, laissant entrevoir  des morceaux de toile brute, révélant la nudité de la toile. Ceux-ci s’opposent aux couleurs primaires utilisées qui dirigent le spectateur dans une ambiguïté d’espace paradoxal ou il peut se projeter à son tour dans un univers ludique. ",
+            description: (ctx) =>  `${ctx.list(0)}`,
+            changeImage: "Changer l'image"
         },
         gallery: { 
             title: 'Galerie',
@@ -48,10 +50,13 @@ const messages = {
             artist: 'Artiste visuelle'
         },
         admin: {
+            save: "Sauvegarder",
             add: "Ajouter",
             cancel: "Annuler",
             createNewProject: "Créer un nouveau projet",
-            addImageErrorMessage: "Vous devez entrez une thumbnail et une image."
+            addImageErrorMessage: "Vous devez entrez une image.",
+            addImagesErrorMessage: "Vous devez entrez une thumbnail et une image.",
+            addImage: "Ajouter une image"
         }
       },
     en: {
@@ -67,6 +72,8 @@ const messages = {
             demarcheArtistiqueBold: "Daria Elas' work",
             demarcheArtistique: 'focuses on the relationship of introspective and societal spaces through figurative abstraction. She initially emphasized her practice around only figurative art, drawing portraits and studying the human proportions. Daria now begins to reflect on the issues of her community and her own personal views  through the abstraction of color and lines, Using the raw texture of the canvas, she explores various relationships through natural shapes, particularly touched by feminist and environmental issues. ',
             demarcheArtistique2: "Daria Elas' paintings generate a multitude of interpretations through their pictural abstraction. During her own process of creation, she draws on her memories, readings, and research to better understand her surroundings. This personal processus is opposed to rawness of the canvas and the bright colors used which lead the viewers into a paradoxical ambiguity where they can project themselves into their own universe",
+            description: (ctx) =>  `${ctx.list(1)}`,
+            changeImage: "Change image"
         },
         gallery: { 
             title: 'Gallery',
@@ -98,10 +105,13 @@ const messages = {
             artist: 'Visual artist'
         },
         admin: {
+            save: "save",
             add: "Add",
             cancel: "Cancel",
             createNewProject: "Create new projet",
-            addImageErrorMessage: "You must add a thumbnail and an image."
+            addImageErrorMessage: "You must add an image.",
+            addImagesErrorMessage: "You must add a thumbnail and an image.",
+            addImage: "Add image"
         }
     }
 };

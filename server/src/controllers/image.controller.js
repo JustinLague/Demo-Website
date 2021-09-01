@@ -1,6 +1,5 @@
 const ImageData = require('../models/imageData').ImageData;
 const Image = require('../models/image').Image;
-const mongoose = require('mongoose');
 const fs = require('fs');
 
 class ImageController {
@@ -19,45 +18,44 @@ class ImageController {
     }
   }
 
-  async addImage(req, res) {
-    try {
+    async addImages(req, res) {
+        try {
+            //find next index 
+            var image = await Image.find().sort({index: "desc"}).limit(1).exec();
+            var index = 0;
+            
+            if (image.length > 0) {
+                index = ++image[0].index;
+            } 
 
-        //find next index 
-        var image = await Image.find().sort({index: "desc"}).limit(1).exec();
-        var index = 0;
-        
-        if (image.length > 0) {
-          index = ++image[0].index;
-        } 
+            image = new Image({
+                projectId : req.body.projectId,
+                index: index
+            });
 
-        image = new Image({
-            projectId : req.body.projectId,
-            index: index
-        });
+            var thumbnail = new ImageData({
+                contentType: req.files[0].mimetype,
+                data: new Buffer.from(fs.readFileSync(req.files[0].path), 'base64'),
+            });
 
-        var thumbnail = new ImageData({
-            contentType: req.files[0].mimetype,
-            data: new Buffer.from(fs.readFileSync(req.files[0].path), 'base64'),
-        });
+            var detailedImage = new ImageData({
+                contentType: req.files[1].mimetype,
+                data: new Buffer.from(fs.readFileSync(req.files[1].path), 'base64'),
+            });
 
-        var detailedImage = new ImageData({
-            contentType: req.files[1].mimetype,
-            data: new Buffer.from(fs.readFileSync(req.files[1].path), 'base64'),
-        });
+            thumbnail.save();
+            detailedImage.save();
 
-        thumbnail.save();
-        detailedImage.save();
+            image.thumbnail = thumbnail;
+            image.detailedImage = detailedImage;
 
-        image.thumbnail = thumbnail;
-        image.detailedImage = detailedImage;
+            image.save();
 
-        image.save();
-
-        res.status(200).send();
-    } catch (err) {
-        res.status(400).send({ error: err.message });
+            res.status(200).send();
+        } catch (err) {
+            res.status(400).send({ error: err.message });
+        }
     }
-  }
 
 	async updateIndex(req, res) {
 		try {

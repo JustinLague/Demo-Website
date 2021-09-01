@@ -61,7 +61,7 @@
                     </div>
                 </div>
                 
-                <b-button v-b-modal.modal-add-image variant="primary">Ajouter une image</b-button>
+                <b-button v-b-modal.modal-add-images variant="primary">Ajouter une image</b-button>
                 
                 <b-form-group>
                     <div v-if="!projectTryingToAdd" class="float-right">
@@ -74,7 +74,7 @@
             </b-form>
 
             <!-- Modal -->
-            <add-image @addImage="onAddImage"></add-image>
+            <add-images @addImage="onAddImage"></add-images>
         </div>
     </div>
 </div>
@@ -83,12 +83,12 @@
 <script>
 import EnlargeableImage from "@diracleo/vue-enlargeable-image";
 import clickToEdit from "./subComponents/ClickToEdit";
-import AddImage from './subComponents/AddImage';
+import AddImages from './subComponents/AddImages';
 import { mapActions, mapState, mapGetters } from "vuex";
 
 export default {
     components: {
-        AddImage,
+        AddImages,
         clickToEdit,
         EnlargeableImage
     },

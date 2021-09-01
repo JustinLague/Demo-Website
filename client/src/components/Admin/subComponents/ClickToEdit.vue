@@ -1,21 +1,21 @@
 <template>
 <div>
     <input type="textbox"
-            v-if="edit && !textarea"
+            v-if="editData && !textarea"
             :value="valueLocal"
             @blur="update"
             @keyup.enter="update"
             v-focus=""
     />
     <textarea type="text"
-              v-if="edit && textarea"
-              rows="3"
+              v-if="editData && textarea"
+              :rows="rows"
               :value="valueLocal"
               @blur="update"
               @keyup.enter="update"
               v-focus="">
     </textarea>
-    <p v-if="!edit" @dblclick="edit = true;" v-html="valueLocal">
+    <p v-if="!editData" @dblclick="editData = true;" v-html="valueLocal">
     </p>
 </div>
 </template>
@@ -25,17 +25,25 @@
   props: {
     value: String,
     prop: String,
+    rows: {
+      type: Number, 
+      default: 3
+    },
     textarea: Boolean,
     edit: Boolean
   },
   data () {
   return {
       valueLocal: this.value,
+      editData: this.edit
     }
   },
   watch: {
     value: function() {
       this.valueLocal = this.value;
+    },
+    edit: function() {
+      this.editData = this.edit;
     }
   },
   computed:{
@@ -48,7 +56,7 @@
         return
 
       this.valueLocal = event.target.value; 
-      this.edit = false; 
+      this.editData = false; 
       this.$emit('input', this.valueLocal, this.prop);
     }
   },

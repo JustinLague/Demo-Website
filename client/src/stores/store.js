@@ -6,6 +6,7 @@ import project from "./modules/project.store";
 import portfolio from "./modules/portfolio.store";
 import dashboard from "./modules/dashboard.store";
 import gallery from "./modules/gallery.store";
+import about from "./modules/about.store"
 
 Vue.use(Vuex);
 
@@ -37,7 +38,8 @@ export default new Vuex.Store({
     user,
     portfolio,
     dashboard,
-    gallery
+    gallery,
+    about
   },
   plugins: [vueSessionStorage.plugin],
   strict: debug
