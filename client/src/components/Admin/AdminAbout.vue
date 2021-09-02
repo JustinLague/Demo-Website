@@ -14,10 +14,9 @@
                             :textarea="true"
                             @input="onUpdateDescription" 
                             :rows="25"
-                            class="section-text"
+                            class="description"
                             :edit=edit></clickToEdit>
             </div>
-
         </div>
 
         <b-form-group>
@@ -69,14 +68,14 @@ export default {
             this.updateDescription({value, lang: this.$i18n.locale})
         },
         onUpdateImage(image) {
-            this.updateImage({ image: {...image} });
+            this.updateImage({ image: {...image}});
         },
     }
 }
 </script>
 
-<style>
-p { 
+<style scoped>
+.description { 
     text-align: justify;
     text-justify: inter-word;
 }
@@ -87,5 +86,9 @@ p {
 
 img {
     margin-bottom: 20px;
+}
+
+.content {
+    margin-right: -15px;
 }
 </style>

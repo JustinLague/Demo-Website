@@ -40,7 +40,6 @@ export default {
     methods: {
         ...mapActions("gallery", ["initGallery"]),
     }
-
 }
 </script>
 

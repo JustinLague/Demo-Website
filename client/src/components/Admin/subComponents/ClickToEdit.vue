@@ -83,5 +83,7 @@ input {
 
 textarea {
   width: 100%;
+  text-align: justify;
+  text-justify: inter-word;
 }
 </style>

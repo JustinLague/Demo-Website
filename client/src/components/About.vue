@@ -1,32 +1,33 @@
 <template>
-<div class="content">
+<div class="content" v-if="loaded">
     <h2 class="main-title">{{ $t('about.title') }}</h2>
 
     <div class="row">
         <div class="col-lg-4 profil">
-            <img src="../assets/img/PhotoDeProfil.jpg" alt="">
+            <img :src="about.imageURL">
         </div>
 
         <div class="col-lg-6 col-12">
-            <p>
-                <strong>{{ $t('about.biographieName') }}</strong> 
-                {{ $t('about.biographie') }} 
-            </p>
-            <p> 
-                <strong>{{ $t('about.demarcheArtistiqueBold') }}</strong> 
-                {{ $t('about.demarcheArtistique') }}
-            </p>
-            <p>
-                {{ $t('about.demarcheArtistique2') }}
-            </p>
+            <p v-html="$t('about.description', about.description)"></p>
         </div>
     </div>
 </div>
 </template>
 
 <script>
-export default {
+import { mapActions, mapState } from "vuex";
 
+export default {
+    created() {
+        this.$nextTick(function () {
+          this.initAbout();
+    })},
+    computed: {
+        ...mapState("about", ["about", "loaded"]),
+    },
+    methods: {
+        ...mapActions("about", ["initAbout"]),
+    }
 }
 </script>
 
