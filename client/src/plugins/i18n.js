@@ -105,7 +105,7 @@ const messages = {
             artist: 'Visual artist'
         },
         admin: {
-            save: "save",
+            save: "Save",
             add: "Add",
             cancel: "Cancel",
             createNewProject: "Create new projet",

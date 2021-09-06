@@ -21,52 +21,59 @@
 </template>
 
 <script>
-  export default {
-  props: {
-    value: String,
-    prop: String,
-    rows: {
-      type: Number, 
-      default: 3
-    },
-    textarea: Boolean,
-    edit: Boolean
-  },
-  data () {
-  return {
-      valueLocal: this.value,
-      editData: this.edit
-    }
-  },
-  watch: {
-    value: function() {
-      this.valueLocal = this.value;
-    },
-    edit: function() {
-      this.editData = this.edit;
-    }
-  },
-  computed:{
-    console: () => console,
-    window: () => window, 
-  },
-  methods:{
-    update(event) {
-      if (event.target.value == "")
-        return
+export default {
+	props: {
+		value: String,
+		prop: String,
+		enterDoesNothing: {
+			type: Boolean,
+			default: false
+		},
+		rows: {
+			type: Number, 
+			default: 3
+		},
+		textarea: Boolean,
+		edit: Boolean
+	},
+	data () {
+		return {
+			valueLocal: this.value,
+			editData: this.edit
+		}
+	},
+	watch: {
+		value: function() {
+			this.valueLocal = this.value;
+		},
+		edit: function() {
+			this.editData = this.edit;
+		}
+	},
+	computed:{
+		console: () => console,
+		window: () => window, 
+	},
+	methods:{
+		update(event) {
+			if(event.keyCode === 13 && this.enterDoesNothing)
+				return
 
-      this.valueLocal = event.target.value; 
-      this.editData = false; 
-      this.$emit('input', this.valueLocal, this.prop);
-    }
-  },
-  directives: {
-    focus: {
-      inserted (el) {
-        el.focus()
-      }
-    }
-  }
+			if (event.target.value == "")
+				return
+
+			this.valueLocal = event.target.value; 
+			this.editData = false; 
+			this.$emit('input', this.valueLocal, this.prop);
+		}
+	},
+	directives: {
+		focus: {
+			inserted (el) {
+				el.focus()
+			}
+		}
+	}
 }
 </script>
 

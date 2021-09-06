@@ -43,7 +43,11 @@ class AboutController {
 
             about.save();
 
-            res.status(200).send(about)
+            res.status(200).send({
+                description: about.description,
+                image: about.image._id
+            });
+            
         } catch (err) {
             res.status(400).send({ error: err.message });
         }

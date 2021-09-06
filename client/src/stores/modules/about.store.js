@@ -2,7 +2,9 @@ import { aboutService } from "../../services/about.services";
 
 /* eslint-disable no-console */
 const state = {
-    about: {},
+    about: { 
+        description: ["Description francaise", "English description"]
+    },
     loaded: false,
     saving: false,
 };
@@ -51,7 +53,11 @@ const actions = {
                 formData.append('image', about.image.dataImage);
             }
 
-            await aboutService.updateAbout(formData);
+            var updatedAbout = await aboutService.updateAbout(formData);
+
+            console.log(updatedAbout.data);
+
+            commit("INIT_ABOUT", updatedAbout.data);
 		} catch (err) {
 			console.error(err)
 				if (err.response && err.response.status === 403) {
@@ -76,7 +82,9 @@ const mutations = {
     },
     INIT_ABOUT(state, about) {
         state.about.imageURL = process.env.VUE_APP_API_URL + "/image/" + about.image;
-        state.about.description = about.description;
+        
+        if(about.description)
+            state.about.description = about.description;
 
         state.loaded = true;
     },

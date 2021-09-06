@@ -2,35 +2,33 @@
   <div class="content" v-if="loaded">
     <h2 class="main-title">{{ $t('about.title') }}</h2>
 
-    <b-form @submit.prevent="handleSubmit">
-        <div class="row">
-            <div class="col-lg-4 profil">
-                <img :src="about.imageURL">
-                <b-button v-b-modal.modal-add-image variant="primary">{{ $t('about.changeImage') }}</b-button>
-            </div>
-
-            <div class="col-lg-6 col-12">
-                <clickToEdit :value="$t('about.description', about.description)" 
-                            :textarea="true"
-                            @input="onUpdateDescription" 
-                            :rows="25"
-                            class="description"
-                            :edit=edit></clickToEdit>
-            </div>
+    <div class="row">
+        <div class="col-lg-4 profil">
+            <img :src="about.imageURL">
+            <b-button v-b-modal.modal-add-image variant="primary">{{ $t('about.changeImage') }}</b-button>
         </div>
 
-        <b-form-group>
+        <div class="col-lg-6 col-12">
+            <clickToEdit :value="$t('about.description', about.description)" 
+                        :textarea="true"
+                        @input="onUpdateDescription" 
+                        :rows="25"
+                        class="description"
+                        :enterDoesNothing="true"
+                        :edit=edit></clickToEdit>
+
             <div v-if="!saving" class="float-right">
                 <b-button type="submit" variant="success">{{ $t('admin.save') }}</b-button>
             </div>
             <div v-else>
                 <b-spinner variant="primary" label="Spinning" class="spinner"></b-spinner>
             </div>
-        </b-form-group>
-    </b-form>
+        </div>
+    </div>
 
     <!-- Modal -->
     <add-image @addImage="onUpdateImage"></add-image>
+    <confirm-dialogue-simple ref="confirmDialogueSimple"></confirm-dialogue-simple>
 </div>
 </template>
 
@@ -38,11 +36,14 @@
 import { mapActions, mapState } from "vuex";
 import AddImage from './subComponents/AddImage';
 import clickToEdit from "./subComponents/ClickToEdit";
+import ConfirmDialogueSimple from './subComponents/ConfirmDialogueSimple'
+
 
 export default {
      components: {
         AddImage,
         clickToEdit,
+        ConfirmDialogueSimple
     },
     created() {
         this.$nextTick(function () {
@@ -61,8 +62,16 @@ export default {
     },
     methods: {
         ...mapActions("about", ["initAbout", "updateDescription", "updateImage", "saveAbout"]),
-		handleSubmit() {
-			this.saveAbout();
+		async handleSubmit() {
+              const ok = await this.$refs.confirmDialogueSimple.show({
+                title: 'Confirmation',
+                message: "N'oublie pas la description anglaise !",
+                okButton: 'Sauvegarder',
+            })
+
+            if (ok) {
+                this.saveAbout();
+            } 
 		},
         onUpdateDescription(value) {
             this.updateDescription({value, lang: this.$i18n.locale})
@@ -86,9 +95,5 @@ export default {
 
 img {
     margin-bottom: 20px;
-}
-
-.content {
-    margin-right: -15px;
 }
 </style>
