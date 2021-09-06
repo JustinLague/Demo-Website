@@ -1,30 +1,42 @@
 <template>
   <div class="content" v-if="loaded">
     <h2 class="main-title">{{ $t('about.title') }}</h2>
-
-    <div class="row">
-        <div class="col-lg-4 profil">
-            <img :src="about.imageURL">
-            <b-button v-b-modal.modal-add-image variant="primary">{{ $t('about.changeImage') }}</b-button>
-        </div>
-
-        <div class="col-lg-6 col-12">
-            <clickToEdit :value="$t('about.description', about.description)" 
-                        :textarea="true"
-                        @input="onUpdateDescription" 
-                        :rows="25"
-                        class="description"
-                        :enterDoesNothing="true"
-                        :edit=edit></clickToEdit>
-
-            <div v-if="!saving" class="float-right">
-                <b-button type="submit" variant="success">{{ $t('admin.save') }}</b-button>
+    
+    <b-form @submit.prevent="handleSubmit">
+        <div class="row">
+            <div class="col-lg-4 profil">
+                <img :src="about.imageURL">
             </div>
-            <div v-else>
-                <b-spinner variant="primary" label="Spinning" class="spinner"></b-spinner>
+
+            <div class="col-lg-6 col-12">
+                <clickToEdit :value="$t('about.description', about.description)" 
+                            :textarea="true"
+                            @input="onUpdateDescription" 
+                            :rows="25"
+                            class="description"
+                            :enterDoesNothing="true"
+                            :edit=edit></clickToEdit>
+                 <div class="edit-icon-border" @click="edit=true">
+                    <b-icon class="icon edit-icon" id="icon-env" scale="0.7" icon="pencil-fill" @click="edit=true"></b-icon>
+                </div>
             </div>
         </div>
-    </div>
+
+        <div class="row">
+            <div class="col-lg-4">
+                <b-button v-b-modal.modal-add-image variant="primary">{{ $t('about.changeImage') }}</b-button>
+            </div>
+
+            <div class="col-lg-6 col-12">
+                <div v-if="!saving" class="float-right">
+                    <b-button type="submit" variant="success">{{ $t('admin.save') }}</b-button>
+                </div>
+                <div v-else>
+                    <b-spinner variant="primary" label="Spinning" class="spinner"></b-spinner>
+                </div>
+            </div>
+        </div>
+    </b-form>
 
     <!-- Modal -->
     <add-image @addImage="onUpdateImage"></add-image>
@@ -74,6 +86,7 @@ export default {
             } 
 		},
         onUpdateDescription(value) {
+            this.edit = false;
             this.updateDescription({value, lang: this.$i18n.locale})
         },
         onUpdateImage(image) {
@@ -95,5 +108,25 @@ export default {
 
 img {
     margin-bottom: 20px;
+}
+
+.edit-icon-border {
+    border: 1px solid rgb(28 103 206);
+    border-radius: 6px;
+    color: rgb(28 103 206);
+    padding-left: 3px;
+    padding-right: 3px; 
+    display: inline;
+    float: right;
+}
+
+.edit-icon-border:hover {
+    cursor: pointer;
+    background-color: rgb(28 103 206);
+}
+
+.edit-icon-border:hover > .icon{
+    cursor: pointer;
+    color: white;
 }
 </style>
