@@ -76,9 +76,9 @@ export default {
         ...mapActions("about", ["initAbout", "updateDescription", "updateImage", "saveAbout"]),
 		async handleSubmit() {
               const ok = await this.$refs.confirmDialogueSimple.show({
-                title: 'Confirmation',
-                message: "N'oublie pas la description anglaise !",
-                okButton: 'Sauvegarder',
+                title: this.$t('admin.confirmation'),
+                message: this.$t('admin.englishSectionCheck'),
+                okButton: this.$t('admin.save'),
             })
 
             if (ok) {

@@ -6,7 +6,7 @@
                 <div class="col-md-12">
                     <h2 class="main-title " v-html="$t('portfolio.title')"></h2>
                     <b-button class="add-section" @click="addSection()" variant="outline-primary">
-                        Ajouter une section
+                        {{ $t('admin.addSection') }}
                     </b-button>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                     <b-form @submit.prevent="handleSubmit">
                         <b-form-group class="float-right">
                                 <div v-if="!saving">
-                                    <b-button type="submit" variant="success">Sauvegarder</b-button>
+                                    <b-button type="submit" variant="success">{{ $t('admin.save') }}</b-button>
                                 </div>
                                 <div v-else>
                                     <b-spinner variant="primary" label="Spinning" class="spinner"></b-spinner>
@@ -87,9 +87,9 @@ export default {
             /* condition pour verifier si la partie anglais est rempli  if() */
             
             const ok = await this.$refs.confirmDialogueSimple.show({
-                title: 'Confirmation',
-                message: "Il semblerait que vous avez oublier la section anglais.",
-                okButton: 'Sauvegarder',
+                title: this.$t('admin.confirmation'),
+                message: this.$t('admin.englishSectionCheck'),
+                okButton: this.$t('admin.save'),
             })
 
             if (ok) {

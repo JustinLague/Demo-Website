@@ -2,7 +2,7 @@
     <b-modal
         id="modal-add-project-to-section" 
         size="lg" 
-        title="Ajouter un nouveau projet"
+        :title="this.$t('admin.addProject')"
         centered
         modal-ok="Sauvegarder"
         @ok="addProject()"

@@ -48,10 +48,14 @@ const messages = {
             save: "Sauvegarder",
             add: "Ajouter",
             cancel: "Annuler",
+            confirmation: "Confirmation",
+            englishSectionCheck: "Il semblerait que vous avez oublier la section anglais !",
             createNewProject: "Créer un nouveau projet",
             addImageErrorMessage: "Vous devez entrez une image.",
             addImagesErrorMessage: "Vous devez entrez une thumbnail et une image.",
-            addImage: "Ajouter une image"
+            addImage: "Ajouter une image",
+            addSection: "Ajouter une section",
+            addProject: "Ajouter un projet"
         }
     },
     en: {
@@ -98,10 +102,14 @@ const messages = {
             save: "Save",
             add: "Add",
             cancel: "Cancel",
+            confirmation: "Confirmation",
+            englishSectionCheck: "It seems like you didn't change the english version !",
             createNewProject: "Create new projet",
             addImageErrorMessage: "You must add an image.",
             addImagesErrorMessage: "You must add a thumbnail and an image.",
-            addImage: "Add image"
+            addImage: "Add image",
+            addSection: "Add section",
+            addProject: "Add project",
         }
     }
 };

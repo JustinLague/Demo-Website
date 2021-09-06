@@ -14,7 +14,7 @@
                 </div>
                 <b-button class="b-add-project" variant="outline-primary">
                     <div v-b-modal.modal-add-project-to-section @click="setSectionId()">
-                        Ajouter un projet
+                        {{ $t('admin.addProject') }}
                     </div>
                 </b-button> 
             </div>
