@@ -57,27 +57,31 @@ export default {
             image: {
                 imageName: "",
                 dataImage : null,
+                data64Image: null,
                 imageUrl: null,
             },
             error: false
         }
     },
     methods: {
-        onChangeImage(e) {
+        async onChangeImage(e) {
             const file = e.target.files[0];
             this.image.imageName = file.name;
             this.image.dataImage = file;
+            this.image.data64Image = await this.toBase64(file);
             this.image.imageUrl = URL.createObjectURL(file);
         },
         onDeleteImage() {
             this.clearRef();
             this.image.imageName = "";
             this.image.dataImage = null;
+            this.image.data64Image = null;
             this.image.imageUrl = "";
         },
         clear() {
             this.image.imageName = "";
             this.image.dataImage = null;
+            this.image.data64Image = null;
             this.image.imageUrl = "";
             this.error = false;
         },
@@ -88,6 +92,14 @@ export default {
             event.preventDefault();
 
             this.handleSubmit();
+        },
+        toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
         },
         handleSubmit() {
             if (!this.image.dataImage) {

@@ -24,11 +24,11 @@ class AboutController {
                 about = new About();
             }
             
-            if(about.image) {
+            if (about.image) 
                 aboutImage = await ImageData.findOne({ _id: about.image }).select("-__v").exec();
-            } else {
+
+            if (!aboutImage)
                 aboutImage = new ImageData();
-            }
 
             about.description = [req.body.descriptionFR, req.body.descriptionEN];
 
@@ -47,7 +47,7 @@ class AboutController {
                 description: about.description,
                 image: about.image._id
             });
-            
+
         } catch (err) {
             res.status(400).send({ error: err.message });
         }

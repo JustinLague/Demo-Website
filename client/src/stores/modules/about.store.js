@@ -42,8 +42,6 @@ const actions = {
         try {
             let about = getters.getAbout
 
-            console.log(about);
-
             let formData = new FormData();
 
             formData.append('descriptionFR', about.description[0]);
@@ -81,8 +79,11 @@ const mutations = {
         state.saving = false;
     },
     INIT_ABOUT(state, about) {
-        state.about.imageURL = process.env.VUE_APP_API_URL + "/image/" + about.image;
-        
+        if(about.image)
+            state.about.imageURL = process.env.VUE_APP_API_URL + "/image/" + about.image;
+        else if (state.about.image && state.about.image.data64Image)
+            state.about.imageURL = state.about.image.data64Image 
+            
         if(about.description)
             state.about.description = about.description;
 

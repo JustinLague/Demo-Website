@@ -27,6 +27,9 @@ const vueSessionStorage = new VuexPersist({
     },
     project: {
       projects: state.project.projects
+    },
+    about: {
+      about: state.about.about
     }
   })
 });
