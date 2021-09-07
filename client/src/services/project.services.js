@@ -15,5 +15,5 @@ export const projectService =  {
 	},
 	deleteImage(image) {
 		return Api().post('/dashboard/deleteImage', image);
-	}
+	},
 }

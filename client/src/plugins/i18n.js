@@ -48,6 +48,9 @@ const messages = {
             save: "Sauvegarder",
             add: "Ajouter",
             cancel: "Annuler",
+            remove: "Enlever",
+            delete: "Supprimer",
+            deleteSection: "Supprimer une section",
             confirmation: "Confirmation",
             englishSectionCheck: "Il semblerait que vous avez oublier la section anglais !",
             createNewProject: "Créer un nouveau projet",
@@ -55,7 +58,10 @@ const messages = {
             addImagesErrorMessage: "Vous devez entrez une thumbnail et une image.",
             addImage: "Ajouter une image",
             addSection: "Ajouter une section",
-            addProject: "Ajouter un projet"
+            addProject: "Ajouter un projet",
+            deleteSelectedProject: "Supprimer le projet",
+            permentalyDeleteProject: "Êtes-vous sure de vouloir supprimer permanament le projet ?",
+            deleteProjectSection: "Enlever le projet de la section"
         }
     },
     en: {
@@ -102,6 +108,9 @@ const messages = {
             save: "Save",
             add: "Add",
             cancel: "Cancel",
+            remove: "Remove",
+            delete: "Delete",
+            deleteSection: "Delete section",
             confirmation: "Confirmation",
             englishSectionCheck: "It seems like you didn't change the english version !",
             createNewProject: "Create new projet",
@@ -110,6 +119,9 @@ const messages = {
             addImage: "Add image",
             addSection: "Add section",
             addProject: "Add project",
+            deleteSelectedProject: "Delete selected project",
+            deleteProjectSection: "Remove this project from this section",
+            permentalyDeleteProject: "Are you sure you want to permanently delete this project ?",
         }
     }
 };

@@ -2,13 +2,15 @@ import { dashboardService } from "../../services/dashboard.services";
 import { sectionService } from "../../services/section.services";
 import { galleryService } from "../../services/gallery.services";
 import _ from 'lodash'; 
+import Vue from "vue";
 
 /* eslint-disable no-console */
 const state = {
     serverError: null,
     saving: false,
     sections: [],
-    galleryImages: []
+    galleryImages: [],
+    stayRemove: false,
 };
 
 const getters = {
@@ -63,6 +65,9 @@ const actions = {
     async removeProjectFromSection({ commit }, payload) {
         commit("REMOVE_PROJECT_FROM_SECTION", payload);
     },
+    async removeProjectFromAllSections({ commit }, payload) {
+        commit("REMOVE_PROJECT_FROM_ALL_SECTION", payload);
+    },
     async removeSection({ commit }, payload) {
         commit("REMOVE_SECTION", payload);
     },
@@ -71,7 +76,7 @@ const actions = {
         try {
             let sections = await dashboardService.saveSections({sections: getters.getSections});
 
-            commit("REMOVE_TEMP");
+            await commit("REMOVE_TEMP");
             
             commit("INIT_SECTIONS", sections.data);
         } catch (err) {
@@ -112,8 +117,12 @@ const actions = {
             }
         }
     },
-    async updateProjectId({ commit }, payload){
+    async updateProjectId({ commit }, payload) {
         commit("UPDATE_PROJECT_ID", payload);
+    },
+    async stayRemove({ commit, dispatch }) {
+        commit("STAY_REMOVE");
+        dispatch('project/stayRemove', null, { root: true });
     }
 };
 
@@ -123,6 +132,9 @@ const mutations = {
     },
     SAVED(state) {
         state.saving = false;
+    },
+    STAY_REMOVE(state) {
+        state.stayRemove = true;
     },
     SERVER_ERROR(state, serverError) {
         state.serverError = serverError;
@@ -134,8 +146,12 @@ const mutations = {
             image.thumnailUrl = process.env.VUE_APP_API_URL + "/image/" + image.thumbnail;
             image.detailedImageUrl = process.env.VUE_APP_API_URL + "/image/" + image.detailedImage;  
         })
+
+        Vue.set(state, 'galleryImages', [...state.galleryImages]);
     },
     INIT_SECTIONS(state, sections) {
+        console.log("init sections", state.stayRemove);
+
         sections = sections.map(s => ({
             ...s,
             visible: true
@@ -149,9 +165,18 @@ const mutations = {
                 let index = sections.findIndex(s => s._id === section._id)
                 sections.splice(index, 1, section);
             }
+
+            if (section.status == "REMOVED" && state.stayRemove) {
+                let index = sections.findIndex(s => s._id === section._id)
+                sections.splice(index, 1, section);
+            }
         });
 
-        state.sections = sections;
+        console.log(sections);
+
+        state.stayRemove = false;
+
+        Vue.set(state, 'sections', [...sections]);
     },
     ADD_SECTION(state) {
         let randomId = "NEW" + Math.floor(Math.random() * 10000000000); 
@@ -163,6 +188,8 @@ const mutations = {
         
         let newSection = { _id: randomId, status: "NEW", title: ["Sans titre", "Untitled"], metaProjects: [], visible: true};
         state.sections.push(newSection);
+
+        Vue.set(state, 'sections', [...state.sections]);
     },
     ADD_PROJECT_TO_SECTION(state, payload) {
         let sectionIndex = state.sections.findIndex(section => section._id === payload.sectionId);
@@ -181,6 +208,8 @@ const mutations = {
         
         if (state.sections[sectionIndex].status != "NEW")
             state.sections[sectionIndex].status = "UPDATED";
+
+        Vue.set(state, 'sections', [...state.sections]);
     },
     REMOVE_PROJECT_FROM_SECTION(state, payload) {
         let sectionIndex = state.sections.findIndex(section => section._id === payload.section._id);
@@ -189,6 +218,8 @@ const mutations = {
 
         if (state.sections[sectionIndex].status != "NEW")
             state.sections[sectionIndex].status = "UPDATED";
+
+        Vue.set(state, 'sections', [...state.sections]);
     },
     REMOVE_SECTION(state, payload) {
         let index = state.sections.findIndex(section => section._id === payload._id);
@@ -201,11 +232,16 @@ const mutations = {
             state.sections[index].visible = false;
         }
 
+        Vue.set(state, 'sections', [...state.sections]);
     },
     REMOVE_TEMP(state) {
+        console.log("remove_temp")
+
         state.sections = state.sections.filter(section => {
             return section.status !== "NEW" && section.status !== "UPDATED";
         });
+
+        Vue.set(state, 'sections', [...state.sections]);
     },
     UPDATE_SECTION_TITLE(state, payload) {
         let sectionIndex = state.sections.findIndex(section => section._id === payload.sectionId);
@@ -221,6 +257,8 @@ const mutations = {
         
         if (state.sections[sectionIndex].status != "NEW")
             state.sections[sectionIndex].status = "UPDATED";
+
+        Vue.set(state, 'sections', [...state.sections]);
     },
     MOVE_PROJECT_UP(state, payload) {
         let sectionIndex = state.sections.findIndex(section => section._id === payload.sectionId);
@@ -233,6 +271,8 @@ const mutations = {
 
         if (state.sections[sectionIndex].status != "NEW")
             state.sections[sectionIndex].status = "UPDATED";
+
+        Vue.set(state, 'sections', [...state.sections]);
     },
     MOVE_PROJECT_DOWN(state, payload) {
         let sectionIndex = state.sections.findIndex(section => section._id === payload.sectionId);
@@ -245,6 +285,8 @@ const mutations = {
 
         if (state.sections[sectionIndex].status != "NEW")
             state.sections[sectionIndex].status = "UPDATED";
+        
+        Vue.set(state, 'sections', [...state.sections]);
     },
     MOVE_IMAGE(state, payload) {
         state.galleryImages[payload.prevIndex].index = payload.newIndex;
@@ -252,6 +294,8 @@ const mutations = {
         state.galleryImages[payload.newIndex].index = payload.prevIndex;
         
         state.galleryImages = _.sortBy(state.galleryImages, ["index"]);
+
+        Vue.set(state, 'galleryImages', [...state.galleryImages]);
     },
     UPDATE_PROJECT_ID(state, payload) {
         var sectionIndex = [];
@@ -264,6 +308,24 @@ const mutations = {
             let indexProject = state.sections[index].metaProjects.findIndex(metaproject => metaproject.projectId === payload.oldId);
             state.sections[index].metaProjects[indexProject].projectId = payload.newId;
         });
+
+        Vue.set(state, 'sections', [...state.sections]);
+    },
+    REMOVE_PROJECT_FROM_ALL_SECTION(state, payload) {
+        var sectionIndex = [];
+        state.sections.forEach(section => {
+            if(section.metaProjects.find(metaproject => metaproject.projectId === payload.projectId))
+                sectionIndex.push(state.sections.findIndex(s => s._id === section._id));
+        });
+
+        sectionIndex.forEach (index => {
+            _.remove(state.sections[index].metaProjects, metaProject => metaProject.projectId === payload.projectId);
+
+            if (state.sections[index].status != "NEW")
+                state.sections[index].status = "UPDATED";
+        });
+
+        Vue.set(state, 'sections', [...state.sections]);
     }
 };
 

@@ -1,5 +1,7 @@
+import Vue from "vue";
 import { projectService } from "../../services/project.services";
 import router from "../../router";
+import _ from 'lodash'; 
 
 /* eslint-disable no-console */
 const state = {
@@ -7,16 +9,20 @@ const state = {
 	saving: false,
 	projects: [], 
 	project: {},
-	loaded: false
+	loaded: false,
+	stayRemove: false
 };
 
 const getters = {
-  getProjects(state) {
-    return state.projects;
-  },
-  getProject: (state) => (id) => {
-    return state.projects.find(project => project._id === id);
-  }
+	getProjects(state) {
+		return state.projects;
+	},
+	getProject: (state) => (id) => {
+		return state.projects.find(project => project._id === id);
+	},
+	getVisibleProjects(state) {
+		return state.projects.filter(project => project.visible === true);
+	}
 };
 
 const actions = { 
@@ -113,11 +119,17 @@ const actions = {
             }
         }
     },
+	async deleteProject({ commit }, payload) {
+		commit("REMOVE_PROJECT", payload);
+	},
 	async addImage({ commit }, payload) {
         commit("ADD_IMAGE_PROJECT", payload);
     },
 	async updateValue({commit}, payload) {
 		commit("UPDATE_VALUE", payload);		
+	},
+	async stayRemove({ commit }) {
+		commit("STAY_REMOVE");
 	}
 };
 
@@ -134,6 +146,8 @@ const mutations = {
 		})
 
 		state.loaded = true;
+
+		Vue.set(state, 'project', {...state.project});
 	},
 
 	//ADMIN
@@ -143,10 +157,18 @@ const mutations = {
     SAVED(state) {
         state.saving = false;
     },
+	STAY_REMOVE(state) {
+		state.stayRemove = true;
+	},
     SERVER_ERROR(state, serverError) {
         state.serverError = serverError;
     },
 	INIT_PROJECTS(state, projects) {
+		projects = projects.map(p => ({
+            ...p,
+            visible: true
+        }));
+
 		state.projects.forEach(project => {
             if (project.status == "NEW")
 				projects.push(project);
@@ -155,6 +177,11 @@ const mutations = {
                 let index = projects.findIndex(s => s._id === project._id)
                 projects.splice(index, 1, project);
             }
+
+			if (project.status == "REMOVED" && state.stayRemove) {
+				let index = projects.findIndex(s => s._id === project._id)
+                projects.splice(index, 1, project);
+			}
         });
 
 		projects.forEach(project => {
@@ -164,7 +191,9 @@ const mutations = {
 			})
 		})
 
-        state.projects = projects;
+		state.stayRemove = false;
+
+		Vue.set(state, 'projects', [...projects]);
 	},
 	CREATE_PROJECT(state, payload) {
 		let randomId = "NEW" + Math.floor(Math.random() * 10000000000); 
@@ -174,16 +203,20 @@ const mutations = {
             randomId = "NEW" + Math.floor(Math.random() * 10000000000); 
         }
 
-        let newProject = { _id: randomId, status: "NEW", title: ["Sans titre", "No title"], artDescription: ["description de l'art", "art description"], description: ["description du project", "project description"], images: []};
+        let newProject = { _id: randomId, status: "NEW", title: ["Sans titre", "No title"], artDescription: ["description de l'art", "art description"], description: ["description du project", "project description"], images: [], visible: true};
 
         state.projects.push(newProject);
-		
+
+		Vue.set(state, 'projects', [...state.projects]);
+
 		router.push({name: 'AdminProject', params: { sectionId: payload.sectionId, projectId: randomId }});
 	},
 	REMOVE_TEMP(state) {
         state.projects = state.projects.filter(project => {
             return project.status !== "NEW" && project.status !== "UPDATED";
         });
+
+		Vue.set(state, 'projects', [...state.projects]);
     },
 	REMOVE_IMAGE_FROM_PROJECT(state, payload) {
         var index = state.projects.findIndex(project => project._id === payload.projectId);
@@ -191,13 +224,30 @@ const mutations = {
 
 		if(state.projects[index].status != "NEW")
 			state.projects[index].status = "UPDATED";
+
+		Vue.set(state, 'projects', [...state.projects]);
     },
+	REMOVE_PROJECT(state, payload) {
+		var index = state.projects.findIndex(project => project._id === payload.projectId);
+
+		if (state.projects[index].status == "NEW") {
+            _.remove(state.projects, p => p._id === payload.projectId);
+        }
+        else {
+            state.projects[index].status = "REMOVED";
+            state.projects[index].visible = false;
+        }
+
+		Vue.set(state, 'projects', [...state.projects]);
+	},
     ADD_IMAGE_PROJECT(state, payload) {
         var index = state.projects.findIndex(project => project._id === payload.projectId);
         state.projects[index].images.push(payload.image);
 
 		if(state.projects[index].status != "NEW")
 			state.projects[index].status = "UPDATED";
+
+		Vue.set(state, 'projects', [...state.projects]);
     },
 	UPDATE_VALUE(state, payload) {
 		var index = state.projects.findIndex(project => project._id === payload.projectId);
@@ -213,12 +263,16 @@ const mutations = {
 
 		if(state.projects[index].status != "NEW")
 			state.projects[index].status = "UPDATED";
+
+		Vue.set(state, 'projects', [...state.projects]);
 	},
 	UPDATE_PROJECT_ID(state, payload) {
 		var index = state.projects.findIndex(project => project._id === payload.oldId);
 
 		state.projects[index]._id = payload.newId;
 		state.projects[index].status = "SAVED";
+
+		Vue.set(state, 'projects', [...state.projects]);
 	}
 };
 

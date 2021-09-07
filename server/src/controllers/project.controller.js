@@ -56,7 +56,7 @@ class ProjectController {
             }
 
             if (project.status == "REMOVED") {
-                Project.findOneAndDelete({ _id: project._id }).exec();
+                await Project.findOneAndDelete({ _id: project._id }).exec();
                 res.send(project._id);
                 return;
             }

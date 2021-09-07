@@ -103,6 +103,11 @@ export default {
             editArtDescription: false,
         }
     },
+     created() {
+        this.$nextTick(function () {
+			this.stayRemove();
+		})
+	},
     computed: {
         ...mapState("project", ["projectTryingToAdd"]),
         ...mapGetters("project", ["getProject"]),
@@ -114,7 +119,7 @@ export default {
     },
     methods: {
         ...mapActions("project", ["updateValue", "deleteImage", "addImage", "initProject"]),
-        ...mapActions("dashboard", ["addProjectToSection"]),
+        ...mapActions("dashboard", ["addProjectToSection", "stayRemove"]),
         onUpdateValue(value, prop) {
             this.editTitle = false;
             this.editDescription = false;

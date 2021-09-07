@@ -14,7 +14,7 @@
                 <div class="row">
                         <div>
                             <b-form-select v-model="selected">
-                                <b-form-select-option v-for="project in projects" :key="project._id" :value="project">{{ $t('project.title', project.title) }}</b-form-select-option>
+                                <b-form-select-option v-for="project in getVisibleProjects" :key="project._id" :value="project">{{ $t('project.title', project.title) }}</b-form-select-option>
                             </b-form-select>
                         </div>
                 </div>
@@ -31,6 +31,9 @@
             </div>
         </div>
         <template #modal-footer="{ ok, cancel }">
+              <b-button size="sm" variant="danger" @click="onDeleteProject()">
+                {{ $t('admin.deleteSelectedProject') }}
+            </b-button>
             <b-button size="sm" variant="success" @click="onCreateProject()">
                 {{ $t('admin.createNewProject') }}
             </b-button>
@@ -41,18 +44,21 @@
                 {{ $t('admin.add') }}
             </b-button>
         </template>
+
+        <confirm-dialogue ref="confirmDialogue"></confirm-dialogue>
+
     </b-modal>
 </template>
 
 <script>
 import ImageViewer from "../../subComponents/ImageViewer";
-import { mapActions } from "vuex";
-import { mapState } from "vuex";
-
+import { mapActions, mapGetters } from "vuex";
+import ConfirmDialogue from './ConfirmDialogue'
 
 export default {
     components: {
-        ImageViewer
+        ImageViewer,
+        ConfirmDialogue,
     },
     props: {
         sectionId: String
@@ -63,23 +69,39 @@ export default {
       }
     },
     computed: {
-        ...mapState("project", ["projects"]),
+        ...mapGetters("project", ["getVisibleProjects"]),
         console: () => console,
         window: () => window,
     },
     methods: {
-        ...mapActions("dashboard", ["addProjectToSection"]),
-        ...mapActions("project", ["createProject"]),
+        ...mapActions("dashboard", ["addProjectToSection", "removeProjectFromSection", "removeProjectFromAllSections"]),
+        ...mapActions("project", ["createProject", "deleteProject"]),
         addProject() {
             if (this.selected == null)
                 return;
 
             this.addProjectToSection({ sectionId: this.sectionId, projectId: this.selected._id});
-            this.$forceUpdate();
             this.selected = null;
         },  
         onCreateProject() {
             this.createProject({ sectionId: this.sectionId });
+        },
+        async onDeleteProject() {
+            if (this.selected == null)
+                return
+
+            const ok = await this.$refs.confirmDialogue.show({
+                title: this.$t('admin.deleteSelectedProject'),
+                message: this.$t('admin.permentalyDeleteProject'),
+                project: this.selected,
+                okButton: this.$t("admin.delete"),
+            })
+
+            if (ok) {
+                await this.removeProjectFromAllSections({ projectId: this.selected._id });
+                await this.deleteProject({ projectId: this.selected._id});
+                this.clear();
+            } 
         },
         clear() {
             this.selected = null;

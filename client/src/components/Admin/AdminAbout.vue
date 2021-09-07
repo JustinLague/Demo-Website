@@ -50,7 +50,6 @@ import AddImage from './subComponents/AddImage';
 import clickToEdit from "./subComponents/ClickToEdit";
 import ConfirmDialogueSimple from './subComponents/ConfirmDialogueSimple'
 
-
 export default {
      components: {
         AddImage,
@@ -75,7 +74,7 @@ export default {
     methods: {
         ...mapActions("about", ["initAbout", "updateDescription", "updateImage", "saveAbout"]),
 		async handleSubmit() {
-              const ok = await this.$refs.confirmDialogueSimple.show({
+            const ok = await this.$refs.confirmDialogueSimple.show({
                 title: this.$t('admin.confirmation'),
                 message: this.$t('admin.englishSectionCheck'),
                 okButton: this.$t('admin.save'),

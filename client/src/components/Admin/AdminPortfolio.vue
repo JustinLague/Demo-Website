@@ -13,7 +13,6 @@
             <div class="section" v-for="section in sections" :key="JSON.stringify(section)">
                 <Section :section=section 
                          :key="JSON.stringify(section)" 
-                         @refresh-section="refreshSection()"
                          @sectionId="setSectionId"
                          v-if=section.visible></Section>
             </div>
@@ -78,9 +77,6 @@ export default {
         ...mapActions("dashboard", ["saveSections", "addSection", "initSections"]),
         setSectionId(sectionId) {
             this.selectedSectionId = sectionId;
-        },
-        refreshSection() {
-            this.$forceUpdate();
         },
         async handleSubmit() {
 

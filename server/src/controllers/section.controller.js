@@ -27,7 +27,7 @@ class SectionController {
                 
                 //delete section
                 if (section.status == "REMOVED") {
-                    Section.findOneAndDelete({ _id: section._id }).exec();
+                    await Section.findOneAndDelete({ _id: section._id }).exec();
                     continue;
                 }
 
@@ -65,6 +65,8 @@ class SectionController {
 
             var sections = await Section.find().select("-__v").exec();
             
+            console.log(sections);
+
             res.send(sections)
         } catch (err) {
             res.status(400).send({ error: err.message });

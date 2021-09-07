@@ -76,13 +76,7 @@ export default {
         console: () => console,
         window: () => window,
     },
-    created() {
-        this.$nextTick(function () {
-            this.initProjects();
-        })
-    },
     methods: {
-        ...mapActions("project", ["initProjects"]),
         ...mapActions("dashboard", ["updateSectionTitle", "removeProjectFromSection", "removeSection", "moveProjectUp", "moveProjectDown"]),
         updateTitle(value) {
             this.edit = false;
@@ -101,28 +95,24 @@ export default {
             };
 
             const ok = await this.$refs.confirmDialogue.show({
-                title: 'Supprimer un projet',
-                message: 'Etes-vous sure que vous voulez supprimer ce projet ?',
+                title: this.$t("admin.deleteProjectSection"),
                 project: this.getProject(projectId),
-                okButton: 'Supprimer',
+                okButton: this.$t("admin.remove"),
             })
 
             if (ok) {
                 this.removeProjectFromSection(payload);
-                this.$forceUpdate();
             } 
         },
         async deleteSection(section) {
             const ok = await this.$refs.confirmDialogue.show({
-                title: 'Supprimer une section',
-                message: 'Etes-vous sure que vous voulez supprimer cette section ?',
+                title: this.$t("admin.deleteSection"),
                 section: section,
-                okButton: 'Supprimer',
+                okButton:  this.$t("admin.delete"),
             })
 
             if (ok) {
                 this.removeSection(section);
-                this.$emit("refresh-section");
             } 
         },
     }
