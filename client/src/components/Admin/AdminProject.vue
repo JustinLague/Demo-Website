@@ -106,6 +106,7 @@ export default {
      created() {
         this.$nextTick(function () {
 			this.stayRemove();
+            this.createImageFromLocalStorage({ projectId: this.projectId });
 		})
 	},
     computed: {
@@ -118,7 +119,7 @@ export default {
         window: () => window,
     },
     methods: {
-        ...mapActions("project", ["updateValue", "deleteImage", "addImage", "initProject"]),
+        ...mapActions("project", ["updateValue", "deleteImage", "addImage", "initProject", "createImageFromLocalStorage"]),
         ...mapActions("dashboard", ["addProjectToSection", "stayRemove"]),
         onUpdateValue(value, prop) {
             this.editTitle = false;
@@ -135,7 +136,7 @@ export default {
             this.$router.push({name: 'AdminPortfolio'});
         },
         onDeleteImage(image) {
-            this.deleteImage({ image, projectId: this.projectId});
+            this.deleteImage({ image: {...image}, projectId: this.projectId});
         }
     }
 }

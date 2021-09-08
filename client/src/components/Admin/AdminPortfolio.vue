@@ -90,7 +90,7 @@ export default {
 
             if (ok) {
                 await Promise.all(this.projects.map(async (project) => {
-                    await this.saveProject(project);
+                    await this.saveProject({...project});
                 }));
 
                 this.saveSections()

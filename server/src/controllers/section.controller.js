@@ -64,8 +64,6 @@ class SectionController {
             }
 
             var sections = await Section.find().select("-__v").exec();
-            
-            console.log(sections);
 
             res.send(sections)
         } catch (err) {

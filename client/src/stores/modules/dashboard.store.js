@@ -150,8 +150,6 @@ const mutations = {
         Vue.set(state, 'galleryImages', [...state.galleryImages]);
     },
     INIT_SECTIONS(state, sections) {
-        console.log("init sections", state.stayRemove);
-
         sections = sections.map(s => ({
             ...s,
             visible: true
@@ -171,8 +169,6 @@ const mutations = {
                 sections.splice(index, 1, section);
             }
         });
-
-        console.log(sections);
 
         state.stayRemove = false;
 

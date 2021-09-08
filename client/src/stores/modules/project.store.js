@@ -59,13 +59,16 @@ const actions = {
 	async saveProject({ commit, dispatch}, project) {
 		try {
 			var oldId = project._id;
+			var images = project.images;
+			project.images = [];
+
 			var projectId = await projectService.saveProject({project: project});
 
 			commit("UPDATE_PROJECT_ID", {oldId: oldId, newId: projectId.data});
 			
 			dispatch("dashboard/updateProjectId", {oldId: oldId, newId: projectId.data}, { root: true });
 
-			await dispatch("updateImage", { images: project.images, projectId: projectId.data });
+			await dispatch("updateImage", { images: images, projectId: projectId.data });
 		} catch (err) {
 			console.error(err)
 			if (err.response && err.response.status === 403) {
@@ -106,6 +109,9 @@ const actions = {
 	},
 	async deleteImage({ commit, dispatch }, payload) {
         try {
+			console.log(payload);
+			payload.image.data64Image = null;
+			payload.image.data64Thumbnail = null;
             await projectService.deleteImage({ image: payload.image });
 
             commit("REMOVE_IMAGE_FROM_PROJECT", payload)
@@ -130,6 +136,26 @@ const actions = {
 	},
 	async stayRemove({ commit }) {
 		commit("STAY_REMOVE");
+	},
+	async createImageFromLocalStorage({ commit, getters }, payload) {
+		var project = getters.getProject(payload.projectId);
+
+		await Promise.all(project.images.map(async (image, index) => {
+			if (!image.thumbnail || !image.detailedImage) {
+				
+				const image64 = await fetch(image.data64Image);
+				const imageBlob = await image64.blob();
+				
+				const thumbnail64 = await fetch(image.data64Thumbnail);
+				const thumbnailBlob = await thumbnail64.blob();
+				
+				//get mime type
+				const fileImage = new File([imageBlob], image.imageName, { type: 'image/jpg' });
+				const fileThumbnail = new File([thumbnailBlob], image.imageName, { type: 'image/jpg' });
+				
+				commit("CREATE_IMAGE_FROM_LOCAL_STORAGE", {projectId: payload.projectId, index, fileImage, fileThumbnail});
+			}
+		}));
 	}
 };
 
@@ -140,6 +166,7 @@ const mutations = {
 		state.project.artDescription = data.project.artDescription;
 		state.project.images = data.images;
 
+		
 		state.project.images.forEach((image) => {
 			image.thumbnailUrl = process.env.VUE_APP_API_URL + "/image/" + image.thumbnail;
 			image.detailedImageUrl = process.env.VUE_APP_API_URL + "/image/" + image.detailedImage;  
@@ -186,8 +213,8 @@ const mutations = {
 
 		projects.forEach(project => {
 			project.images.forEach((image) => {
-				image.thumbnailUrl = image.thumbnailUrl === undefined ? process.env.VUE_APP_API_URL + "/image/" + image.thumbnail : image.thumbnailUrl;
-				image.detailedImageUrl = image.detailedImageUrl === undefined ? process.env.VUE_APP_API_URL + "/image/" + image.detailedImage : image.detailedImageUrl;  
+				image.thumbnailUrl = image.thumbnail !== undefined ? process.env.VUE_APP_API_URL + "/image/" + image.thumbnail : image.thumbnailUrl;
+				image.detailedImageUrl = image.detailedImage !== undefined ? process.env.VUE_APP_API_URL + "/image/" + image.detailedImage : image.detailedImageUrl;  
 			})
 		})
 
@@ -272,6 +299,16 @@ const mutations = {
 		state.projects[index]._id = payload.newId;
 		state.projects[index].status = "SAVED";
 
+		
+	},
+	CREATE_IMAGE_FROM_LOCAL_STORAGE(state, payload) {
+		var index = state.projects.findIndex(project => project._id === payload.projectId);
+
+		state.projects[index].images[payload.index].dataImage = payload.fileImage;
+		state.projects[index].images[payload.index].detailedImageUrl = URL.createObjectURL(payload.fileImage);
+		state.projects[index].images[payload.index].dataThumbnail = payload.fileThumbnail;
+		state.projects[index].images[payload.index].thumbnailUrl = URL.createObjectURL(payload.fileThumbnail);
+		
 		Vue.set(state, 'projects', [...state.projects]);
 	}
 };
